@@ -17,6 +17,7 @@ func main() {
 		Title:            "Weird Password Generator",
 		Width:            1024,
 		Height:           768,
+		MinWidth:         1024,
 		Assets:           assets,
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup:        app.startup,
