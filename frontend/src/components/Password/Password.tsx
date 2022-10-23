@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { useClipboard } from '../../hooks/use-clipboard/useClipboard'
+import React, { useState } from 'react'
+import { useGoClipboard } from '../../hooks/use-go-clipboard/useGoClipboard'
 import styles from './Password.module.css'
+
+import { Button } from '@mantine/core'
 
 type PasswordProps = {
     password: string,
@@ -10,7 +12,7 @@ type PasswordProps = {
 
 function Password({ password, setPassword }: PasswordProps) {
     const [inputType, setInputType] = useState('password')
-    const { copy, error, copied } = useClipboard()
+    const { copy, error, copied } = useGoClipboard()
 
     const toggleInputType = (e: React.MouseEvent) => {
         e.preventDefault()
@@ -28,11 +30,13 @@ function Password({ password, setPassword }: PasswordProps) {
 
     return (
         <div className={styles.inputContainer}>
-            <input type={inputType} value={password} className={styles.input} placeholder="Something..." onChange={setPassword} />
-            <button onClick={toggleInputType} className={styles.button}>{
+            <input type={inputType} value={password} className={styles.input} onChange={setPassword} />
+            <Button color="cyan" sx={{ height: '100%', marginLeft: '10px', width: '8rem' }} onClick={toggleInputType}  >{
                 inputType === 'password' ? 'SHOW' : 'HIDE'
-            }</button>
-            <button onClick={handleCopy} className={styles.button}> {copied ? 'COPIED' : 'COPY'} </button>
+            }</Button>
+            <Button color={copied ? "green" : "blue"} sx={{ height: '100%', marginLeft: '10px', width: '8rem' }} onClick={handleCopy}  >{
+                copied ? 'COPIED' : 'COPY'
+            }</Button>
         </div>
     )
 }

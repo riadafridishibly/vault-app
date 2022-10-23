@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CopyToClipboard } from "../../../wailsjs/go/main/App";
 
-export function useClipboard({ timeout = 2000 } = {}) {
+export function useGoClipboard({ timeout = 2000 } = {}) {
     const [error, setError] = useState<Error | null>(null);
     const [copied, setCopied] = useState(false);
     const [copyTimeout, setCopyTimeout] = useState<number | undefined>(undefined);

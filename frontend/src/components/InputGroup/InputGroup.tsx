@@ -13,7 +13,7 @@ function InputGroup({ name, value, onChange }: InputGroupProps) {
             <div className={styles.group}>
                 <span>{name}</span>
             </div>
-            <input type="text" onChange={onChange} value={value} />
+            <input className={styles.input} type="text" onChange={onChange} value={value} />
         </div>
     )
 }

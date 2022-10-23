@@ -3,6 +3,13 @@
     text-align: center;
 }
 
+.navWithPage {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    justify-content: space-around;
+}
+
 #logo {
     display: block;
     width: 50%;
