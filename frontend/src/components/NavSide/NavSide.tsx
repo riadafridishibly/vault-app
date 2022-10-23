@@ -27,6 +27,7 @@ import {
     IconLogout,
     IconSwitchHorizontal,
 } from '@tabler/icons';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = createStyles((theme, _params, getRef) => {
     const icon = getRef('icon');
@@ -128,6 +129,7 @@ function BadgeWithAvatar({ title }: { title: string }) {
 }
 
 function NavbarSegmented() {
+    const navigate = useNavigate()
     const { classes, cx } = useStyles();
     const [section, setSection] = useState<'account' | 'general'>('account');
     const [active, setActive] = useState('Billing');
@@ -140,6 +142,7 @@ function NavbarSegmented() {
             onClick={(event) => {
                 event.preventDefault();
                 setActive(item.label);
+                navigate('/generator');
             }}
         >
             <item.icon className={classes.linkIcon} stroke={1.5} />
@@ -151,7 +154,7 @@ function NavbarSegmented() {
         <Navbar width={{ sm: 300 }} p="md" className={classes.navbar}>
             <Navbar.Section>
                 <Center sx={{ marginBottom: '0.7rem' }}>
-                    <BadgeWithAvatar title={"me@example.com"} />
+                    <BadgeWithAvatar title={"user@example.com"} />
                 </Center>
 
                 <SegmentedControl
