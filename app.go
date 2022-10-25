@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/iwpnd/pw"
 	"github.com/riadafridishibly/wpg/pkg/generator"
 	"github.com/riadafridishibly/wpg/pkg/generator/common"
 	"github.com/wailsapp/wails/v2/pkg/logger"
@@ -34,6 +35,24 @@ func (a *App) startup(ctx context.Context) {
 
 func (a *App) CopyToClipboard(value string) {
 	clipboard.Write(clipboard.FmtText, []byte(value))
+}
+
+func (a *App) GenerateRandomPassword(options []string) string {
+	var opts []pw.Option
+	for _, opt := range options {
+		switch opt {
+		case "uppercase":
+			opts = append(opts, pw.WithUpperCase())
+		case "lowercase":
+			opts = append(opts, pw.WithLowerCase())
+		case "numbers":
+			opts = append(opts, pw.WithNumbers())
+		case "special":
+			opts = append(opts, pw.WithSpecial())
+		}
+	}
+
+	return pw.NewPassword(20, opts...)
 }
 
 func (a *App) GenerateNewPassword(seed, password string) (string, error) {

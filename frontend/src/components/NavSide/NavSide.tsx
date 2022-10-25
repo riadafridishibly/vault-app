@@ -91,13 +91,13 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 const tabs = {
     account: [
-        { link: '', label: 'Notifications', icon: IconBellRinging },
-        { link: '', label: 'Billing', icon: IconReceipt2 },
-        { link: '', label: 'Security', icon: IconFingerprint },
-        { link: '', label: 'SSH Keys', icon: IconKey },
-        { link: '', label: 'Databases', icon: IconDatabaseImport },
-        { link: '', label: 'Authentication', icon: Icon2fa },
-        { link: '', label: 'Other Settings', icon: IconSettings },
+        { link: '/', label: 'Notifications', icon: IconBellRinging },
+        { link: '/', label: 'Billing', icon: IconReceipt2 },
+        { link: '/', label: 'Security', icon: IconFingerprint },
+        { link: '/password_generator', label: 'Password Generator', icon: IconKey },
+        { link: '/', label: 'Databases', icon: IconDatabaseImport },
+        { link: '/', label: 'Authentication', icon: Icon2fa },
+        { link: '/', label: 'Other Settings', icon: IconSettings },
     ],
     general: [
         { link: '', label: 'Orders', icon: IconShoppingCart },
@@ -142,7 +142,7 @@ function NavbarSegmented() {
             onClick={(event) => {
                 event.preventDefault();
                 setActive(item.label);
-                navigate('/generator');
+                navigate(item.link);
             }}
         >
             <item.icon className={classes.linkIcon} stroke={1.5} />

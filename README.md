@@ -2,8 +2,7 @@
 
 Wails password generator app
 
-![Image](./screenshot/window.png)
-
+![Image](./screenshot/rpg.png)
 
 ## About
 
@@ -20,3 +19,12 @@ to this in your browser, and you can call your Go code from devtools.
 ## Building
 
 To build a redistributable, production mode package, use `wails build`.
+
+## TODO
+
+- [ ] Define Each Page and attatch with navbar
+  - `useNavigage`
+- [x] Random Password Generator
+- [ ] Encryptor (let's use age for now)
+  - Use progress bar
+- [ ] And so on
