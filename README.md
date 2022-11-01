@@ -4,6 +4,13 @@ Wails password generator app
 
 ![Image](./screenshot/rpg.png)
 
+## Features to implement
+
+- [x] Random Password Generator
+- [ ] Password Manager
+- [ ] Secure Notes (Encrypted)
+- [ ] Encrypt Files / Directories
+
 ## About
 
 You can configure the project by editing `wails.json`. More information about the project settings can be found

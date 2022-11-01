@@ -8,6 +8,7 @@ import (
 	"github.com/riadafridishibly/wpg/pkg/generator"
 	"github.com/riadafridishibly/wpg/pkg/generator/common"
 	"github.com/wailsapp/wails/v2/pkg/logger"
+	wailsruntime "github.com/wailsapp/wails/v2/pkg/runtime"
 	"golang.design/x/clipboard"
 )
 
@@ -53,6 +54,10 @@ func (a *App) GenerateRandomPassword(options []string) string {
 	}
 
 	return pw.NewPassword(20, opts...)
+}
+
+func (a *App) OpenDialog() ([]string, error) {
+	return wailsruntime.OpenMultipleFilesDialog(a.ctx, wailsruntime.OpenDialogOptions{})
 }
 
 func (a *App) GenerateNewPassword(seed, password string) (string, error) {

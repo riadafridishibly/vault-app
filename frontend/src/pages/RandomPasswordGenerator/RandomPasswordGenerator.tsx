@@ -19,7 +19,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { GenerateRandomPassword } from "../../../wailsjs/go/main/App";
 import { useGoClipboard } from "../../hooks/use-go-clipboard/useGoClipboard";
 
-function ButtonCopy({ password }: { password: string }) {
+export function ButtonCopy({ password }: { password: string }) {
   const clipboard = useGoClipboard();
   return (
     <Tooltip
@@ -33,6 +33,7 @@ function ButtonCopy({ password }: { password: string }) {
     >
       <Button
         variant="light"
+        color={clipboard.copied ? "green" : "grape"}
         rightIcon={
           clipboard.copied ? (
             <IconCheck size={20} stroke={1.5} />
@@ -92,7 +93,7 @@ function RandomPasswordGenerator() {
               variant="light"
               radius="xl"
               size="sm"
-              color="green"
+              color="yellow"
               styles={{
                 root: { height: 48 },
               }}
@@ -105,7 +106,7 @@ function RandomPasswordGenerator() {
             </Button>
           </Center>
           <Space h="xl" />
-          <Text
+          {/* <Text
             component="span"
             align="center"
             size={20}
@@ -114,7 +115,7 @@ function RandomPasswordGenerator() {
             style={{ fontFamily: "Greycliff CF, sans-serif" }}
           >
             Options
-          </Text>
+          </Text> */}
 
           <Center>
             <Chip.Group value={value} onChange={setValue} multiple>

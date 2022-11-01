@@ -7,6 +7,9 @@ import styles from "./App.module.css";
 import DataTable from "./components/DataTable/DataTable";
 import { Route, Routes } from "react-router-dom";
 import RandomPasswordGenerator from "./pages/RandomPasswordGenerator/RandomPasswordGenerator";
+import EncryptFiles from "./pages/EncryptFiles/EncryptFiles";
+import Notes from "./pages/Notes/Notes";
+import NewNote from "./pages/Notes/NewNote";
 
 function App() {
   return (
@@ -35,6 +38,9 @@ function App() {
             path={"/password_generator"}
             element={<RandomPasswordGenerator />}
           />
+          <Route path={"/encrypt_files"} element={<EncryptFiles />} />
+          <Route path={"/notes"} element={<Notes />} />
+          <Route path={"/new_note"} element={<NewNote />} />
         </Routes>
       </AppShell>
     </MantineProvider>

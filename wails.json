@@ -1,6 +1,6 @@
 {
-  "name": "weird-password-generator",
-  "outputfilename": "wpg",
+  "name": "Valult",
+  "outputfilename": "vault",
   "frontend:install": "yarn install",
   "frontend:build": "yarn build",
   "frontend:dev:watcher": "yarn dev",

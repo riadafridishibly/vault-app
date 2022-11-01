@@ -14,7 +14,7 @@ func main() {
 	app := NewApp()
 
 	err := wails.Run(&options.App{
-		Title:            "Weird Password Generator",
+		Title:            "Vault",
 		Width:            1024,
 		Height:           768,
 		MinWidth:         1024,

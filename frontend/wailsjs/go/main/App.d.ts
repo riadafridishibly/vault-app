@@ -8,3 +8,5 @@ export function GenerateNewPassword(arg1:string,arg2:string):Promise<string>;
 export function GenerateRandomPassword(arg1:Array<string>):Promise<string>;
 
 export function Greet(arg1:string):Promise<string>;
+
+export function OpenDialog():Promise<Array<string>>;
