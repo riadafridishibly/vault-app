@@ -28,6 +28,9 @@ import {
   IconSwitchHorizontal,
   IconLock,
   IconNotes,
+  IconCloudLock,
+  IconLockAccess,
+  IconFilePower,
 } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 
@@ -100,11 +103,10 @@ const useStyles = createStyles((theme, _params, getRef) => {
     },
 
     footer: {
-      borderTop: `1px solid ${
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[4]
-          : theme.colors.gray[3]
-      }`,
+      borderTop: `1px solid ${theme.colorScheme === "dark"
+        ? theme.colors.dark[4]
+        : theme.colors.gray[3]
+        }`,
       paddingTop: theme.spacing.md,
     },
   };
@@ -112,16 +114,15 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 const tabs = {
   account: [
-    { link: "/", label: "Notifications", icon: IconBellRinging },
+    { link: "/notifications", label: "Notifications", icon: IconBellRinging },
     { link: "/notes", label: "Notes", icon: IconNotes },
-    { link: "/", label: "Security", icon: IconFingerprint },
+    { link: "/password_manager", label: "Password Manager", icon: IconLockAccess },
     { link: "/password_generator", label: "Password Generator", icon: IconKey },
-    { link: "/encrypt_files", label: "Encrypt Files", icon: IconLock },
-    { link: "/", label: "Databases", icon: IconDatabaseImport },
-    { link: "/", label: "Authentication", icon: Icon2fa },
-    { link: "/", label: "Other Settings", icon: IconSettings },
+    { link: "/encrypt_files", label: "Encrypt Files", icon: IconFilePower },
+    { link: "/settings", label: "Settings", icon: IconSettings },
   ],
   general: [
+    { link: "/", label: "Databases", icon: IconDatabaseImport },
     { link: "", label: "Orders", icon: IconShoppingCart },
     { link: "", label: "Receipts", icon: IconLicense },
     { link: "", label: "Reviews", icon: IconMessage2 },

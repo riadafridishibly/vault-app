@@ -10,6 +10,8 @@ import RandomPasswordGenerator from "./pages/RandomPasswordGenerator/RandomPassw
 import EncryptFiles from "./pages/EncryptFiles/EncryptFiles";
 import Notes from "./pages/Notes/Notes";
 import NewNote from "./pages/Notes/NewNote";
+import Notifications from "./pages/Notifications/Notifications";
+import Settings from "./pages/Settings/Settings";
 
 function App() {
   return (
@@ -34,13 +36,15 @@ function App() {
         <Routes>
           <Route path={"/"} element={<DataTable />} />
           <Route path={"/wpg"} element={<PasswordGenerator />} />
+          <Route path={"/notifications"} element={<Notifications />} />
+          <Route path={"/settings"} element={<Settings />} />
           <Route
             path={"/password_generator"}
             element={<RandomPasswordGenerator />}
           />
           <Route path={"/encrypt_files"} element={<EncryptFiles />} />
           <Route path={"/notes"} element={<Notes />} />
-          <Route path={"/new_note"} element={<NewNote />} />
+          <Route path={"/notes/new"} element={<NewNote />} />
         </Routes>
       </AppShell>
     </MantineProvider>

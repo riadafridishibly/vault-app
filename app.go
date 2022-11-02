@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/iwpnd/pw"
 	"github.com/riadafridishibly/wpg/pkg/generator"
@@ -57,7 +58,15 @@ func (a *App) GenerateRandomPassword(options []string) string {
 }
 
 func (a *App) OpenDialog() ([]string, error) {
-	return wailsruntime.OpenMultipleFilesDialog(a.ctx, wailsruntime.OpenDialogOptions{})
+	return wailsruntime.OpenMultipleFilesDialog(a.ctx, wailsruntime.OpenDialogOptions{
+		DefaultDirectory:           os.Getenv("HOME"),
+		DefaultFilename:            "",
+		Title:                      "Select Files",
+		ShowHiddenFiles:            false,
+		CanCreateDirectories:       false,
+		ResolvesAliases:            false,
+		TreatPackagesAsDirectories: false,
+	})
 }
 
 func (a *App) GenerateNewPassword(seed, password string) (string, error) {

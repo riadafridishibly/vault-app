@@ -109,7 +109,7 @@ function HeaderSearch({ links }: HeaderSearchProps) {
             <Button
               onClick={(e: React.MouseEvent) => {
                 e.preventDefault();
-                navigate("/new_note", { state: { hello: "world" } });
+                navigate("/notes/new", { state: { hello: "world" } });
               }}
               leftIcon={<IconPlus />}
             >
