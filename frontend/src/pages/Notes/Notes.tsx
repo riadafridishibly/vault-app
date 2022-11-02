@@ -1,26 +1,21 @@
 // @ts-nocheck
-import React, { useCallback, useMemo, Ref, PropsWithChildren } from 'react'
-import isHotkey from 'is-hotkey'
-import { Editable, withReact, useSlate, Slate } from 'slate-react'
+import React, { useMemo } from 'react'
+import imageExtensions from 'image-extensions'
+import isUrl from 'is-url'
+import { Transforms, createEditor, Descendant } from 'slate'
 import {
-  Editor,
-  Transforms,
-  createEditor,
-  Descendant,
-  Element as SlateElement,
-} from 'slate'
+  Slate,
+  Editable,
+  useSlateStatic,
+  useSelected,
+  useFocused,
+  withReact,
+  ReactEditor,
+} from 'slate-react'
 import { withHistory } from 'slate-history'
+import { css, cx } from '@emotion/css'
 
-import ReactDOM from 'react-dom'
-import { cx, css } from '@emotion/css'
-
-interface BaseProps {
-  className: string
-  [key: string]: unknown
-}
-type OrNull<T> = T | null
-
-export const Button = React.forwardRef(
+const Button = React.forwardRef(
   (
     {
       className,
@@ -55,64 +50,7 @@ export const Button = React.forwardRef(
   )
 )
 
-export const EditorValue = React.forwardRef(
-  (
-    {
-      className,
-      value,
-      ...props
-    }: PropsWithChildren<
-      {
-        value: any
-      } & BaseProps
-    >,
-    ref: Ref<OrNull<null>>
-  ) => {
-    const textLines = value.document.nodes
-      .map(node => node.text)
-      .toArray()
-      .join('\n')
-    return (
-      <div
-        ref={ref}
-        {...props}
-        className={cx(
-          className,
-          css`
-            margin: 30px -20px 0;
-          `
-        )}
-      >
-        <div
-          className={css`
-            font-size: 14px;
-            padding: 5px 20px;
-            color: #404040;
-            border-top: 2px solid #eeeeee;
-            background: #f8f8f8;
-          `}
-        >
-          Slate's value as text
-        </div>
-        <div
-          className={css`
-            color: #404040;
-            font: 12px monospace;
-            white-space: pre-wrap;
-            padding: 10px 20px;
-            div {
-              margin: 0 0 0.5em;
-            }
-          `}
-        >
-          {textLines}
-        </div>
-      </div>
-    )
-  }
-)
-
-export const Icon = React.forwardRef(
+const Icon = React.forwardRef(
   (
     { className, ...props }: PropsWithChildren<BaseProps>,
     ref: Ref<OrNull<HTMLSpanElement>>
@@ -132,29 +70,7 @@ export const Icon = React.forwardRef(
   )
 )
 
-export const Instruction = React.forwardRef(
-  (
-    { className, ...props }: PropsWithChildren<BaseProps>,
-    ref: Ref<OrNull<HTMLDivElement>>
-  ) => (
-    <div
-      {...props}
-      ref={ref}
-      className={cx(
-        className,
-        css`
-          white-space: pre-wrap;
-          margin: 0 -20px 10px;
-          padding: 10px 20px;
-          font-size: 14px;
-          background: #f8f8e8;
-        `
-      )}
-    />
-  )
-)
-
-export const Menu = React.forwardRef(
+const Menu = React.forwardRef(
   (
     { className, ...props }: PropsWithChildren<BaseProps>,
     ref: Ref<OrNull<HTMLDivElement>>
@@ -168,7 +84,6 @@ export const Menu = React.forwardRef(
           & > * {
             display: inline-block;
           }
-
           & > * + * {
             margin-left: 15px;
           }
@@ -178,13 +93,7 @@ export const Menu = React.forwardRef(
   )
 )
 
-export const Portal = ({ children }) => {
-  return typeof document === 'object'
-    ? ReactDOM.createPortal(children, document.body)
-    : null
-}
-
-export const Toolbar = React.forwardRef(
+const Toolbar = React.forwardRef(
   (
     { className, ...props }: PropsWithChildren<BaseProps>,
     ref: Ref<OrNull<HTMLDivElement>>
@@ -206,239 +115,178 @@ export const Toolbar = React.forwardRef(
   )
 )
 
-const HOTKEYS = {
-  'mod+b': 'bold',
-  'mod+i': 'italic',
-  'mod+u': 'underline',
-  'mod+`': 'code',
+
+type EmptyText = {
+  text: string
 }
 
-const LIST_TYPES = ['numbered-list', 'bulleted-list']
-const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify']
+type ImageElement = {
+  type: 'image'
+  url: string
+  children: EmptyText[]
+}
 
 const Notes = () => {
-  const renderElement = useCallback(props => <Element {...props} />, [])
-  const renderLeaf = useCallback(props => <Leaf {...props} />, [])
-  const editor = useMemo(() => withHistory(withReact(createEditor())), [])
+  const editor = useMemo(
+    () => withImages(withHistory(withReact(createEditor()))),
+    []
+  )
 
   return (
-    <Slate editor={editor} value={initialValue}
-      onChange={(value) => console.log(value)}
-    >
+    <Slate editor={editor} value={initialValue}>
       <Toolbar>
-        <MarkButton format="bold" icon="format_bold" />
-        <MarkButton format="italic" icon="format_italic" />
-        <MarkButton format="underline" icon="format_underlined" />
-        <MarkButton format="code" icon="code" />
-        <BlockButton format="heading-one" icon="looks_one" />
-        <BlockButton format="heading-two" icon="looks_two" />
-        <BlockButton format="block-quote" icon="format_quote" />
-        <BlockButton format="numbered-list" icon="format_list_numbered" />
-        <BlockButton format="bulleted-list" icon="format_list_bulleted" />
-        <BlockButton format="left" icon="format_align_left" />
-        <BlockButton format="center" icon="format_align_center" />
-        <BlockButton format="right" icon="format_align_right" />
-        <BlockButton format="justify" icon="format_align_justify" />
+        <InsertImageButton />
       </Toolbar>
       <Editable
-        renderElement={renderElement}
-        renderLeaf={renderLeaf}
-        placeholder="Enter some rich text…"
-        spellCheck
-        autoFocus
-        onKeyDown={event => {
-          for (const hotkey in HOTKEYS) {
-            if (isHotkey(hotkey, event as any)) {
-              event.preventDefault()
-              const mark = HOTKEYS[hotkey]
-              toggleMark(editor, mark)
-            }
-          }
-        }}
+        renderElement={props => <Element {...props} />}
+        placeholder="Enter some text..."
       />
     </Slate>
   )
 }
 
-const toggleBlock = (editor, format) => {
-  const isActive = isBlockActive(
-    editor,
-    format,
-    TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type'
-  )
-  const isList = LIST_TYPES.includes(format)
+const withImages = editor => {
+  const { insertData, isVoid } = editor
 
-  Transforms.unwrapNodes(editor, {
-    match: n =>
-      !Editor.isEditor(n) &&
-      SlateElement.isElement(n) &&
-      LIST_TYPES.includes(n.type) &&
-      !TEXT_ALIGN_TYPES.includes(format),
-    split: true,
-  })
-  let newProperties: Partial<SlateElement>
-  if (TEXT_ALIGN_TYPES.includes(format)) {
-    newProperties = {
-      align: isActive ? undefined : format,
+  editor.isVoid = element => {
+    return element.type === 'image' ? true : isVoid(element)
+  }
+
+  editor.insertData = data => {
+    const text = data.getData('text/plain')
+    const { files } = data
+
+    if (files && files.length > 0) {
+      for (const file of files) {
+        const reader = new FileReader()
+        const [mime] = file.type.split('/')
+
+        if (mime === 'image') {
+          reader.addEventListener('load', () => {
+            const url = reader.result
+            insertImage(editor, url)
+          })
+
+          reader.readAsDataURL(file)
+        }
+      }
+    } else if (isImageUrl(text)) {
+      insertImage(editor, text)
+    } else {
+      insertData(data)
     }
-  } else {
-    newProperties = {
-      type: isActive ? 'paragraph' : isList ? 'list-item' : format,
-    }
   }
-  Transforms.setNodes<SlateElement>(editor, newProperties)
 
-  if (!isActive && isList) {
-    const block = { type: format, children: [] }
-    Transforms.wrapNodes(editor, block)
-  }
+  return editor
 }
 
-const toggleMark = (editor, format) => {
-  const isActive = isMarkActive(editor, format)
-
-  if (isActive) {
-    Editor.removeMark(editor, format)
-  } else {
-    Editor.addMark(editor, format, true)
-  }
+const insertImage = (editor, url) => {
+  const text = { text: '' }
+  const image: ImageElement = { type: 'image', url, children: [text] }
+  Transforms.insertNodes(editor, image)
 }
 
-const isBlockActive = (editor, format, blockType = 'type') => {
-  const { selection } = editor
-  if (!selection) return false
+const Element = props => {
+  const { attributes, children, element } = props
 
-  const [match] = Array.from(
-    Editor.nodes(editor, {
-      at: Editor.unhangRange(editor, selection),
-      match: n =>
-        !Editor.isEditor(n) &&
-        SlateElement.isElement(n) &&
-        n[blockType] === format,
-    })
-  )
-
-  return !!match
-}
-
-const isMarkActive = (editor, format) => {
-  const marks = Editor.marks(editor)
-  return marks ? marks[format] === true : false
-}
-
-const Element = ({ attributes, children, element }) => {
-  const style = { textAlign: element.align }
   switch (element.type) {
-    case 'block-quote':
-      return (
-        <blockquote style={style} {...attributes}>
-          {children}
-        </blockquote>
-      )
-    case 'bulleted-list':
-      return (
-        <ul style={style} {...attributes}>
-          {children}
-        </ul>
-      )
-    case 'heading-one':
-      return (
-        <h1 style={style} {...attributes}>
-          {children}
-        </h1>
-      )
-    case 'heading-two':
-      return (
-        <h2 style={style} {...attributes}>
-          {children}
-        </h2>
-      )
-    case 'list-item':
-      return (
-        <li style={style} {...attributes}>
-          {children}
-        </li>
-      )
-    case 'numbered-list':
-      return (
-        <ol style={style} {...attributes}>
-          {children}
-        </ol>
-      )
+    case 'image':
+      return <Image {...props} />
     default:
-      return (
-        <p style={style} {...attributes}>
-          {children}
-        </p>
-      )
+      return <p {...attributes}>{children}</p>
   }
 }
 
-const Leaf = ({ attributes, children, leaf }) => {
-  if (leaf.bold) {
-    children = <strong>{children}</strong>
-  }
+const Image = ({ attributes, children, element }) => {
+  const editor = useSlateStatic()
+  const path = ReactEditor.findPath(editor, element)
 
-  if (leaf.code) {
-    children = <code>{children}</code>
-  }
-
-  if (leaf.italic) {
-    children = <em>{children}</em>
-  }
-
-  if (leaf.underline) {
-    children = <u>{children}</u>
-  }
-
-  return <span {...attributes}>{children}</span>
+  const selected = useSelected()
+  const focused = useFocused()
+  return (
+    <div {...attributes}>
+      {children}
+      <div
+        contentEditable={false}
+        className={css`
+          position: relative;
+        `}
+      >
+        <img
+          src={element.url}
+          className={css`
+            display: block;
+            max-width: 100%;
+            max-height: 20em;
+            box-shadow: ${selected && focused ? '0 0 0 3px #B4D5FF' : 'none'};
+          `}
+        />
+        <Button
+          active
+          onClick={() => Transforms.removeNodes(editor, { at: path })}
+          className={css`
+            display: ${selected && focused ? 'inline' : 'none'};
+            position: absolute;
+            top: 0.5em;
+            left: 0.5em;
+            background-color: white;
+          `}
+        >
+          <Icon>delete</Icon>
+        </Button>
+      </div>
+    </div>
+  )
 }
 
-const BlockButton = ({ format, icon }) => {
-  const editor = useSlate()
+const InsertImageButton = () => {
+  const editor = useSlateStatic()
   return (
     <Button
-      active={isBlockActive(
-        editor,
-        format,
-        TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type'
-      )}
       onMouseDown={event => {
         event.preventDefault()
-        toggleBlock(editor, format)
+        const url = window.prompt('Enter the URL of the image:')
+        if (url && !isImageUrl(url)) {
+          alert('URL is not an image')
+          return
+        }
+        url && insertImage(editor, url)
       }}
     >
-      <Icon>{icon}</Icon>
+      <Icon>image</Icon>
     </Button>
   )
 }
 
-const MarkButton = ({ format, icon }) => {
-  const editor = useSlate()
-  return (
-    <Button
-      active={isMarkActive(editor, format)}
-      onMouseDown={event => {
-        event.preventDefault()
-        toggleMark(editor, format)
-      }}
-    >
-      <Icon>{icon}</Icon>
-    </Button>
-  )
+const isImageUrl = url => {
+  if (!url) return false
+  if (!isUrl(url)) return false
+  const ext = new URL(url).pathname.split('.').pop()
+  return imageExtensions.includes(ext)
 }
 
 const initialValue: Descendant[] = [
   {
     type: 'paragraph',
     children: [
-      { text: 'This is editable ' },
-      { text: 'rich', bold: true },
-      { text: ' text, ' },
-      { text: 'much', italic: true },
-      { text: ' better than a ' },
-      { text: '<textarea>', code: true },
-      { text: '!' },
+      {
+        text:
+          'In addition to nodes that contain editable text, you can also create other types of nodes, like images or videos.',
+      },
+    ],
+  },
+  {
+    type: 'image',
+    url: 'https://source.unsplash.com/kFrdX5IeQzI',
+    children: [{ text: '' }],
+  },
+  {
+    type: 'paragraph',
+    children: [
+      {
+        text:
+          'This example shows images in action. It features two ways to add images. You can either add an image via the toolbar icon above, or if you want in on a little secret, copy an image URL to your clipboard and paste it anywhere in the editor!',
+      },
     ],
   },
   {
@@ -446,23 +294,14 @@ const initialValue: Descendant[] = [
     children: [
       {
         text:
-          "Since it's rich text, you can do things like turn a selection of text ",
-      },
-      { text: 'bold', bold: true },
-      {
-        text:
-          ', or add a semantically rendered block quote in the middle of the page, like this:',
+          'You can delete images with the cross in the top left. Try deleting this sheep:',
       },
     ],
   },
   {
-    type: 'block-quote',
-    children: [{ text: 'A wise quote.' }],
-  },
-  {
-    type: 'paragraph',
-    align: 'center',
-    children: [{ text: 'Try it out for yourself!' }],
+    type: 'image',
+    url: 'https://source.unsplash.com/zOwZKwZOZq8',
+    children: [{ text: '' }],
   },
 ]
 
