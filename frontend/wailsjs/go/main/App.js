@@ -14,6 +14,10 @@ export function GenerateRandomPassword(arg1) {
   return window['go']['main']['App']['GenerateRandomPassword'](arg1);
 }
 
+export function GetAddress() {
+  return window['go']['main']['App']['GetAddress']();
+}
+
 export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
 }

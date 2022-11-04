@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 
+	"github.com/riadafridishibly/wpg/pkg/imghandler"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 )
@@ -19,8 +20,10 @@ func main() {
 		Height:           768,
 		MinWidth:         1024,
 		Assets:           assets,
+		AssetsHandler:    imghandler.NewImageHandler(),
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup:        app.startup,
+		OnShutdown:       app.shutdown,
 		Bind: []interface{}{
 			app,
 		},
