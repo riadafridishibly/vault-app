@@ -19,5 +19,6 @@ Keep your secrets secret.
 - [ ] Encryptor (let's use age for now)
   - Use progress bar
 - [ ] And so on
+- [ ] Remove Vertical/Horizontal Scrollbar
 
 ## Self Hosting (Organization)
