@@ -1,6 +1,8 @@
 package utils
 
-import "crypto/rand"
+import (
+	"crypto/rand"
+)
 
 const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
