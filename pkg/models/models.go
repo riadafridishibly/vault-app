@@ -9,6 +9,7 @@ type ExternalField struct {
 
 type PasswordItems struct {
 	ID             int64
+	Description    string
 	SiteName       string
 	Username       string
 	Password       string

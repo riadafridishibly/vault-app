@@ -10,7 +10,7 @@ export default function NewNote() {
   const [value, onChange] = useState(initialValue);
   const handleChange = useCallback(
     (value: string, delta: any, sources: any) => {
-      console.log(sources);
+      console.log(value);
       onChange(value);
     },
     []
