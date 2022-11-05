@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
+import DataTable from '../../components/DataTable/DataTable';
+import { dummyData } from '../../shared/data/dummy-data.data';
 
 function PasswordManager() {
-    return (
-        <div>PasswordManager</div>
-    )
+    return <DataTable data={dummyData.data}></DataTable>;
 }
 
-export default PasswordManager
+export default PasswordManager;
