@@ -5,6 +5,7 @@ import {
   Group,
   Burger,
   Button,
+  Text,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconAbacus, IconPlus, IconSearch } from "@tabler/icons";
@@ -84,7 +85,7 @@ function HeaderSearch({ links }: HeaderSearchProps) {
       <div className={classes.inner}>
         <Group>
           <Burger opened={opened} onClick={toggle} size="sm" />
-          <IconAbacus size={28} />
+          <Text<"h1"> weight={"bolder"}>Vault</Text>
         </Group>
 
         <Group>

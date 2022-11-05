@@ -11,6 +11,7 @@ import {
   CopyButton,
   ActionIcon,
   Tooltip,
+  Button,
 } from "@mantine/core";
 import { keys } from "@mantine/utils";
 import {
@@ -22,7 +23,41 @@ import {
   IconSearch,
 } from "@tabler/icons";
 import { useGoClipboard } from "../../hooks/use-go-clipboard/useGoClipboard";
-import { ButtonCopy } from "../../pages/RandomPasswordGenerator/RandomPasswordGenerator";
+
+export function ButtonCopy({ password }: { password: string }) {
+  const clipboard = useGoClipboard();
+  return (
+    <Tooltip
+      label="Item Copied"
+      offset={5}
+      position="top"
+      radius="xl"
+      transition="slide-up"
+      transitionDuration={100}
+      opened={clipboard.copied}
+    >
+      <Button
+        variant={"subtle"}
+        color={clipboard.copied ? "green" : "gray"}
+        // rightIcon={
+        //   clipboard.copied ? (
+        //     <IconCheck size={20} stroke={1.5} />
+        //   ) : null
+        //   // <IconCopy size={20} stroke={1.5} />
+        // }
+        radius="xl"
+        style={{ fontWeight: "normal" }}
+        styles={{
+          root: { paddingRight: 14 },
+          rightIcon: { marginLeft: 22 },
+        }}
+        onClick={() => clipboard.copy(password)}
+      >
+        {password}
+      </Button>
+    </Tooltip>
+  );
+}
 
 const useStyles = createStyles((theme) => ({
   th: {
