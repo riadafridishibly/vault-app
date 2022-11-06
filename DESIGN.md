@@ -30,7 +30,8 @@
       - Tags
       - Edit
   - New
-    - Modal
+    - [x] Modal (May change)
+    - [] backend implementation
   - Edit
     - Modal
 
