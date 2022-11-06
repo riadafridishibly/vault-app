@@ -44,6 +44,7 @@ func (a *App) initializeServer() {
 			println(err)
 		}
 	}()
+	wailsruntime.LogDebugf(a.ctx, "Internal Image Hanlder Server Running: %s", a.addr)
 }
 func (a *App) shutdown(ctx context.Context) {
 	a.server.Shutdown(ctx)
