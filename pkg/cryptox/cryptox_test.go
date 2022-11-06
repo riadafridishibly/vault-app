@@ -28,6 +28,22 @@ func TestEncryptDecryptString(t *testing.T) {
 	}
 }
 
+func TestEncryptDecryptWithPassword(t *testing.T) {
+	const s = "Hello, World!"
+	encText, err := EncryptWithPassword(s, "12345")
+	if err != nil {
+		t.Error("Failed to encrypt")
+	}
+	decText, err := DecryptWithPassword(encText, "12345")
+	if err != nil {
+		t.Error("Failed to decrypt")
+	}
+
+	if s != decText {
+		t.Error("Failed to retrieve original value")
+	}
+}
+
 func TestConvertKeys(t *testing.T) {
 	pubKey, privKey, err := GenerateNewAgeKey()
 	if err != nil {

@@ -2,11 +2,15 @@ package cryptox
 
 import (
 	"bytes"
+	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"io"
 	"strings"
 
 	"filippo.io/age"
+	"golang.org/x/crypto/argon2"
+	"golang.org/x/crypto/chacha20poly1305"
 )
 
 func GenerateNewAgeKey() (pubKey, privKey string, err error) {
@@ -18,6 +22,51 @@ func GenerateNewAgeKey() (pubKey, privKey string, err error) {
 	pubKey = identity.Recipient().String()
 	privKey = identity.String()
 	return
+}
+
+func Derive32BytesKey(password string) []byte {
+	return argon2.IDKey([]byte(password), []byte("vault-app-salt"), 1, 64*1024, 4, 32)
+}
+
+func EncryptWithPassword(plaintext, password string) (string, error) {
+	aead, err := chacha20poly1305.New(Derive32BytesKey(password))
+	if err != nil {
+		return "", err
+	}
+
+	plainTextBytes := []byte(plaintext)
+	nonce := make([]byte,
+		aead.NonceSize(),
+		aead.NonceSize()+len(plainTextBytes)+aead.Overhead())
+	if _, err := rand.Read(nonce); err != nil {
+		return "", err
+	}
+
+	cipertextBytes := aead.Seal(nonce, nonce, plainTextBytes, nil)
+	return base64.StdEncoding.EncodeToString(cipertextBytes), nil
+}
+
+func DecryptWithPassword(b64string, password string) (string, error) {
+	aead, err := chacha20poly1305.New(Derive32BytesKey(password))
+	if err != nil {
+		return "", err
+	}
+
+	ciphertextString, err := base64.StdEncoding.DecodeString(b64string)
+	if err != nil {
+		return "", err
+	}
+
+	ciphertextBytes := []byte(ciphertextString)
+	if len(ciphertextBytes) < aead.NonceSize() {
+		return "", errors.New("invalid ciphertext: too short")
+	}
+
+	nonce, ciphertext := ciphertextBytes[:aead.NonceSize()],
+		ciphertextBytes[aead.NonceSize():]
+
+	plaintext, err := aead.Open(nil, nonce, ciphertext, nil)
+	return string(plaintext), err
 }
 
 func IdentityFromKey(privateKey string) (age.Identity, error) {
