@@ -1,9 +1,8 @@
-import { dummyData } from '../../shared/data/dummy-data.data';
-import { RowData } from '../../shared/interfaces/row-data.interface';
+import { TableData } from '../../shared/models/table-data.model';
 import { TableSort } from './components/TableSort';
 
-function DataTable({ data }: { data: RowData[] }) {
-    return <TableSort data={data} />;
+function DataTable({ tableData }: { tableData: TableData }) {
+    return <TableSort rows={tableData.rows} headers={tableData.headers} />;
 }
 
 export default DataTable;

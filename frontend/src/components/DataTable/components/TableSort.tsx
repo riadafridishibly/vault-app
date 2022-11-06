@@ -4,14 +4,14 @@ import { useState } from 'react';
 import { ButtonCopy } from '../../../shared/components/ButtonCopy';
 
 import { RowData } from '../../../shared/interfaces/row-data.interface';
-import { TableSortProps } from '../../../shared/interfaces/table-sort-props.interface';
+import { TableData } from '../../../shared/models/table-data.model';
 
 import { sortData } from '../utils/data-table-utils';
 import { TableHeader } from './TableHeader';
 
-export function TableSort({ data }: TableSortProps) {
+export function TableSort({ headers, rows }: TableData) {
     const [search, setSearch] = useState('');
-    const [sortedData, setSortedData] = useState(data);
+    const [sortedData, setSortedData] = useState(rows);
     const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
     const [reverseSortDirection, setReverseSortDirection] = useState(false);
 
@@ -19,32 +19,35 @@ export function TableSort({ data }: TableSortProps) {
         const reversed = field === sortBy ? !reverseSortDirection : false;
         setReverseSortDirection(reversed);
         setSortBy(field);
-        setSortedData(sortData(data, { sortBy: field, reversed, search }));
+        setSortedData(sortData(rows, { sortBy: field, reversed, search }));
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.currentTarget;
         setSearch(value);
         setSortedData(
-            sortData(data, {
+            sortData(rows, {
                 sortBy,
                 reversed: reverseSortDirection,
                 search: value,
-            })
+            }),
         );
     };
+    const tableHeaderData = headers;
 
-    const rows = sortedData.map((row) => (
-        <tr key={row.name}>
-            <td>{row.name}</td>
-            {/* <CopyableTd value={row.email} /> */}
-            <td>
-                <ButtonCopy password={row.email} label={'Item Copied'} />
-            </td>
-
-            <td>
-                <ButtonCopy password={row.company} label={'Item Copied'} />
-            </td>
+    const rowDatas = sortedData.map((rows, index) => (
+        <tr key={index}>
+            {Object.keys(rows).map((data, index) => {
+                return (
+                    <td key={data}>
+                        {rows[data].isCopyable === true ? (
+                            <ButtonCopy password={rows[data].value} label={'Item Copied'} />
+                        ) : (
+                            rows[data].value
+                        )}
+                    </td>
+                );
+            })}
         </tr>
     ));
 
@@ -64,35 +67,32 @@ export function TableSort({ data }: TableSortProps) {
             >
                 <thead>
                     <tr>
-                        <TableHeader
-                            sorted={sortBy === 'name'}
-                            reversed={reverseSortDirection}
-                            onSort={() => setSorting('name')}
-                        >
-                            Name
-                        </TableHeader>
-                        <TableHeader
-                            sorted={sortBy === 'email'}
-                            reversed={reverseSortDirection}
-                            onSort={() => setSorting('email')}
-                        >
-                            Email
-                        </TableHeader>
-                        <TableHeader
-                            sorted={sortBy === 'company'}
-                            reversed={reverseSortDirection}
-                            onSort={() => setSorting('company')}
-                        >
-                            Company
-                        </TableHeader>
+                        {tableHeaderData.map((value, index) => {
+                            return (
+                                <TableHeader
+                                    key={index}
+                                    sorted={sortBy === value}
+                                    reversed={reverseSortDirection}
+                                    onSort={() => {
+                                        let row = rows[0];
+                                        let len = Object.keys(row).length;
+                                        return index >= len
+                                            ? null
+                                            : setSorting(Object.keys(row)[index]);
+                                    }}
+                                >
+                                    {value}
+                                </TableHeader>
+                            );
+                        })}
                     </tr>
                 </thead>
                 <tbody>
                     {rows.length > 0 ? (
-                        rows
+                        rowDatas
                     ) : (
                         <tr>
-                            <td colSpan={Object.keys(data[0]).length}>
+                            <td colSpan={Object.keys(rows[0]).length}>
                                 <Text weight={500} align="center">
                                     Nothing found
                                 </Text>
