@@ -13,7 +13,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	lru "github.com/hashicorp/golang-lru"
-	"github.com/riadafridishibly/wpg/pkg/utils"
+	"github.com/riadafridishibly/vault-app/pkg/utils"
 )
 
 var cache = newCache()

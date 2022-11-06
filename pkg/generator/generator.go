@@ -6,7 +6,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/riadafridishibly/wpg/pkg/generator/common"
+	"github.com/riadafridishibly/vault-app/pkg/generator/common"
 	"golang.org/x/crypto/argon2"
 	"golang.org/x/crypto/hkdf"
 )

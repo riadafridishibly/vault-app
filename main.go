@@ -3,7 +3,7 @@ package main
 import (
 	"embed"
 
-	"github.com/riadafridishibly/wpg/pkg/imghandler"
+	"github.com/riadafridishibly/vault-app/pkg/imghandler"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 )
