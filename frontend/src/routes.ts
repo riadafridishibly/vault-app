@@ -7,6 +7,7 @@ import Notifications from './pages/Notifications/Notifications';
 import PasswordManager from './pages/PasswordManager/PasswordManager';
 import PasswordGenerator from './pages/PasswordGenerator/PasswordGenerator';
 import Settings from './pages/Settings/Settings';
+import Keys from './pages/Keys/Keys';
 
 // TODO: route type may change depending on authentication logic
 enum RouteType {
@@ -47,6 +48,7 @@ export const routeMappings: RouteData[] = [
         component: EncryptFiles,
         routeType: RouteType.Account,
     },
+    { path: '/keys', component: Keys, routeType: RouteType.Account },
     { path: '/notes', component: Notes, routeType: RouteType.Account },
     { path: '/notes/new', component: NewNote },
 ];

@@ -1,18 +1,13 @@
 import {
 	IconBellRinging,
 	IconDatabaseImport,
-	IconFileAnalytics,
 	IconFilePower,
 	IconKey,
-	IconLicense,
+	IconLock,
 	IconLockAccess,
-	IconMessage2,
-	IconMessages,
 	IconNotes,
-	IconReceiptRefund,
 	IconSettings,
-	IconShoppingCart,
-	IconUsers,
+	IconShieldLock,
 } from "@tabler/icons";
 
 export const tabs = {
@@ -26,15 +21,16 @@ export const tabs = {
 		{
 			link: "/password_manager",
 			label: "Password Manager",
-			icon: IconLockAccess,
+			icon: IconShieldLock,
 		},
 		{
 			link: "/password_generator",
 			label: "Password Generator",
-			icon: IconKey,
+			icon: IconLock,
 		},
 		{ link: "/encrypt_files", label: "Encrypt Files", icon: IconFilePower },
 		{ link: "/settings", label: "Settings", icon: IconSettings },
+		{ link: "/keys", label: "Keys", icon: IconKey },
 	],
 	general: [{ link: "/", label: "Databases", icon: IconDatabaseImport }],
 };
