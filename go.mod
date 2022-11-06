@@ -1,4 +1,4 @@
-module github.com/riadafridishibly/wpg
+module github.com/riadafridishibly/vault-app
 
 go 1.18
 

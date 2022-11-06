@@ -7,9 +7,9 @@ import (
 	"os"
 
 	"github.com/iwpnd/pw"
-	"github.com/riadafridishibly/wpg/pkg/generator"
-	"github.com/riadafridishibly/wpg/pkg/generator/common"
-	"github.com/riadafridishibly/wpg/pkg/imghandler"
+	"github.com/riadafridishibly/vault-app/pkg/generator"
+	"github.com/riadafridishibly/vault-app/pkg/generator/common"
+	"github.com/riadafridishibly/vault-app/pkg/imghandler"
 	"github.com/wailsapp/wails/v2/pkg/logger"
 	wailsruntime "github.com/wailsapp/wails/v2/pkg/runtime"
 	"golang.design/x/clipboard"
