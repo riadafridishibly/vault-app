@@ -31,13 +31,6 @@ export const routeMappings: RouteData[] = [
         icon: IconDatabaseImport,
     },
     {
-        path: '/password_generator',
-        component: PasswordGenerator,
-        routeType: RouteType.Account,
-        label: 'Password Generator',
-        icon: IconLock,
-    },
-    {
         path: '/notifications',
         component: Notifications,
         routeType: RouteType.Account,
@@ -45,11 +38,11 @@ export const routeMappings: RouteData[] = [
         icon: IconBellRinging,
     },
     {
-        path: '/settings',
-        component: Settings,
+        path: '/notes',
+        component: Notes,
         routeType: RouteType.Account,
-        label: 'Settings',
-        icon: IconSettings,
+        label: 'Notes',
+        icon: IconNotes,
     },
     {
         path: '/password_manager',
@@ -66,11 +59,18 @@ export const routeMappings: RouteData[] = [
         icon: IconFilePower,
     },
     {
-        path: '/notes',
-        component: Notes,
+        path: '/password_generator',
+        component: PasswordGenerator,
         routeType: RouteType.Account,
-        label: 'Notes',
-        icon: IconNotes,
+        label: 'Password Generator',
+        icon: IconLock,
+    },
+    {
+        path: '/settings',
+        component: Settings,
+        routeType: RouteType.Account,
+        label: 'Settings',
+        icon: IconSettings,
     },
     {
         path: '/notes/new',
