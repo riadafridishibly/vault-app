@@ -1,12 +1,12 @@
 {
-  "name": "Valult",
-  "outputfilename": "vault",
-  "frontend:install": "yarn install",
-  "frontend:build": "yarn build",
-  "frontend:dev:watcher": "yarn dev",
-  "frontend:dev:serverUrl": "auto",
-  "author": {
-    "name": "Riad Afridi Shibly",
-    "email": "riadafridishibly@gmail.com"
-  }
+    "name": "Vault",
+    "outputfilename": "vault",
+    "frontend:install": "yarn install",
+    "frontend:build": "yarn build",
+    "frontend:dev:watcher": "yarn dev",
+    "frontend:dev:serverUrl": "auto",
+    "author": {
+        "name": "Riad Afridi Shibly",
+        "email": "riadafridishibly@gmail.com"
+    }
 }
