@@ -12,3 +12,5 @@ export function GetAddress():Promise<string>;
 export function Greet(arg1:string):Promise<string>;
 
 export function OpenDialog():Promise<Array<string>>;
+
+export function PasteFromClipboard():Promise<string>;

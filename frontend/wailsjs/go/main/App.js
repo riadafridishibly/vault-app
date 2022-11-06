@@ -25,3 +25,7 @@ export function Greet(arg1) {
 export function OpenDialog() {
   return window['go']['main']['App']['OpenDialog']();
 }
+
+export function PasteFromClipboard() {
+  return window['go']['main']['App']['PasteFromClipboard']();
+}
