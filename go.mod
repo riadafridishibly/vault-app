@@ -12,6 +12,8 @@ require (
 
 require github.com/go-chi/cors v1.2.1
 
+require filippo.io/age v1.0.0
+
 require (
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
