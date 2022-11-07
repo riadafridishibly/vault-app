@@ -38,7 +38,12 @@ function CreatePassword() {
     };
 
     const pasteButton = (propName: string) => (
-        <Button bg={modalButtonColor} size="sm" p="5px" onClick={(e) => handlePaste(e, propName)}>
+        <Button
+            bg={modalButtonColor}
+            size="sm"
+            p="5px"
+            onClick={(e: React.MouseEvent) => handlePaste(e, propName)}
+        >
             <IconClipboard />
         </Button>
     );
