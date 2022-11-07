@@ -69,6 +69,10 @@ func (a *App) CopyToClipboard(value string) {
 	clipboard.Write(clipboard.FmtText, []byte(value))
 }
 
+func (a *App) PasteFromClipboard() string {
+	return string(clipboard.Read(clipboard.FmtText))
+}
+
 func (a *App) GenerateRandomPassword(options []string) string {
 	var opts []pw.Option
 	for _, opt := range options {

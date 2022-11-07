@@ -12,6 +12,7 @@
     "@emotion/css": "^11.10.5",
     "@emotion/react": "^11.10.4",
     "@mantine/core": "^5.6.1",
+    "@mantine/form": "^5.7.1",
     "@mantine/hooks": "^5.6.1",
     "@mantine/rte": "^5.6.4",
     "@tabler/icons": "^1.106.0",
