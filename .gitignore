@@ -3,3 +3,4 @@ node_modules
 frontend/dist
 frontend/.yarn
 frontend/.yarnrc.yml
+*.db

@@ -2,6 +2,9 @@ package main
 
 import (
 	"embed"
+	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/riadafridishibly/vault-app/pkg/imghandler"
 	"github.com/wailsapp/wails/v2"
@@ -12,9 +15,12 @@ import (
 var assets embed.FS
 
 func main() {
-	app := NewApp()
+	app, err := NewApp()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title:            "Vault",
 		Width:            1024,
 		Height:           768,

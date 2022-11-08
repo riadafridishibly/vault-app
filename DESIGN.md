@@ -38,5 +38,18 @@
 ### Backend
 
 - Password Manager
+  - API
+    - CREATE
+      - Website
+      - Username
+      - Password
+      - Tags
+    - READ
+      - Return all (pagination)
+    - UPDATE
+      - Row update
+    - DELETE
+      - Row delete
+
   - Models
     - ## PasswordItem

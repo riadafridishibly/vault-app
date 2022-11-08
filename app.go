@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/iwpnd/pw"
+	"github.com/riadafridishibly/vault-app/pkg/dao"
 	"github.com/riadafridishibly/vault-app/pkg/generator"
 	"github.com/riadafridishibly/vault-app/pkg/generator/common"
 	"github.com/riadafridishibly/vault-app/pkg/imghandler"
@@ -22,11 +23,17 @@ type App struct {
 	ctx    context.Context
 	server *http.Server
 	addr   string
+	dao    *dao.Dao
 }
 
 // NewApp creates a new App application struct
-func NewApp() *App {
-	return &App{}
+func NewApp() (*App, error) {
+	dao, err := dao.NewDao()
+
+	if err != nil {
+		return nil, err
+	}
+	return &App{dao: dao}, nil
 }
 
 func (a *App) initializeServer() {
@@ -46,7 +53,9 @@ func (a *App) initializeServer() {
 	}()
 	wailsruntime.LogDebugf(a.ctx, "Internal Image Hanlder Server Running: %s", a.addr)
 }
+
 func (a *App) shutdown(ctx context.Context) {
+	a.dao.Close()
 	a.server.Shutdown(ctx)
 }
 
