@@ -4,13 +4,16 @@ import {
   Autocomplete,
   Group,
   Burger,
-  Button,
   Text,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconAbacus, IconPlus, IconSearch } from "@tabler/icons";
+import { IconSearch } from "@tabler/icons";
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import EncryptFilesControls from "../../pages/EncryptFiles/EncryptFilesControls";
+import KeysControls from "../../pages/Keys/KeysControls";
+import PasswordManagerControls from "../../pages/PasswordManager/PasswordManagerControls";
+
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -63,11 +66,23 @@ interface HeaderSearchProps {
   links: { link: string; label: string }[];
 }
 
+function renderActions(location: string) {
+  if (location.startsWith('/keys')) {
+    return <KeysControls />
+  }
+  if (location.startsWith('/password_manager')) {
+    return <PasswordManagerControls />
+  }
+  if (location.startsWith('/encrypt_files')) {
+    return <EncryptFilesControls />
+  }
+  return null
+}
+
 function HeaderSearch({ links }: HeaderSearchProps) {
+  const loc = useLocation();
   const [opened, { toggle }] = useDisclosure(false);
   const { classes } = useStyles();
-  const loc = useLocation();
-  const navigate = useNavigate();
 
   const items = links.map((link) => (
     <a
@@ -92,6 +107,7 @@ function HeaderSearch({ links }: HeaderSearchProps) {
           <Group ml={50} spacing={5} className={classes.links}>
             {items}
           </Group>
+          {/* TODO(riad): Integrate spotlight search */}
           <Autocomplete
             className={classes.search}
             placeholder="Search"
@@ -106,17 +122,7 @@ function HeaderSearch({ links }: HeaderSearchProps) {
               "Blitz.js",
             ]}
           />
-          {loc && loc.pathname === "/notes" && (
-            <Button
-              onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
-                navigate("/notes/new", { state: { hello: "world" } });
-              }}
-              leftIcon={<IconPlus />}
-            >
-              New Note
-            </Button>
-          )}
+          {renderActions(loc.pathname)}
         </Group>
       </div>
     </Header>
@@ -127,28 +133,9 @@ function NavTop() {
   const loc = useLocation();
   React.useEffect(() => {
     console.log("location:", loc);
-  }, [loc]);
+  }, [loc.pathname]);
   return (
-    <HeaderSearch
-      links={[
-        {
-          link: "/about",
-          label: "Features",
-        },
-        {
-          link: "/pricing",
-          label: "Pricing",
-        },
-        {
-          link: "/learn",
-          label: "Learn",
-        },
-        {
-          link: "/community",
-          label: "Community",
-        },
-      ]}
-    />
+    <HeaderSearch links={[]} />
   );
 }
 

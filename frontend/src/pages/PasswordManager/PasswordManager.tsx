@@ -1,4 +1,3 @@
-import { Group } from '@mantine/core';
 import DataTable from '../../components/DataTable/DataTable';
 import CreatePassword from '../../shared/components/CreatePassword';
 import { passwordDummy } from '../../shared/data/dummy-data.data';

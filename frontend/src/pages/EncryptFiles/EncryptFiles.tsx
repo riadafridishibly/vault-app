@@ -1,30 +1,13 @@
-import { Button, Center } from "@mantine/core";
-import React from "react";
-import { OpenDialog } from "../../../wailsjs/go/main/App";
+import { Code } from "@mantine/core";
+import { useRecoilValue } from "recoil";
+import { selectedFiles } from "./EncryptFilesControls";
 
 function EncryptFiles() {
-  const [files, setFiles] = React.useState<string[]>([]);
-  const openFileDialog = () => {
-    OpenDialog()
-      .then((files) => {
-        if (files) {
-          setFiles((curr) => [...curr, ...files])
-        }
-      })
-      .catch((err) => console.error(err));
-  };
+  const files = useRecoilValue(selectedFiles)
   return (
-    <>
-      <Center>{JSON.stringify(files)}</Center>
-      <Button
-        onClick={(e: React.MouseEvent) => {
-          e.preventDefault();
-          openFileDialog();
-        }}
-      >
-        Open Files
-      </Button>
-    </>
+    <Code>
+      {JSON.stringify(files, null, 4)}
+    </Code>
   );
 }
 
