@@ -19,6 +19,7 @@ import Settings from './pages/Settings/Settings';
 import Keys from './pages/Keys/Keys';
 import { RouteType } from './shared/enums/route-type.enum';
 import { RouteData } from './shared/interfaces/route-data.interface';
+import NewKey from './pages/Keys/NewKey';
 
 const nullTablerIcon = null as any as TablerIcon;
 
@@ -78,5 +79,18 @@ export const routeMappings: RouteData[] = [
         routeType: RouteType.Hidden,
         icon: nullTablerIcon,
     },
-    { path: '/keys', component: Keys, routeType: RouteType.Account, label: 'Keys', icon: IconKey },
+    {
+        path: '/keys',
+        component: Keys,
+        routeType: RouteType.Account,
+        label: 'Keys',
+        icon: IconKey
+    },
+    {
+        path: '/keys/new',
+        component: Keys,
+        routeType: RouteType.Hidden,
+        label: 'Keys',
+        icon: IconKey
+    },
 ];
