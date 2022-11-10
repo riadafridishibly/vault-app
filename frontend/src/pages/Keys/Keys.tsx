@@ -4,10 +4,9 @@ import { keysDummy } from '../../shared/data/dummy-data.data';
 import NewKey from './NewKey';
 
 function Keys() {
-    const loc = useLocation()
     return (
         <>
-            {loc && loc.pathname === '/keys/new' && <NewKey />}
+            <NewKey />
             <DataTable tableData={keysDummy} />
         </>
     )

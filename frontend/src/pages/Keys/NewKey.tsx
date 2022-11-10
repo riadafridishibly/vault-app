@@ -1,18 +1,18 @@
 import { Button, Center, Modal, Tabs } from '@mantine/core'
-import React, { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
+import { showNewKeyAddModal } from './KeysControls'
 import SSHKeyGen from './SSHKeyGen'
 
 function NewKey() {
-    const navigate = useNavigate()
-    const [show, setShow] = React.useState(true)
+    const [show, setShow] = useRecoilState(showNewKeyAddModal)
 
     return (
         <Modal
             title="Add New Key"
             withCloseButton={true}
             opened={show}
-            onClose={() => { setShow(false); navigate('/keys') }}
+            onClose={() => { setShow(false) }}
         >
             <Tabs defaultValue="ssh_key">
                 <Tabs.List>

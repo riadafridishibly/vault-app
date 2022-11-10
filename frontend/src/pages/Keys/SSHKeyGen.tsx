@@ -14,7 +14,7 @@ function SSHKeyGen() {
     const [name, setName] = React.useState(`id_${defaultSelected}`)
     const [selected, setSelected] = React.useState(defaultSelected)
 
-    // TODO: respect user edits
+    // TODO(riad): respect user edits
     const handleSelected = React.useCallback((value: string) => {
         setSelected(value)
         setName(`id_${value}`)
