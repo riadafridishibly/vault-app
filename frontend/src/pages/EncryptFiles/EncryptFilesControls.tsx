@@ -1,22 +1,20 @@
 import { Button, Group } from '@mantine/core';
-import React from 'react'
+import React from 'react';
 import { atom, useSetRecoilState } from 'recoil';
-import { OpenDialog } from '../../../wailsjs/go/main/App';
-
+import { OpenDialog } from '@wailsjs/go/main/App';
 
 export const selectedFiles = atom<string[]>({
     key: 'selectedFiles',
-    default: []
-})
-
+    default: [],
+});
 
 function OpenFiles() {
-    const setFiles = useSetRecoilState(selectedFiles)
+    const setFiles = useSetRecoilState(selectedFiles);
     const openFileDialog = () => {
         OpenDialog()
             .then((files) => {
                 if (files) {
-                    setFiles((curr) => [...curr, ...files])
+                    setFiles((curr) => [...curr, ...files]);
                 }
             })
             .catch((err) => console.error(err));
@@ -38,7 +36,7 @@ function EncryptFilesControls() {
         <Group>
             <OpenFiles />
         </Group>
-    )
+    );
 }
 
-export default EncryptFilesControls
+export default EncryptFilesControls;

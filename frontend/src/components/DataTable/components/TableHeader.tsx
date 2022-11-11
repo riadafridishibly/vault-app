@@ -1,12 +1,6 @@
-import {
-    createStyles,
-    Group,
-    UnstyledButton,
-    Text,
-    Center,
-} from '@mantine/core';
+import { createStyles, Group, UnstyledButton, Text, Center } from '@mantine/core';
 import { IconChevronDown, IconChevronUp, IconSelector } from '@tabler/icons';
-import { ThProps } from '../../../shared/interfaces/th-props.interface';
+import { ThProps } from '@src/shared/interfaces/th-props.interface';
 
 const useStyles = createStyles((theme) => ({
     th: {
@@ -19,9 +13,7 @@ const useStyles = createStyles((theme) => ({
 
         '&:hover': {
             backgroundColor:
-                theme.colorScheme === 'dark'
-                    ? theme.colors.dark[6]
-                    : theme.colors.gray[0],
+                theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
         },
     },
 
@@ -34,11 +26,7 @@ const useStyles = createStyles((theme) => ({
 
 export function TableHeader({ children, reversed, sorted, onSort }: ThProps) {
     const { classes } = useStyles();
-    const Icon = sorted
-        ? reversed
-            ? IconChevronUp
-            : IconChevronDown
-        : IconSelector;
+    const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
     return (
         <th className={classes.th}>
             <UnstyledButton onClick={onSort} className={classes.control}>

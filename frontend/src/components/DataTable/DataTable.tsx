@@ -1,4 +1,4 @@
-import { TableData } from '../../shared/models/table-data.model';
+import { TableData } from '@src/shared/models/table-data.model';
 import { TableSort } from './components/TableSort';
 
 function DataTable({ tableData }: { tableData: TableData }) {

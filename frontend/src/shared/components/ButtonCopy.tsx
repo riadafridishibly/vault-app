@@ -1,13 +1,7 @@
 import { Button, Tooltip } from '@mantine/core';
-import { useGoClipboard } from '../../hooks/use-go-clipboard/useGoClipboard';
+import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
 
-export function ButtonCopy({
-    password,
-    label,
-}: {
-    password: string;
-    label: string;
-}) {
+export function ButtonCopy({ password, label }: { password: string; label: string }) {
     const clipboard = useGoClipboard();
     return (
         <Tooltip
@@ -29,7 +23,6 @@ export function ButtonCopy({
                 //   // <IconCopy size={20} stroke={1.5} />
                 // }
                 radius="xl"
-                
                 style={{ fontWeight: 'normal' }}
                 styles={{
                     root: { paddingRight: 14 },

@@ -1,12 +1,12 @@
 import { ScrollArea, Table, TextInput, Text } from '@mantine/core';
 import { IconSearch } from '@tabler/icons';
 import { useState } from 'react';
-import { ButtonCopy } from '../../../shared/components/ButtonCopy';
+import { ButtonCopy } from '@src/shared/components/ButtonCopy';
 
-import { RowData } from '../../../shared/interfaces/row-data.interface';
-import { TableData } from '../../../shared/models/table-data.model';
+import { RowData } from '@src/shared/interfaces/row-data.interface';
+import { TableData } from '@src/shared/models/table-data.model';
 
-import { sortData } from '../utils/data-table-utils';
+import { sortData } from '@src/components/DataTable/utils/data-table-utils';
 import { TableHeader } from './TableHeader';
 
 export function TableSort({ headers, rows }: TableData) {

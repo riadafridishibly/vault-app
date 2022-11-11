@@ -3,8 +3,8 @@ import { Center, createStyles, Navbar, SegmentedControl } from '@mantine/core';
 import { IconLogout, IconSwitchHorizontal } from '@tabler/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { routeMappings } from '../../../routes';
-import { RouteType } from '../../../shared/enums/route-type.enum';
+import { routeMappings } from '@src/routes';
+import { RouteType } from '@src/shared/enums/route-type.enum';
 import { BadgeWithAvatar } from './BadgeWithAvatar';
 
 const useStyles = createStyles((theme, _params, getRef) => {
