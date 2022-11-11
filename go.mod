@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/hashicorp/golang-lru v0.5.4
-	github.com/wailsapp/wails/v2 v2.1.0
+	github.com/wailsapp/wails/v2 v2.2.0
 	golang.design/x/clipboard v0.6.2
 	golang.org/x/crypto v0.0.0-20220517005047-85d78b3ac167
 )
@@ -13,6 +13,11 @@ require (
 require github.com/go-chi/cors v1.2.1
 
 require filippo.io/age v1.0.0
+
+require (
+	github.com/samber/lo v1.27.1 // indirect
+	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
+)
 
 require (
 	ariga.io/atlas v0.7.3-0.20221011160332-3ca609863edd // indirect
