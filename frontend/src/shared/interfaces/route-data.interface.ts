@@ -1,5 +1,5 @@
 import { TablerIcon } from '@tabler/icons';
-import { RouteType } from '../enums/route-type.enum';
+import { RouteType } from '@src/shared/enums/route-type.enum';
 
 export interface RouteData {
     path: string;

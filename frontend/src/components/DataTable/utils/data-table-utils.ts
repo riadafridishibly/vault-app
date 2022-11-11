@@ -1,5 +1,5 @@
 import { keys } from '@mantine/utils';
-import { RowData } from '../../../shared/interfaces/row-data.interface';
+import { RowData } from '@src/shared/interfaces/row-data.interface';
 
 export function filterData(data: RowData[], search: string) {
     const query = search.toLowerCase().trim();

@@ -3,8 +3,8 @@ import { useForm } from '@mantine/form';
 import { IconClipboard } from '@tabler/icons';
 import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { useGoClipboard } from '../../hooks/use-go-clipboard/useGoClipboard';
-import { showNewPasswordCreateModal } from '../../pages/PasswordManager/PasswordManagerControls';
+import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
+import { showNewPasswordCreateModal } from '@src/pages/PasswordManager/PasswordManagerControls';
 
 // TODO: model may change later on
 class UserPass {
@@ -20,7 +20,7 @@ const modalButtonColor = 'gray';
 
 function CreatePassword() {
     const { error, paste } = useGoClipboard();
-    const [opened, setOpened] = useRecoilState(showNewPasswordCreateModal)
+    const [opened, setOpened] = useRecoilState(showNewPasswordCreateModal);
     const userPassForm = useForm<UserPass>({
         initialValues: new UserPass(),
     });

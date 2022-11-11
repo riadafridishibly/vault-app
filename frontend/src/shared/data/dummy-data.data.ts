@@ -1,6 +1,5 @@
-import { CellData } from '../models/cell-data.model';
-import { TableData } from './../models/table-data.model';
-
+import { CellData } from '@src/shared/models/cell-data.model';
+import { TableData } from '@src/shared/models/table-data.model';
 
 export const passwordDummy: TableData = {
     headers: ['Website', 'Username', 'Password', 'Tags'],

@@ -1,8 +1,8 @@
 import { Box, Button, Center, Chip, Space, Stack, Text, Tooltip } from '@mantine/core';
 import { IconCheck, IconCopy, IconReload } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
-import { GenerateRandomPassword } from '../../../wailsjs/go/main/App';
-import { useGoClipboard } from '../../hooks/use-go-clipboard/useGoClipboard';
+import { GenerateRandomPassword } from '@wailsjs/go/main/App';
+import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
 
 export function ButtonCopy({ password }: { password: string }) {
     const clipboard = useGoClipboard();
