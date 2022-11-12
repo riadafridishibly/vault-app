@@ -1,7 +1,7 @@
 import { Button, Group } from '@mantine/core';
 import React from 'react';
 import { atom, useSetRecoilState } from 'recoil';
-import { OpenDialog } from '@wailsjs/go/main/App';
+import { OpenDialog } from '@wailsjs/go/main/DialogService';
 
 export const selectedFiles = atom<string[]>({
     key: 'selectedFiles',

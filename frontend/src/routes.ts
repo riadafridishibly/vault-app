@@ -1,7 +1,7 @@
 import { PwnChecker } from './pages/PwnChecker/PwnChecker';
 import {
+    IconAlertTriangle,
     IconBellRinging,
-    IconCloudLockOpen,
     IconDatabaseImport,
     IconFilePower,
     IconKey,
@@ -21,7 +21,6 @@ import Settings from './pages/Settings/Settings';
 import Keys from './pages/Keys/Keys';
 import { RouteType } from './shared/enums/route-type.enum';
 import { RouteData } from './shared/interfaces/route-data.interface';
-import NewKey from './pages/Keys/NewKey';
 
 const nullTablerIcon = null as any as TablerIcon;
 
@@ -92,8 +91,8 @@ export const routeMappings: RouteData[] = [
         path: '/password-checker',
         component: PwnChecker,
         routeType: RouteType.Account,
-        label: 'Check Password Breach',
-        icon: IconCloudLockOpen,
+        label: 'Password Breach',
+        icon: IconAlertTriangle,
     },
     {
         path: '/keys/new',

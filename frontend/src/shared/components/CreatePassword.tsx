@@ -1,8 +1,8 @@
 import { Button, Group, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconClipboard } from '@tabler/icons';
-import React, { useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React from 'react';
+import { useRecoilState } from 'recoil';
 import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
 import { showNewPasswordCreateModal } from '@src/pages/PasswordManager/PasswordManagerControls';
 import {

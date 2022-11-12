@@ -1,7 +1,7 @@
 import { Box, Button, Center, Chip, Space, Stack, Text, Tooltip } from '@mantine/core';
 import { IconCheck, IconCopy, IconReload } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
-import { GenerateRandomPassword } from '@wailsjs/go/main/App';
+import { GeneratePassword } from '@wailsjs/go/main/PasswordService';
 import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
 
 export function ButtonCopy({ password }: { password: string }) {
@@ -41,11 +41,11 @@ export function ButtonCopy({ password }: { password: string }) {
 }
 
 function PasswordGenerator() {
-    const [value, setValue] = useState(['uppercase']);
+    const [value, setValue] = useState(['uppercase', 'lowercase', 'numbers']);
     const [pass, setPass] = useState('');
 
     const generateNew = () => {
-        GenerateRandomPassword(value)
+        GeneratePassword(value)
             .then((pass) => setPass(pass))
             .catch((err) => console.error(err));
     };

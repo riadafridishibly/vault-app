@@ -3,6 +3,9 @@
 dev:
 	wails dev
 
+module:
+	wails generate module
+
 build:
 	wails build
 
