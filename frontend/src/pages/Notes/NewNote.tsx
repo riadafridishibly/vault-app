@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { RichTextEditor } from '@mantine/rte';
-import { GetAddress } from '@wailsjs/go/main/App';
+import { GetAddress } from '@wailsjs/go/main/AssetServerHack';
 
 const initialValue =
     '<p>Your initial <b>html value</b> or an empty string to init editor without value</p>';

@@ -8,7 +8,7 @@ import {
     modalTextInputMargin,
 } from '@src/shared/constants/modal.constants';
 import { IconClipboard } from '@tabler/icons';
-import { CheckPasswordBreach } from '@wailsjs/go/main/App';
+import { CheckPasswordBreach } from '@wailsjs/go/main/PasswordService';
 import React, { useState } from 'react';
 
 export const PwnChecker = () => {
@@ -49,8 +49,6 @@ export const PwnChecker = () => {
                 <TextInput
                     m={modalTextInputMargin}
                     placeholder="Password"
-                    label="Password"
-                    withAsterisk
                     required
                     {...passForm.getInputProps('password')}
                     rightSection={pasteButton('password')}

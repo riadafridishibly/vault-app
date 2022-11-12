@@ -5,8 +5,8 @@ import (
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/riadafridishibly/vault-app/internal/imghandler"
 
-	"github.com/riadafridishibly/vault-app/pkg/imghandler"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -34,7 +34,11 @@ func main() {
 		OnStartup:        app.startup,
 		OnShutdown:       app.shutdown,
 		Bind: []interface{}{
-			app,
+			app.dialogService,
+			app.passwordService,
+			app.databaseService,
+			app.clipboardService,
+			app.assetServer,
 		},
 	})
 

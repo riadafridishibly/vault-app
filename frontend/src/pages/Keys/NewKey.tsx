@@ -1,5 +1,4 @@
 import { Button, Center, Modal, Tabs } from '@mantine/core'
-import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { showNewKeyAddModal } from './KeysControls'
 import SSHKeyGen from './SSHKeyGen'

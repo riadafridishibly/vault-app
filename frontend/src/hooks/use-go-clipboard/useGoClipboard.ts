@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CopyToClipboard, PasteFromClipboard } from '@wailsjs/go/main/App';
+import { Copy, Paste } from '@wailsjs/go/main/ClipboardService';
 
 export function useGoClipboard({ timeout = 2000 } = {}) {
     const [error, setError] = useState<Error | null>(null);
@@ -13,14 +13,14 @@ export function useGoClipboard({ timeout = 2000 } = {}) {
     };
 
     const copy = (valueToCopy: any) => {
-        CopyToClipboard(valueToCopy)
+        Copy(valueToCopy)
             .then(() => handleCopyResult(true))
             .catch((err) => setError(err));
     };
 
     const paste = async () => {
         try {
-            return await PasteFromClipboard();
+            return await Paste();
         } catch (ex) {
             console.log(ex);
         }

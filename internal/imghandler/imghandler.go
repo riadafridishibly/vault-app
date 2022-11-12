@@ -13,7 +13,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	lru "github.com/hashicorp/golang-lru"
-	"github.com/riadafridishibly/vault-app/pkg/utils"
+	"github.com/riadafridishibly/vault-app/internal/utils"
 )
 
 var cache = newCache()
@@ -84,7 +84,7 @@ func NewImageHandler() http.Handler {
 }
 
 func NewServer() (srv *http.Server, l net.Listener, err error) {
-	l, err = net.Listen("tcp", "localhost:0")
+	l, err = net.Listen("tcp", "localhost:56789")
 	if err != nil {
 		return
 	}
