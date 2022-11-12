@@ -1,5 +1,7 @@
+import { PwnChecker } from './pages/PwnChecker/PwnChecker';
 import {
     IconBellRinging,
+    IconCloudLockOpen,
     IconDatabaseImport,
     IconFilePower,
     IconKey,
@@ -84,13 +86,20 @@ export const routeMappings: RouteData[] = [
         component: Keys,
         routeType: RouteType.Account,
         label: 'Keys',
-        icon: IconKey
+        icon: IconKey,
+    },
+    {
+        path: '/password-checker',
+        component: PwnChecker,
+        routeType: RouteType.Account,
+        label: 'Check Password Breach',
+        icon: IconCloudLockOpen,
     },
     {
         path: '/keys/new',
         component: Keys,
         routeType: RouteType.Hidden,
         label: 'Keys',
-        icon: IconKey
+        icon: IconKey,
     },
 ];

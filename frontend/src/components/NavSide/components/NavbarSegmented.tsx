@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { routeMappings } from '@src/routes';
 import { RouteType } from '@src/shared/enums/route-type.enum';
 import { BadgeWithAvatar } from './BadgeWithAvatar';
+import { isNullOrUndefined } from '@src/shared/utils/utils';
 
 const useStyles = createStyles((theme, _params, getRef) => {
     const icon: string = getRef('icon');
@@ -98,7 +99,9 @@ export function NavbarSegmented() {
                     navigate(item.path);
                 }}
             >
-                <item.icon className={classes.linkIcon} stroke={1.5} />
+                {isNullOrUndefined(item?.icon) === false && (
+                    <item.icon className={classes.linkIcon} stroke={1.5} />
+                )}
                 <span>{item.label}</span>
             </a>
         ));
