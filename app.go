@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/iwpnd/pw"
+	"github.com/riadafridishibly/vault-app/pkg/breachchecker"
 	"github.com/riadafridishibly/vault-app/pkg/dao"
 	"github.com/riadafridishibly/vault-app/pkg/generator"
 	"github.com/riadafridishibly/vault-app/pkg/generator/common"
@@ -80,6 +81,10 @@ func (a *App) CopyToClipboard(value string) {
 
 func (a *App) PasteFromClipboard() string {
 	return string(clipboard.Read(clipboard.FmtText))
+}
+
+func (a *App) CheckPasswordBreach(password string) (int, error) {
+	return breachchecker.GetBreach(password)
 }
 
 func (a *App) GenerateRandomPassword(options []string) string {

@@ -5,6 +5,12 @@ import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
 import { showNewPasswordCreateModal } from '@src/pages/PasswordManager/PasswordManagerControls';
+import {
+    modalButtonColor,
+    modalButtonMargin,
+    modalButtonSize,
+    modalTextInputMargin,
+} from '../constants/modal.constants';
 
 // TODO: model may change later on
 class UserPass {
@@ -12,11 +18,6 @@ class UserPass {
     username: string = '';
     password: string = '';
 }
-
-const modalButtonSize = 'md';
-const modalButtonMargin = 'sm';
-const modalTextInputMargin = 'sm';
-const modalButtonColor = 'gray';
 
 function CreatePassword() {
     const { error, paste } = useGoClipboard();
