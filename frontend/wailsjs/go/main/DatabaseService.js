@@ -5,3 +5,15 @@
 export function CreatePasswordItem(arg1) {
   return window['go']['main']['DatabaseService']['CreatePasswordItem'](arg1);
 }
+
+export function DeletePasswordItem(arg1) {
+  return window['go']['main']['DatabaseService']['DeletePasswordItem'](arg1);
+}
+
+export function ReadAllPasswordItems() {
+  return window['go']['main']['DatabaseService']['ReadAllPasswordItems']();
+}
+
+export function UpdatePasswordItem(arg1) {
+  return window['go']['main']['DatabaseService']['UpdatePasswordItem'](arg1);
+}

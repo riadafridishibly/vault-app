@@ -29,6 +29,12 @@ func (piu *PasswordItemUpdate) Where(ps ...predicate.PasswordItem) *PasswordItem
 	return piu
 }
 
+// SetAvatar sets the "avatar" field.
+func (piu *PasswordItemUpdate) SetAvatar(s string) *PasswordItemUpdate {
+	piu.mutation.SetAvatar(s)
+	return piu
+}
+
 // SetDescription sets the "description" field.
 func (piu *PasswordItemUpdate) SetDescription(s string) *PasswordItemUpdate {
 	piu.mutation.SetDescription(s)
@@ -41,9 +47,21 @@ func (piu *PasswordItemUpdate) SetSiteName(s string) *PasswordItemUpdate {
 	return piu
 }
 
+// SetSiteURL sets the "site_url" field.
+func (piu *PasswordItemUpdate) SetSiteURL(s string) *PasswordItemUpdate {
+	piu.mutation.SetSiteURL(s)
+	return piu
+}
+
 // SetUsername sets the "username" field.
 func (piu *PasswordItemUpdate) SetUsername(s string) *PasswordItemUpdate {
 	piu.mutation.SetUsername(s)
+	return piu
+}
+
+// SetUsernameType sets the "username_type" field.
+func (piu *PasswordItemUpdate) SetUsernameType(s string) *PasswordItemUpdate {
+	piu.mutation.SetUsernameType(s)
 	return piu
 }
 
@@ -111,18 +129,12 @@ func (piu *PasswordItemUpdate) Save(ctx context.Context) (int, error) {
 		affected int
 	)
 	if len(piu.hooks) == 0 {
-		if err = piu.check(); err != nil {
-			return 0, err
-		}
 		affected, err = piu.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*PasswordItemMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = piu.check(); err != nil {
-				return 0, err
 			}
 			piu.mutation = mutation
 			affected, err = piu.sqlSave(ctx)
@@ -164,16 +176,6 @@ func (piu *PasswordItemUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (piu *PasswordItemUpdate) check() error {
-	if v, ok := piu.mutation.Description(); ok {
-		if err := passworditem.DescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "PasswordItem.description": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (piu *PasswordItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -192,14 +194,23 @@ func (piu *PasswordItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := piu.mutation.Avatar(); ok {
+		_spec.SetField(passworditem.FieldAvatar, field.TypeString, value)
+	}
 	if value, ok := piu.mutation.Description(); ok {
 		_spec.SetField(passworditem.FieldDescription, field.TypeString, value)
 	}
 	if value, ok := piu.mutation.SiteName(); ok {
 		_spec.SetField(passworditem.FieldSiteName, field.TypeString, value)
 	}
+	if value, ok := piu.mutation.SiteURL(); ok {
+		_spec.SetField(passworditem.FieldSiteURL, field.TypeString, value)
+	}
 	if value, ok := piu.mutation.Username(); ok {
 		_spec.SetField(passworditem.FieldUsername, field.TypeString, value)
+	}
+	if value, ok := piu.mutation.UsernameType(); ok {
+		_spec.SetField(passworditem.FieldUsernameType, field.TypeString, value)
 	}
 	if value, ok := piu.mutation.Password(); ok {
 		_spec.SetField(passworditem.FieldPassword, field.TypeString, value)
@@ -240,6 +251,12 @@ type PasswordItemUpdateOne struct {
 	mutation *PasswordItemMutation
 }
 
+// SetAvatar sets the "avatar" field.
+func (piuo *PasswordItemUpdateOne) SetAvatar(s string) *PasswordItemUpdateOne {
+	piuo.mutation.SetAvatar(s)
+	return piuo
+}
+
 // SetDescription sets the "description" field.
 func (piuo *PasswordItemUpdateOne) SetDescription(s string) *PasswordItemUpdateOne {
 	piuo.mutation.SetDescription(s)
@@ -252,9 +269,21 @@ func (piuo *PasswordItemUpdateOne) SetSiteName(s string) *PasswordItemUpdateOne 
 	return piuo
 }
 
+// SetSiteURL sets the "site_url" field.
+func (piuo *PasswordItemUpdateOne) SetSiteURL(s string) *PasswordItemUpdateOne {
+	piuo.mutation.SetSiteURL(s)
+	return piuo
+}
+
 // SetUsername sets the "username" field.
 func (piuo *PasswordItemUpdateOne) SetUsername(s string) *PasswordItemUpdateOne {
 	piuo.mutation.SetUsername(s)
+	return piuo
+}
+
+// SetUsernameType sets the "username_type" field.
+func (piuo *PasswordItemUpdateOne) SetUsernameType(s string) *PasswordItemUpdateOne {
+	piuo.mutation.SetUsernameType(s)
 	return piuo
 }
 
@@ -329,18 +358,12 @@ func (piuo *PasswordItemUpdateOne) Save(ctx context.Context) (*PasswordItem, err
 		node *PasswordItem
 	)
 	if len(piuo.hooks) == 0 {
-		if err = piuo.check(); err != nil {
-			return nil, err
-		}
 		node, err = piuo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*PasswordItemMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = piuo.check(); err != nil {
-				return nil, err
 			}
 			piuo.mutation = mutation
 			node, err = piuo.sqlSave(ctx)
@@ -388,16 +411,6 @@ func (piuo *PasswordItemUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (piuo *PasswordItemUpdateOne) check() error {
-	if v, ok := piuo.mutation.Description(); ok {
-		if err := passworditem.DescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "PasswordItem.description": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (piuo *PasswordItemUpdateOne) sqlSave(ctx context.Context) (_node *PasswordItem, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -433,14 +446,23 @@ func (piuo *PasswordItemUpdateOne) sqlSave(ctx context.Context) (_node *Password
 			}
 		}
 	}
+	if value, ok := piuo.mutation.Avatar(); ok {
+		_spec.SetField(passworditem.FieldAvatar, field.TypeString, value)
+	}
 	if value, ok := piuo.mutation.Description(); ok {
 		_spec.SetField(passworditem.FieldDescription, field.TypeString, value)
 	}
 	if value, ok := piuo.mutation.SiteName(); ok {
 		_spec.SetField(passworditem.FieldSiteName, field.TypeString, value)
 	}
+	if value, ok := piuo.mutation.SiteURL(); ok {
+		_spec.SetField(passworditem.FieldSiteURL, field.TypeString, value)
+	}
 	if value, ok := piuo.mutation.Username(); ok {
 		_spec.SetField(passworditem.FieldUsername, field.TypeString, value)
+	}
+	if value, ok := piuo.mutation.UsernameType(); ok {
+		_spec.SetField(passworditem.FieldUsernameType, field.TypeString, value)
 	}
 	if value, ok := piuo.mutation.Password(); ok {
 		_spec.SetField(passworditem.FieldPassword, field.TypeString, value)

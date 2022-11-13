@@ -33,9 +33,12 @@ type PasswordItemMutation struct {
 	op            Op
 	typ           string
 	id            *int
+	avatar        *string
 	description   *string
 	site_name     *string
+	site_url      *string
 	username      *string
+	username_type *string
 	password      *string
 	tags          *[]string
 	appendtags    []string
@@ -145,6 +148,42 @@ func (m *PasswordItemMutation) IDs(ctx context.Context) ([]int, error) {
 	}
 }
 
+// SetAvatar sets the "avatar" field.
+func (m *PasswordItemMutation) SetAvatar(s string) {
+	m.avatar = &s
+}
+
+// Avatar returns the value of the "avatar" field in the mutation.
+func (m *PasswordItemMutation) Avatar() (r string, exists bool) {
+	v := m.avatar
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAvatar returns the old "avatar" field's value of the PasswordItem entity.
+// If the PasswordItem object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PasswordItemMutation) OldAvatar(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAvatar is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAvatar requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAvatar: %w", err)
+	}
+	return oldValue.Avatar, nil
+}
+
+// ResetAvatar resets all changes to the "avatar" field.
+func (m *PasswordItemMutation) ResetAvatar() {
+	m.avatar = nil
+}
+
 // SetDescription sets the "description" field.
 func (m *PasswordItemMutation) SetDescription(s string) {
 	m.description = &s
@@ -217,6 +256,42 @@ func (m *PasswordItemMutation) ResetSiteName() {
 	m.site_name = nil
 }
 
+// SetSiteURL sets the "site_url" field.
+func (m *PasswordItemMutation) SetSiteURL(s string) {
+	m.site_url = &s
+}
+
+// SiteURL returns the value of the "site_url" field in the mutation.
+func (m *PasswordItemMutation) SiteURL() (r string, exists bool) {
+	v := m.site_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSiteURL returns the old "site_url" field's value of the PasswordItem entity.
+// If the PasswordItem object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PasswordItemMutation) OldSiteURL(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSiteURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSiteURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSiteURL: %w", err)
+	}
+	return oldValue.SiteURL, nil
+}
+
+// ResetSiteURL resets all changes to the "site_url" field.
+func (m *PasswordItemMutation) ResetSiteURL() {
+	m.site_url = nil
+}
+
 // SetUsername sets the "username" field.
 func (m *PasswordItemMutation) SetUsername(s string) {
 	m.username = &s
@@ -251,6 +326,42 @@ func (m *PasswordItemMutation) OldUsername(ctx context.Context) (v *string, err 
 // ResetUsername resets all changes to the "username" field.
 func (m *PasswordItemMutation) ResetUsername() {
 	m.username = nil
+}
+
+// SetUsernameType sets the "username_type" field.
+func (m *PasswordItemMutation) SetUsernameType(s string) {
+	m.username_type = &s
+}
+
+// UsernameType returns the value of the "username_type" field in the mutation.
+func (m *PasswordItemMutation) UsernameType() (r string, exists bool) {
+	v := m.username_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUsernameType returns the old "username_type" field's value of the PasswordItem entity.
+// If the PasswordItem object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PasswordItemMutation) OldUsernameType(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUsernameType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUsernameType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUsernameType: %w", err)
+	}
+	return oldValue.UsernameType, nil
+}
+
+// ResetUsernameType resets all changes to the "username_type" field.
+func (m *PasswordItemMutation) ResetUsernameType() {
+	m.username_type = nil
 }
 
 // SetPassword sets the "password" field.
@@ -445,15 +556,24 @@ func (m *PasswordItemMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PasswordItemMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 10)
+	if m.avatar != nil {
+		fields = append(fields, passworditem.FieldAvatar)
+	}
 	if m.description != nil {
 		fields = append(fields, passworditem.FieldDescription)
 	}
 	if m.site_name != nil {
 		fields = append(fields, passworditem.FieldSiteName)
 	}
+	if m.site_url != nil {
+		fields = append(fields, passworditem.FieldSiteURL)
+	}
 	if m.username != nil {
 		fields = append(fields, passworditem.FieldUsername)
+	}
+	if m.username_type != nil {
+		fields = append(fields, passworditem.FieldUsernameType)
 	}
 	if m.password != nil {
 		fields = append(fields, passworditem.FieldPassword)
@@ -475,12 +595,18 @@ func (m *PasswordItemMutation) Fields() []string {
 // schema.
 func (m *PasswordItemMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case passworditem.FieldAvatar:
+		return m.Avatar()
 	case passworditem.FieldDescription:
 		return m.Description()
 	case passworditem.FieldSiteName:
 		return m.SiteName()
+	case passworditem.FieldSiteURL:
+		return m.SiteURL()
 	case passworditem.FieldUsername:
 		return m.Username()
+	case passworditem.FieldUsernameType:
+		return m.UsernameType()
 	case passworditem.FieldPassword:
 		return m.Password()
 	case passworditem.FieldTags:
@@ -498,12 +624,18 @@ func (m *PasswordItemMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *PasswordItemMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case passworditem.FieldAvatar:
+		return m.OldAvatar(ctx)
 	case passworditem.FieldDescription:
 		return m.OldDescription(ctx)
 	case passworditem.FieldSiteName:
 		return m.OldSiteName(ctx)
+	case passworditem.FieldSiteURL:
+		return m.OldSiteURL(ctx)
 	case passworditem.FieldUsername:
 		return m.OldUsername(ctx)
+	case passworditem.FieldUsernameType:
+		return m.OldUsernameType(ctx)
 	case passworditem.FieldPassword:
 		return m.OldPassword(ctx)
 	case passworditem.FieldTags:
@@ -521,6 +653,13 @@ func (m *PasswordItemMutation) OldField(ctx context.Context, name string) (ent.V
 // type.
 func (m *PasswordItemMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case passworditem.FieldAvatar:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAvatar(v)
+		return nil
 	case passworditem.FieldDescription:
 		v, ok := value.(string)
 		if !ok {
@@ -535,12 +674,26 @@ func (m *PasswordItemMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSiteName(v)
 		return nil
+	case passworditem.FieldSiteURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSiteURL(v)
+		return nil
 	case passworditem.FieldUsername:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUsername(v)
+		return nil
+	case passworditem.FieldUsernameType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUsernameType(v)
 		return nil
 	case passworditem.FieldPassword:
 		v, ok := value.(string)
@@ -628,14 +781,23 @@ func (m *PasswordItemMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *PasswordItemMutation) ResetField(name string) error {
 	switch name {
+	case passworditem.FieldAvatar:
+		m.ResetAvatar()
+		return nil
 	case passworditem.FieldDescription:
 		m.ResetDescription()
 		return nil
 	case passworditem.FieldSiteName:
 		m.ResetSiteName()
 		return nil
+	case passworditem.FieldSiteURL:
+		m.ResetSiteURL()
+		return nil
 	case passworditem.FieldUsername:
 		m.ResetUsername()
+		return nil
+	case passworditem.FieldUsernameType:
+		m.ResetUsernameType()
 		return nil
 	case passworditem.FieldPassword:
 		m.ResetPassword()

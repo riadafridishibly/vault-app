@@ -17,12 +17,18 @@ type PasswordItem struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// Avatar holds the value of the "avatar" field.
+	Avatar *string `json:"avatar,omitempty"`
 	// Description holds the value of the "description" field.
 	Description *string `json:"description,omitempty"`
 	// SiteName holds the value of the "site_name" field.
 	SiteName *string `json:"site_name,omitempty"`
+	// SiteURL holds the value of the "site_url" field.
+	SiteURL *string `json:"site_url,omitempty"`
 	// Username holds the value of the "username" field.
 	Username *string `json:"username,omitempty"`
+	// UsernameType holds the value of the "username_type" field.
+	UsernameType *string `json:"username_type,omitempty"`
 	// Password holds the value of the "password" field.
 	Password *string `json:"password,omitempty"`
 	// Tags holds the value of the "tags" field.
@@ -42,7 +48,7 @@ func (*PasswordItem) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case passworditem.FieldID:
 			values[i] = new(sql.NullInt64)
-		case passworditem.FieldDescription, passworditem.FieldSiteName, passworditem.FieldUsername, passworditem.FieldPassword:
+		case passworditem.FieldAvatar, passworditem.FieldDescription, passworditem.FieldSiteName, passworditem.FieldSiteURL, passworditem.FieldUsername, passworditem.FieldUsernameType, passworditem.FieldPassword:
 			values[i] = new(sql.NullString)
 		case passworditem.FieldCreatedAt, passworditem.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -67,6 +73,13 @@ func (pi *PasswordItem) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			pi.ID = int(value.Int64)
+		case passworditem.FieldAvatar:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar", values[i])
+			} else if value.Valid {
+				pi.Avatar = new(string)
+				*pi.Avatar = value.String
+			}
 		case passworditem.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
@@ -81,12 +94,26 @@ func (pi *PasswordItem) assignValues(columns []string, values []any) error {
 				pi.SiteName = new(string)
 				*pi.SiteName = value.String
 			}
+		case passworditem.FieldSiteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field site_url", values[i])
+			} else if value.Valid {
+				pi.SiteURL = new(string)
+				*pi.SiteURL = value.String
+			}
 		case passworditem.FieldUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field username", values[i])
 			} else if value.Valid {
 				pi.Username = new(string)
 				*pi.Username = value.String
+			}
+		case passworditem.FieldUsernameType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field username_type", values[i])
+			} else if value.Valid {
+				pi.UsernameType = new(string)
+				*pi.UsernameType = value.String
 			}
 		case passworditem.FieldPassword:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -143,6 +170,11 @@ func (pi *PasswordItem) String() string {
 	var builder strings.Builder
 	builder.WriteString("PasswordItem(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", pi.ID))
+	if v := pi.Avatar; v != nil {
+		builder.WriteString("avatar=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	if v := pi.Description; v != nil {
 		builder.WriteString("description=")
 		builder.WriteString(*v)
@@ -153,8 +185,18 @@ func (pi *PasswordItem) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
+	if v := pi.SiteURL; v != nil {
+		builder.WriteString("site_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	if v := pi.Username; v != nil {
 		builder.WriteString("username=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := pi.UsernameType; v != nil {
+		builder.WriteString("username_type=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

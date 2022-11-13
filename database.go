@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 
+	"github.com/riadafridishibly/vault-app/ent"
 	"github.com/riadafridishibly/vault-app/internal/dao"
 )
 
@@ -27,9 +28,20 @@ func (db *DatabaseService) updateContext(ctx context.Context) {
 	db.ctx = ctx
 }
 
-func (db *DatabaseService) CreatePasswordItem(passwordItem dao.PasswordItem) error {
-	_, err := db.dao.CreatePasswordItem(db.ctx, passwordItem)
-	return err
+func (db *DatabaseService) CreatePasswordItem(p ent.PasswordItem) (*ent.PasswordItem, error) {
+	return db.dao.CreatePasswordItem(db.ctx, p)
+}
+
+func (db *DatabaseService) UpdatePasswordItem(p ent.PasswordItem) (*ent.PasswordItem, error) {
+	return db.dao.UpdatePasswordItem(db.ctx, p)
+}
+
+func (db *DatabaseService) DeletePasswordItem(id int) (*ent.PasswordItem, error) {
+	return db.dao.DeletePasswordItem(db.ctx, id)
+}
+
+func (db *DatabaseService) ReadAllPasswordItems() ([]*ent.PasswordItem, error) {
+	return db.dao.ReadAllPasswordItems(db.ctx)
 }
 
 func (db *DatabaseService) close() error {
