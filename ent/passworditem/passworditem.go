@@ -11,12 +11,18 @@ const (
 	Label = "password_item"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldAvatar holds the string denoting the avatar field in the database.
+	FieldAvatar = "avatar"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldSiteName holds the string denoting the site_name field in the database.
 	FieldSiteName = "site_name"
+	// FieldSiteURL holds the string denoting the site_url field in the database.
+	FieldSiteURL = "site_url"
 	// FieldUsername holds the string denoting the username field in the database.
 	FieldUsername = "username"
+	// FieldUsernameType holds the string denoting the username_type field in the database.
+	FieldUsernameType = "username_type"
 	// FieldPassword holds the string denoting the password field in the database.
 	FieldPassword = "password"
 	// FieldTags holds the string denoting the tags field in the database.
@@ -32,9 +38,12 @@ const (
 // Columns holds all SQL columns for passworditem fields.
 var Columns = []string{
 	FieldID,
+	FieldAvatar,
 	FieldDescription,
 	FieldSiteName,
+	FieldSiteURL,
 	FieldUsername,
+	FieldUsernameType,
 	FieldPassword,
 	FieldTags,
 	FieldCreatedAt,
@@ -52,8 +61,6 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
-	DescriptionValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.

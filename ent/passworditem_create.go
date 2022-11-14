@@ -20,9 +20,31 @@ type PasswordItemCreate struct {
 	hooks    []Hook
 }
 
+// SetAvatar sets the "avatar" field.
+func (pic *PasswordItemCreate) SetAvatar(s string) *PasswordItemCreate {
+	pic.mutation.SetAvatar(s)
+	return pic
+}
+
+// SetNillableAvatar sets the "avatar" field if the given value is not nil.
+func (pic *PasswordItemCreate) SetNillableAvatar(s *string) *PasswordItemCreate {
+	if s != nil {
+		pic.SetAvatar(*s)
+	}
+	return pic
+}
+
 // SetDescription sets the "description" field.
 func (pic *PasswordItemCreate) SetDescription(s string) *PasswordItemCreate {
 	pic.mutation.SetDescription(s)
+	return pic
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pic *PasswordItemCreate) SetNillableDescription(s *string) *PasswordItemCreate {
+	if s != nil {
+		pic.SetDescription(*s)
+	}
 	return pic
 }
 
@@ -32,15 +54,67 @@ func (pic *PasswordItemCreate) SetSiteName(s string) *PasswordItemCreate {
 	return pic
 }
 
+// SetNillableSiteName sets the "site_name" field if the given value is not nil.
+func (pic *PasswordItemCreate) SetNillableSiteName(s *string) *PasswordItemCreate {
+	if s != nil {
+		pic.SetSiteName(*s)
+	}
+	return pic
+}
+
+// SetSiteURL sets the "site_url" field.
+func (pic *PasswordItemCreate) SetSiteURL(s string) *PasswordItemCreate {
+	pic.mutation.SetSiteURL(s)
+	return pic
+}
+
+// SetNillableSiteURL sets the "site_url" field if the given value is not nil.
+func (pic *PasswordItemCreate) SetNillableSiteURL(s *string) *PasswordItemCreate {
+	if s != nil {
+		pic.SetSiteURL(*s)
+	}
+	return pic
+}
+
 // SetUsername sets the "username" field.
 func (pic *PasswordItemCreate) SetUsername(s string) *PasswordItemCreate {
 	pic.mutation.SetUsername(s)
 	return pic
 }
 
+// SetNillableUsername sets the "username" field if the given value is not nil.
+func (pic *PasswordItemCreate) SetNillableUsername(s *string) *PasswordItemCreate {
+	if s != nil {
+		pic.SetUsername(*s)
+	}
+	return pic
+}
+
+// SetUsernameType sets the "username_type" field.
+func (pic *PasswordItemCreate) SetUsernameType(s string) *PasswordItemCreate {
+	pic.mutation.SetUsernameType(s)
+	return pic
+}
+
+// SetNillableUsernameType sets the "username_type" field if the given value is not nil.
+func (pic *PasswordItemCreate) SetNillableUsernameType(s *string) *PasswordItemCreate {
+	if s != nil {
+		pic.SetUsernameType(*s)
+	}
+	return pic
+}
+
 // SetPassword sets the "password" field.
 func (pic *PasswordItemCreate) SetPassword(s string) *PasswordItemCreate {
 	pic.mutation.SetPassword(s)
+	return pic
+}
+
+// SetNillablePassword sets the "password" field if the given value is not nil.
+func (pic *PasswordItemCreate) SetNillablePassword(s *string) *PasswordItemCreate {
+	if s != nil {
+		pic.SetPassword(*s)
+	}
 	return pic
 }
 
@@ -167,23 +241,6 @@ func (pic *PasswordItemCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (pic *PasswordItemCreate) check() error {
-	if _, ok := pic.mutation.Description(); !ok {
-		return &ValidationError{Name: "description", err: errors.New(`ent: missing required field "PasswordItem.description"`)}
-	}
-	if v, ok := pic.mutation.Description(); ok {
-		if err := passworditem.DescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "PasswordItem.description": %w`, err)}
-		}
-	}
-	if _, ok := pic.mutation.SiteName(); !ok {
-		return &ValidationError{Name: "site_name", err: errors.New(`ent: missing required field "PasswordItem.site_name"`)}
-	}
-	if _, ok := pic.mutation.Username(); !ok {
-		return &ValidationError{Name: "username", err: errors.New(`ent: missing required field "PasswordItem.username"`)}
-	}
-	if _, ok := pic.mutation.Password(); !ok {
-		return &ValidationError{Name: "password", err: errors.New(`ent: missing required field "PasswordItem.password"`)}
-	}
 	if _, ok := pic.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "PasswordItem.created_at"`)}
 	}
@@ -217,6 +274,10 @@ func (pic *PasswordItemCreate) createSpec() (*PasswordItem, *sqlgraph.CreateSpec
 			},
 		}
 	)
+	if value, ok := pic.mutation.Avatar(); ok {
+		_spec.SetField(passworditem.FieldAvatar, field.TypeString, value)
+		_node.Avatar = &value
+	}
 	if value, ok := pic.mutation.Description(); ok {
 		_spec.SetField(passworditem.FieldDescription, field.TypeString, value)
 		_node.Description = &value
@@ -225,9 +286,17 @@ func (pic *PasswordItemCreate) createSpec() (*PasswordItem, *sqlgraph.CreateSpec
 		_spec.SetField(passworditem.FieldSiteName, field.TypeString, value)
 		_node.SiteName = &value
 	}
+	if value, ok := pic.mutation.SiteURL(); ok {
+		_spec.SetField(passworditem.FieldSiteURL, field.TypeString, value)
+		_node.SiteURL = &value
+	}
 	if value, ok := pic.mutation.Username(); ok {
 		_spec.SetField(passworditem.FieldUsername, field.TypeString, value)
 		_node.Username = &value
+	}
+	if value, ok := pic.mutation.UsernameType(); ok {
+		_spec.SetField(passworditem.FieldUsernameType, field.TypeString, value)
+		_node.UsernameType = &value
 	}
 	if value, ok := pic.mutation.Password(); ok {
 		_spec.SetField(passworditem.FieldPassword, field.TypeString, value)

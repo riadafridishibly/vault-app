@@ -15,16 +15,12 @@ import (
 func init() {
 	passworditemFields := schema.PasswordItem{}.Fields()
 	_ = passworditemFields
-	// passworditemDescDescription is the schema descriptor for description field.
-	passworditemDescDescription := passworditemFields[0].Descriptor()
-	// passworditem.DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
-	passworditem.DescriptionValidator = passworditemDescDescription.Validators[0].(func(string) error)
 	// passworditemDescCreatedAt is the schema descriptor for created_at field.
-	passworditemDescCreatedAt := passworditemFields[5].Descriptor()
+	passworditemDescCreatedAt := passworditemFields[8].Descriptor()
 	// passworditem.DefaultCreatedAt holds the default value on creation for the created_at field.
 	passworditem.DefaultCreatedAt = passworditemDescCreatedAt.Default.(func() time.Time)
 	// passworditemDescUpdatedAt is the schema descriptor for updated_at field.
-	passworditemDescUpdatedAt := passworditemFields[6].Descriptor()
+	passworditemDescUpdatedAt := passworditemFields[9].Descriptor()
 	// passworditem.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	passworditem.DefaultUpdatedAt = passworditemDescUpdatedAt.Default.(func() time.Time)
 }

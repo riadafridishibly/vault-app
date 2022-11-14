@@ -4,6 +4,7 @@ import { MantineProvider, AppShell, ColorScheme, ColorSchemeProvider } from "@ma
 import { Route, Routes } from "react-router-dom";
 import { routeMappings } from "./routes";
 import React from "react";
+import { NotificationsProvider } from "@mantine/notifications";
 
 function App() {
 	const [colorScheme, setColorScheme] = React.useState<ColorScheme>('dark');
@@ -17,31 +18,33 @@ function App() {
 				withGlobalStyles
 				withNormalizeCSS
 			>
-				<AppShell
-					padding='md'
-					navbar={<NavSide />}
-					header={<NavTop />}
-					styles={(theme) => ({
-						main: {
-							backgroundColor:
-								theme.colorScheme === "dark"
-									? theme.colors.dark[8]
-									: theme.colors.gray[0],
-						},
-					})}
-				>
-					<Routes>
-						{routeMappings.map((route, index) => {
-							return (
-								<Route
-									key={index}
-									path={route.path}
-									element={route.component()}
-								/>
-							);
+				<NotificationsProvider>
+					<AppShell
+						padding='md'
+						navbar={<NavSide />}
+						header={<NavTop />}
+						styles={(theme) => ({
+							main: {
+								backgroundColor:
+									theme.colorScheme === "dark"
+										? theme.colors.dark[8]
+										: theme.colors.gray[0],
+							},
 						})}
-					</Routes>
-				</AppShell>
+					>
+						<Routes>
+							{routeMappings.map((route, index) => {
+								return (
+									<Route
+										key={index}
+										path={route.path}
+										element={route.component()}
+									/>
+								);
+							})}
+						</Routes>
+					</AppShell>
+				</NotificationsProvider>
 			</MantineProvider>
 		</ColorSchemeProvider>
 

@@ -29,9 +29,43 @@ func (piu *PasswordItemUpdate) Where(ps ...predicate.PasswordItem) *PasswordItem
 	return piu
 }
 
+// SetAvatar sets the "avatar" field.
+func (piu *PasswordItemUpdate) SetAvatar(s string) *PasswordItemUpdate {
+	piu.mutation.SetAvatar(s)
+	return piu
+}
+
+// SetNillableAvatar sets the "avatar" field if the given value is not nil.
+func (piu *PasswordItemUpdate) SetNillableAvatar(s *string) *PasswordItemUpdate {
+	if s != nil {
+		piu.SetAvatar(*s)
+	}
+	return piu
+}
+
+// ClearAvatar clears the value of the "avatar" field.
+func (piu *PasswordItemUpdate) ClearAvatar() *PasswordItemUpdate {
+	piu.mutation.ClearAvatar()
+	return piu
+}
+
 // SetDescription sets the "description" field.
 func (piu *PasswordItemUpdate) SetDescription(s string) *PasswordItemUpdate {
 	piu.mutation.SetDescription(s)
+	return piu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (piu *PasswordItemUpdate) SetNillableDescription(s *string) *PasswordItemUpdate {
+	if s != nil {
+		piu.SetDescription(*s)
+	}
+	return piu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (piu *PasswordItemUpdate) ClearDescription() *PasswordItemUpdate {
+	piu.mutation.ClearDescription()
 	return piu
 }
 
@@ -41,15 +75,97 @@ func (piu *PasswordItemUpdate) SetSiteName(s string) *PasswordItemUpdate {
 	return piu
 }
 
+// SetNillableSiteName sets the "site_name" field if the given value is not nil.
+func (piu *PasswordItemUpdate) SetNillableSiteName(s *string) *PasswordItemUpdate {
+	if s != nil {
+		piu.SetSiteName(*s)
+	}
+	return piu
+}
+
+// ClearSiteName clears the value of the "site_name" field.
+func (piu *PasswordItemUpdate) ClearSiteName() *PasswordItemUpdate {
+	piu.mutation.ClearSiteName()
+	return piu
+}
+
+// SetSiteURL sets the "site_url" field.
+func (piu *PasswordItemUpdate) SetSiteURL(s string) *PasswordItemUpdate {
+	piu.mutation.SetSiteURL(s)
+	return piu
+}
+
+// SetNillableSiteURL sets the "site_url" field if the given value is not nil.
+func (piu *PasswordItemUpdate) SetNillableSiteURL(s *string) *PasswordItemUpdate {
+	if s != nil {
+		piu.SetSiteURL(*s)
+	}
+	return piu
+}
+
+// ClearSiteURL clears the value of the "site_url" field.
+func (piu *PasswordItemUpdate) ClearSiteURL() *PasswordItemUpdate {
+	piu.mutation.ClearSiteURL()
+	return piu
+}
+
 // SetUsername sets the "username" field.
 func (piu *PasswordItemUpdate) SetUsername(s string) *PasswordItemUpdate {
 	piu.mutation.SetUsername(s)
 	return piu
 }
 
+// SetNillableUsername sets the "username" field if the given value is not nil.
+func (piu *PasswordItemUpdate) SetNillableUsername(s *string) *PasswordItemUpdate {
+	if s != nil {
+		piu.SetUsername(*s)
+	}
+	return piu
+}
+
+// ClearUsername clears the value of the "username" field.
+func (piu *PasswordItemUpdate) ClearUsername() *PasswordItemUpdate {
+	piu.mutation.ClearUsername()
+	return piu
+}
+
+// SetUsernameType sets the "username_type" field.
+func (piu *PasswordItemUpdate) SetUsernameType(s string) *PasswordItemUpdate {
+	piu.mutation.SetUsernameType(s)
+	return piu
+}
+
+// SetNillableUsernameType sets the "username_type" field if the given value is not nil.
+func (piu *PasswordItemUpdate) SetNillableUsernameType(s *string) *PasswordItemUpdate {
+	if s != nil {
+		piu.SetUsernameType(*s)
+	}
+	return piu
+}
+
+// ClearUsernameType clears the value of the "username_type" field.
+func (piu *PasswordItemUpdate) ClearUsernameType() *PasswordItemUpdate {
+	piu.mutation.ClearUsernameType()
+	return piu
+}
+
 // SetPassword sets the "password" field.
 func (piu *PasswordItemUpdate) SetPassword(s string) *PasswordItemUpdate {
 	piu.mutation.SetPassword(s)
+	return piu
+}
+
+// SetNillablePassword sets the "password" field if the given value is not nil.
+func (piu *PasswordItemUpdate) SetNillablePassword(s *string) *PasswordItemUpdate {
+	if s != nil {
+		piu.SetPassword(*s)
+	}
+	return piu
+}
+
+// ClearPassword clears the value of the "password" field.
+func (piu *PasswordItemUpdate) ClearPassword() *PasswordItemUpdate {
+	piu.mutation.ClearPassword()
 	return piu
 }
 
@@ -111,18 +227,12 @@ func (piu *PasswordItemUpdate) Save(ctx context.Context) (int, error) {
 		affected int
 	)
 	if len(piu.hooks) == 0 {
-		if err = piu.check(); err != nil {
-			return 0, err
-		}
 		affected, err = piu.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*PasswordItemMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = piu.check(); err != nil {
-				return 0, err
 			}
 			piu.mutation = mutation
 			affected, err = piu.sqlSave(ctx)
@@ -164,16 +274,6 @@ func (piu *PasswordItemUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (piu *PasswordItemUpdate) check() error {
-	if v, ok := piu.mutation.Description(); ok {
-		if err := passworditem.DescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "PasswordItem.description": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (piu *PasswordItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -192,17 +292,47 @@ func (piu *PasswordItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := piu.mutation.Avatar(); ok {
+		_spec.SetField(passworditem.FieldAvatar, field.TypeString, value)
+	}
+	if piu.mutation.AvatarCleared() {
+		_spec.ClearField(passworditem.FieldAvatar, field.TypeString)
+	}
 	if value, ok := piu.mutation.Description(); ok {
 		_spec.SetField(passworditem.FieldDescription, field.TypeString, value)
+	}
+	if piu.mutation.DescriptionCleared() {
+		_spec.ClearField(passworditem.FieldDescription, field.TypeString)
 	}
 	if value, ok := piu.mutation.SiteName(); ok {
 		_spec.SetField(passworditem.FieldSiteName, field.TypeString, value)
 	}
+	if piu.mutation.SiteNameCleared() {
+		_spec.ClearField(passworditem.FieldSiteName, field.TypeString)
+	}
+	if value, ok := piu.mutation.SiteURL(); ok {
+		_spec.SetField(passworditem.FieldSiteURL, field.TypeString, value)
+	}
+	if piu.mutation.SiteURLCleared() {
+		_spec.ClearField(passworditem.FieldSiteURL, field.TypeString)
+	}
 	if value, ok := piu.mutation.Username(); ok {
 		_spec.SetField(passworditem.FieldUsername, field.TypeString, value)
 	}
+	if piu.mutation.UsernameCleared() {
+		_spec.ClearField(passworditem.FieldUsername, field.TypeString)
+	}
+	if value, ok := piu.mutation.UsernameType(); ok {
+		_spec.SetField(passworditem.FieldUsernameType, field.TypeString, value)
+	}
+	if piu.mutation.UsernameTypeCleared() {
+		_spec.ClearField(passworditem.FieldUsernameType, field.TypeString)
+	}
 	if value, ok := piu.mutation.Password(); ok {
 		_spec.SetField(passworditem.FieldPassword, field.TypeString, value)
+	}
+	if piu.mutation.PasswordCleared() {
+		_spec.ClearField(passworditem.FieldPassword, field.TypeString)
 	}
 	if value, ok := piu.mutation.Tags(); ok {
 		_spec.SetField(passworditem.FieldTags, field.TypeJSON, value)
@@ -240,9 +370,43 @@ type PasswordItemUpdateOne struct {
 	mutation *PasswordItemMutation
 }
 
+// SetAvatar sets the "avatar" field.
+func (piuo *PasswordItemUpdateOne) SetAvatar(s string) *PasswordItemUpdateOne {
+	piuo.mutation.SetAvatar(s)
+	return piuo
+}
+
+// SetNillableAvatar sets the "avatar" field if the given value is not nil.
+func (piuo *PasswordItemUpdateOne) SetNillableAvatar(s *string) *PasswordItemUpdateOne {
+	if s != nil {
+		piuo.SetAvatar(*s)
+	}
+	return piuo
+}
+
+// ClearAvatar clears the value of the "avatar" field.
+func (piuo *PasswordItemUpdateOne) ClearAvatar() *PasswordItemUpdateOne {
+	piuo.mutation.ClearAvatar()
+	return piuo
+}
+
 // SetDescription sets the "description" field.
 func (piuo *PasswordItemUpdateOne) SetDescription(s string) *PasswordItemUpdateOne {
 	piuo.mutation.SetDescription(s)
+	return piuo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (piuo *PasswordItemUpdateOne) SetNillableDescription(s *string) *PasswordItemUpdateOne {
+	if s != nil {
+		piuo.SetDescription(*s)
+	}
+	return piuo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (piuo *PasswordItemUpdateOne) ClearDescription() *PasswordItemUpdateOne {
+	piuo.mutation.ClearDescription()
 	return piuo
 }
 
@@ -252,15 +416,97 @@ func (piuo *PasswordItemUpdateOne) SetSiteName(s string) *PasswordItemUpdateOne 
 	return piuo
 }
 
+// SetNillableSiteName sets the "site_name" field if the given value is not nil.
+func (piuo *PasswordItemUpdateOne) SetNillableSiteName(s *string) *PasswordItemUpdateOne {
+	if s != nil {
+		piuo.SetSiteName(*s)
+	}
+	return piuo
+}
+
+// ClearSiteName clears the value of the "site_name" field.
+func (piuo *PasswordItemUpdateOne) ClearSiteName() *PasswordItemUpdateOne {
+	piuo.mutation.ClearSiteName()
+	return piuo
+}
+
+// SetSiteURL sets the "site_url" field.
+func (piuo *PasswordItemUpdateOne) SetSiteURL(s string) *PasswordItemUpdateOne {
+	piuo.mutation.SetSiteURL(s)
+	return piuo
+}
+
+// SetNillableSiteURL sets the "site_url" field if the given value is not nil.
+func (piuo *PasswordItemUpdateOne) SetNillableSiteURL(s *string) *PasswordItemUpdateOne {
+	if s != nil {
+		piuo.SetSiteURL(*s)
+	}
+	return piuo
+}
+
+// ClearSiteURL clears the value of the "site_url" field.
+func (piuo *PasswordItemUpdateOne) ClearSiteURL() *PasswordItemUpdateOne {
+	piuo.mutation.ClearSiteURL()
+	return piuo
+}
+
 // SetUsername sets the "username" field.
 func (piuo *PasswordItemUpdateOne) SetUsername(s string) *PasswordItemUpdateOne {
 	piuo.mutation.SetUsername(s)
 	return piuo
 }
 
+// SetNillableUsername sets the "username" field if the given value is not nil.
+func (piuo *PasswordItemUpdateOne) SetNillableUsername(s *string) *PasswordItemUpdateOne {
+	if s != nil {
+		piuo.SetUsername(*s)
+	}
+	return piuo
+}
+
+// ClearUsername clears the value of the "username" field.
+func (piuo *PasswordItemUpdateOne) ClearUsername() *PasswordItemUpdateOne {
+	piuo.mutation.ClearUsername()
+	return piuo
+}
+
+// SetUsernameType sets the "username_type" field.
+func (piuo *PasswordItemUpdateOne) SetUsernameType(s string) *PasswordItemUpdateOne {
+	piuo.mutation.SetUsernameType(s)
+	return piuo
+}
+
+// SetNillableUsernameType sets the "username_type" field if the given value is not nil.
+func (piuo *PasswordItemUpdateOne) SetNillableUsernameType(s *string) *PasswordItemUpdateOne {
+	if s != nil {
+		piuo.SetUsernameType(*s)
+	}
+	return piuo
+}
+
+// ClearUsernameType clears the value of the "username_type" field.
+func (piuo *PasswordItemUpdateOne) ClearUsernameType() *PasswordItemUpdateOne {
+	piuo.mutation.ClearUsernameType()
+	return piuo
+}
+
 // SetPassword sets the "password" field.
 func (piuo *PasswordItemUpdateOne) SetPassword(s string) *PasswordItemUpdateOne {
 	piuo.mutation.SetPassword(s)
+	return piuo
+}
+
+// SetNillablePassword sets the "password" field if the given value is not nil.
+func (piuo *PasswordItemUpdateOne) SetNillablePassword(s *string) *PasswordItemUpdateOne {
+	if s != nil {
+		piuo.SetPassword(*s)
+	}
+	return piuo
+}
+
+// ClearPassword clears the value of the "password" field.
+func (piuo *PasswordItemUpdateOne) ClearPassword() *PasswordItemUpdateOne {
+	piuo.mutation.ClearPassword()
 	return piuo
 }
 
@@ -329,18 +575,12 @@ func (piuo *PasswordItemUpdateOne) Save(ctx context.Context) (*PasswordItem, err
 		node *PasswordItem
 	)
 	if len(piuo.hooks) == 0 {
-		if err = piuo.check(); err != nil {
-			return nil, err
-		}
 		node, err = piuo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*PasswordItemMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = piuo.check(); err != nil {
-				return nil, err
 			}
 			piuo.mutation = mutation
 			node, err = piuo.sqlSave(ctx)
@@ -388,16 +628,6 @@ func (piuo *PasswordItemUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (piuo *PasswordItemUpdateOne) check() error {
-	if v, ok := piuo.mutation.Description(); ok {
-		if err := passworditem.DescriptionValidator(v); err != nil {
-			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "PasswordItem.description": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (piuo *PasswordItemUpdateOne) sqlSave(ctx context.Context) (_node *PasswordItem, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -433,17 +663,47 @@ func (piuo *PasswordItemUpdateOne) sqlSave(ctx context.Context) (_node *Password
 			}
 		}
 	}
+	if value, ok := piuo.mutation.Avatar(); ok {
+		_spec.SetField(passworditem.FieldAvatar, field.TypeString, value)
+	}
+	if piuo.mutation.AvatarCleared() {
+		_spec.ClearField(passworditem.FieldAvatar, field.TypeString)
+	}
 	if value, ok := piuo.mutation.Description(); ok {
 		_spec.SetField(passworditem.FieldDescription, field.TypeString, value)
+	}
+	if piuo.mutation.DescriptionCleared() {
+		_spec.ClearField(passworditem.FieldDescription, field.TypeString)
 	}
 	if value, ok := piuo.mutation.SiteName(); ok {
 		_spec.SetField(passworditem.FieldSiteName, field.TypeString, value)
 	}
+	if piuo.mutation.SiteNameCleared() {
+		_spec.ClearField(passworditem.FieldSiteName, field.TypeString)
+	}
+	if value, ok := piuo.mutation.SiteURL(); ok {
+		_spec.SetField(passworditem.FieldSiteURL, field.TypeString, value)
+	}
+	if piuo.mutation.SiteURLCleared() {
+		_spec.ClearField(passworditem.FieldSiteURL, field.TypeString)
+	}
 	if value, ok := piuo.mutation.Username(); ok {
 		_spec.SetField(passworditem.FieldUsername, field.TypeString, value)
 	}
+	if piuo.mutation.UsernameCleared() {
+		_spec.ClearField(passworditem.FieldUsername, field.TypeString)
+	}
+	if value, ok := piuo.mutation.UsernameType(); ok {
+		_spec.SetField(passworditem.FieldUsernameType, field.TypeString, value)
+	}
+	if piuo.mutation.UsernameTypeCleared() {
+		_spec.ClearField(passworditem.FieldUsernameType, field.TypeString)
+	}
 	if value, ok := piuo.mutation.Password(); ok {
 		_spec.SetField(passworditem.FieldPassword, field.TypeString, value)
+	}
+	if piuo.mutation.PasswordCleared() {
+		_spec.ClearField(passworditem.FieldPassword, field.TypeString)
 	}
 	if value, ok := piuo.mutation.Tags(); ok {
 		_spec.SetField(passworditem.FieldTags, field.TypeJSON, value)
