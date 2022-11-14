@@ -16,6 +16,9 @@ func NewDao() (*Dao, error) {
 	if err != nil {
 		return nil, err
 	}
+	if err := client.Schema.Create(context.Background()); err != nil {
+		return nil, fmt.Errorf("failed creating schema resources: %v", err)
+	}
 	return &Dao{client: client}, nil
 }
 
