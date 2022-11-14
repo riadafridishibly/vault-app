@@ -179,9 +179,22 @@ func (m *PasswordItemMutation) OldAvatar(ctx context.Context) (v *string, err er
 	return oldValue.Avatar, nil
 }
 
+// ClearAvatar clears the value of the "avatar" field.
+func (m *PasswordItemMutation) ClearAvatar() {
+	m.avatar = nil
+	m.clearedFields[passworditem.FieldAvatar] = struct{}{}
+}
+
+// AvatarCleared returns if the "avatar" field was cleared in this mutation.
+func (m *PasswordItemMutation) AvatarCleared() bool {
+	_, ok := m.clearedFields[passworditem.FieldAvatar]
+	return ok
+}
+
 // ResetAvatar resets all changes to the "avatar" field.
 func (m *PasswordItemMutation) ResetAvatar() {
 	m.avatar = nil
+	delete(m.clearedFields, passworditem.FieldAvatar)
 }
 
 // SetDescription sets the "description" field.
@@ -215,9 +228,22 @@ func (m *PasswordItemMutation) OldDescription(ctx context.Context) (v *string, e
 	return oldValue.Description, nil
 }
 
+// ClearDescription clears the value of the "description" field.
+func (m *PasswordItemMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[passworditem.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *PasswordItemMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[passworditem.FieldDescription]
+	return ok
+}
+
 // ResetDescription resets all changes to the "description" field.
 func (m *PasswordItemMutation) ResetDescription() {
 	m.description = nil
+	delete(m.clearedFields, passworditem.FieldDescription)
 }
 
 // SetSiteName sets the "site_name" field.
@@ -251,9 +277,22 @@ func (m *PasswordItemMutation) OldSiteName(ctx context.Context) (v *string, err 
 	return oldValue.SiteName, nil
 }
 
+// ClearSiteName clears the value of the "site_name" field.
+func (m *PasswordItemMutation) ClearSiteName() {
+	m.site_name = nil
+	m.clearedFields[passworditem.FieldSiteName] = struct{}{}
+}
+
+// SiteNameCleared returns if the "site_name" field was cleared in this mutation.
+func (m *PasswordItemMutation) SiteNameCleared() bool {
+	_, ok := m.clearedFields[passworditem.FieldSiteName]
+	return ok
+}
+
 // ResetSiteName resets all changes to the "site_name" field.
 func (m *PasswordItemMutation) ResetSiteName() {
 	m.site_name = nil
+	delete(m.clearedFields, passworditem.FieldSiteName)
 }
 
 // SetSiteURL sets the "site_url" field.
@@ -287,9 +326,22 @@ func (m *PasswordItemMutation) OldSiteURL(ctx context.Context) (v *string, err e
 	return oldValue.SiteURL, nil
 }
 
+// ClearSiteURL clears the value of the "site_url" field.
+func (m *PasswordItemMutation) ClearSiteURL() {
+	m.site_url = nil
+	m.clearedFields[passworditem.FieldSiteURL] = struct{}{}
+}
+
+// SiteURLCleared returns if the "site_url" field was cleared in this mutation.
+func (m *PasswordItemMutation) SiteURLCleared() bool {
+	_, ok := m.clearedFields[passworditem.FieldSiteURL]
+	return ok
+}
+
 // ResetSiteURL resets all changes to the "site_url" field.
 func (m *PasswordItemMutation) ResetSiteURL() {
 	m.site_url = nil
+	delete(m.clearedFields, passworditem.FieldSiteURL)
 }
 
 // SetUsername sets the "username" field.
@@ -323,9 +375,22 @@ func (m *PasswordItemMutation) OldUsername(ctx context.Context) (v *string, err 
 	return oldValue.Username, nil
 }
 
+// ClearUsername clears the value of the "username" field.
+func (m *PasswordItemMutation) ClearUsername() {
+	m.username = nil
+	m.clearedFields[passworditem.FieldUsername] = struct{}{}
+}
+
+// UsernameCleared returns if the "username" field was cleared in this mutation.
+func (m *PasswordItemMutation) UsernameCleared() bool {
+	_, ok := m.clearedFields[passworditem.FieldUsername]
+	return ok
+}
+
 // ResetUsername resets all changes to the "username" field.
 func (m *PasswordItemMutation) ResetUsername() {
 	m.username = nil
+	delete(m.clearedFields, passworditem.FieldUsername)
 }
 
 // SetUsernameType sets the "username_type" field.
@@ -359,9 +424,22 @@ func (m *PasswordItemMutation) OldUsernameType(ctx context.Context) (v *string, 
 	return oldValue.UsernameType, nil
 }
 
+// ClearUsernameType clears the value of the "username_type" field.
+func (m *PasswordItemMutation) ClearUsernameType() {
+	m.username_type = nil
+	m.clearedFields[passworditem.FieldUsernameType] = struct{}{}
+}
+
+// UsernameTypeCleared returns if the "username_type" field was cleared in this mutation.
+func (m *PasswordItemMutation) UsernameTypeCleared() bool {
+	_, ok := m.clearedFields[passworditem.FieldUsernameType]
+	return ok
+}
+
 // ResetUsernameType resets all changes to the "username_type" field.
 func (m *PasswordItemMutation) ResetUsernameType() {
 	m.username_type = nil
+	delete(m.clearedFields, passworditem.FieldUsernameType)
 }
 
 // SetPassword sets the "password" field.
@@ -395,9 +473,22 @@ func (m *PasswordItemMutation) OldPassword(ctx context.Context) (v *string, err 
 	return oldValue.Password, nil
 }
 
+// ClearPassword clears the value of the "password" field.
+func (m *PasswordItemMutation) ClearPassword() {
+	m.password = nil
+	m.clearedFields[passworditem.FieldPassword] = struct{}{}
+}
+
+// PasswordCleared returns if the "password" field was cleared in this mutation.
+func (m *PasswordItemMutation) PasswordCleared() bool {
+	_, ok := m.clearedFields[passworditem.FieldPassword]
+	return ok
+}
+
 // ResetPassword resets all changes to the "password" field.
 func (m *PasswordItemMutation) ResetPassword() {
 	m.password = nil
+	delete(m.clearedFields, passworditem.FieldPassword)
 }
 
 // SetTags sets the "tags" field.
@@ -753,6 +844,27 @@ func (m *PasswordItemMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *PasswordItemMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(passworditem.FieldAvatar) {
+		fields = append(fields, passworditem.FieldAvatar)
+	}
+	if m.FieldCleared(passworditem.FieldDescription) {
+		fields = append(fields, passworditem.FieldDescription)
+	}
+	if m.FieldCleared(passworditem.FieldSiteName) {
+		fields = append(fields, passworditem.FieldSiteName)
+	}
+	if m.FieldCleared(passworditem.FieldSiteURL) {
+		fields = append(fields, passworditem.FieldSiteURL)
+	}
+	if m.FieldCleared(passworditem.FieldUsername) {
+		fields = append(fields, passworditem.FieldUsername)
+	}
+	if m.FieldCleared(passworditem.FieldUsernameType) {
+		fields = append(fields, passworditem.FieldUsernameType)
+	}
+	if m.FieldCleared(passworditem.FieldPassword) {
+		fields = append(fields, passworditem.FieldPassword)
+	}
 	if m.FieldCleared(passworditem.FieldTags) {
 		fields = append(fields, passworditem.FieldTags)
 	}
@@ -770,6 +882,27 @@ func (m *PasswordItemMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *PasswordItemMutation) ClearField(name string) error {
 	switch name {
+	case passworditem.FieldAvatar:
+		m.ClearAvatar()
+		return nil
+	case passworditem.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case passworditem.FieldSiteName:
+		m.ClearSiteName()
+		return nil
+	case passworditem.FieldSiteURL:
+		m.ClearSiteURL()
+		return nil
+	case passworditem.FieldUsername:
+		m.ClearUsername()
+		return nil
+	case passworditem.FieldUsernameType:
+		m.ClearUsernameType()
+		return nil
+	case passworditem.FieldPassword:
+		m.ClearPassword()
+		return nil
 	case passworditem.FieldTags:
 		m.ClearTags()
 		return nil

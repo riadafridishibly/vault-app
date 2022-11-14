@@ -228,6 +228,20 @@ func AvatarHasSuffix(v string) predicate.PasswordItem {
 	})
 }
 
+// AvatarIsNil applies the IsNil predicate on the "avatar" field.
+func AvatarIsNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldAvatar)))
+	})
+}
+
+// AvatarNotNil applies the NotNil predicate on the "avatar" field.
+func AvatarNotNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldAvatar)))
+	})
+}
+
 // AvatarEqualFold applies the EqualFold predicate on the "avatar" field.
 func AvatarEqualFold(v string) predicate.PasswordItem {
 	return predicate.PasswordItem(func(s *sql.Selector) {
@@ -324,6 +338,20 @@ func DescriptionHasPrefix(v string) predicate.PasswordItem {
 func DescriptionHasSuffix(v string) predicate.PasswordItem {
 	return predicate.PasswordItem(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldDescription)))
+	})
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldDescription)))
 	})
 }
 
@@ -426,6 +454,20 @@ func SiteNameHasSuffix(v string) predicate.PasswordItem {
 	})
 }
 
+// SiteNameIsNil applies the IsNil predicate on the "site_name" field.
+func SiteNameIsNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSiteName)))
+	})
+}
+
+// SiteNameNotNil applies the NotNil predicate on the "site_name" field.
+func SiteNameNotNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSiteName)))
+	})
+}
+
 // SiteNameEqualFold applies the EqualFold predicate on the "site_name" field.
 func SiteNameEqualFold(v string) predicate.PasswordItem {
 	return predicate.PasswordItem(func(s *sql.Selector) {
@@ -522,6 +564,20 @@ func SiteURLHasPrefix(v string) predicate.PasswordItem {
 func SiteURLHasSuffix(v string) predicate.PasswordItem {
 	return predicate.PasswordItem(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldSiteURL), v))
+	})
+}
+
+// SiteURLIsNil applies the IsNil predicate on the "site_url" field.
+func SiteURLIsNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSiteURL)))
+	})
+}
+
+// SiteURLNotNil applies the NotNil predicate on the "site_url" field.
+func SiteURLNotNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSiteURL)))
 	})
 }
 
@@ -624,6 +680,20 @@ func UsernameHasSuffix(v string) predicate.PasswordItem {
 	})
 }
 
+// UsernameIsNil applies the IsNil predicate on the "username" field.
+func UsernameIsNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldUsername)))
+	})
+}
+
+// UsernameNotNil applies the NotNil predicate on the "username" field.
+func UsernameNotNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldUsername)))
+	})
+}
+
 // UsernameEqualFold applies the EqualFold predicate on the "username" field.
 func UsernameEqualFold(v string) predicate.PasswordItem {
 	return predicate.PasswordItem(func(s *sql.Selector) {
@@ -723,6 +793,20 @@ func UsernameTypeHasSuffix(v string) predicate.PasswordItem {
 	})
 }
 
+// UsernameTypeIsNil applies the IsNil predicate on the "username_type" field.
+func UsernameTypeIsNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldUsernameType)))
+	})
+}
+
+// UsernameTypeNotNil applies the NotNil predicate on the "username_type" field.
+func UsernameTypeNotNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldUsernameType)))
+	})
+}
+
 // UsernameTypeEqualFold applies the EqualFold predicate on the "username_type" field.
 func UsernameTypeEqualFold(v string) predicate.PasswordItem {
 	return predicate.PasswordItem(func(s *sql.Selector) {
@@ -819,6 +903,20 @@ func PasswordHasPrefix(v string) predicate.PasswordItem {
 func PasswordHasSuffix(v string) predicate.PasswordItem {
 	return predicate.PasswordItem(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldPassword), v))
+	})
+}
+
+// PasswordIsNil applies the IsNil predicate on the "password" field.
+func PasswordIsNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldPassword)))
+	})
+}
+
+// PasswordNotNil applies the NotNil predicate on the "password" field.
+func PasswordNotNil() predicate.PasswordItem {
+	return predicate.PasswordItem(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldPassword)))
 	})
 }
 
