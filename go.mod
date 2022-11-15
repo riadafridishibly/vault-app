@@ -6,7 +6,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/hashicorp/golang-lru v0.5.4
 	github.com/wailsapp/wails/v2 v2.2.0
-	golang.design/x/clipboard v0.6.2
+	golang.design/x/clipboard v0.6.3
 	golang.org/x/crypto v0.0.0-20220517005047-85d78b3ac167
 )
 
