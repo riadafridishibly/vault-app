@@ -2,7 +2,7 @@ import { ActionIcon, Modal, MultiSelect } from '@mantine/core';
 import React, { useState } from 'react';
 import { useForm } from '@mantine/form';
 import { IconLock, IconAt, IconClipboardCopy, IconEyeOff, IconEye } from '@tabler/icons';
-import { ent } from '@wailsjs/go/models'
+import { ent } from '@wailsjs/go/models';
 import {
     TextInput,
     Group,
@@ -15,8 +15,8 @@ import {
 import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { showNewPasswordCreateModal } from '@src/pages/PasswordManager/PasswordManagerControls';
-import { CreatePasswordItem } from '@wailsjs/go/main/DatabaseService'
-import { passwordMangerItems } from '@src/pages/PasswordManager/Table';
+import { CreatePasswordItem } from '@wailsjs/go/main/DatabaseService';
+import { passwordManagerItems } from '@src/pages/PasswordManager/Table';
 
 export interface CreatePasswordItemProps {
     noShadow?: boolean;
@@ -24,14 +24,10 @@ export interface CreatePasswordItemProps {
     style?: React.CSSProperties;
 }
 
-export function CreatePasswordItemForm({
-    noShadow,
-    noPadding,
-    style,
-}: CreatePasswordItemProps) {
-    const setPasswordItems = useSetRecoilState(passwordMangerItems)
-    const [openModal, setOpenModal] = useRecoilState(showNewPasswordCreateModal)
-    const [inputType, setInputType] = useState<'text' | 'password'>('password')
+export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordItemProps) {
+    const setPasswordItems = useSetRecoilState(passwordManagerItems);
+    const [openModal, setOpenModal] = useRecoilState(showNewPasswordCreateModal);
+    const [inputType, setInputType] = useState<'text' | 'password'>('password');
     const { paste } = useGoClipboard();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -49,8 +45,8 @@ export function CreatePasswordItemForm({
     });
 
     const toggleInputType = () => {
-        setInputType(curr => curr === 'text' ? 'password' : 'text')
-    }
+        setInputType((curr) => (curr === 'text' ? 'password' : 'text'));
+    };
 
     const handlePaste = async (e: React.MouseEvent, propName: string) => {
         e.preventDefault();
@@ -59,7 +55,7 @@ export function CreatePasswordItemForm({
 
     const pasteButton = (propName: string) => (
         <ActionIcon
-            variant='default'
+            variant="default"
             sx={{ opacity: 0.4 }}
             // size="sm"
             onClick={(e: React.MouseEvent) => handlePaste(e, propName)}
@@ -68,29 +64,34 @@ export function CreatePasswordItemForm({
         </ActionIcon>
     );
 
-
     const handleSubmit = (values: ent.PasswordItem) => {
         setLoading(true);
-        CreatePasswordItem(values).
-            then(resp => {
-                setPasswordItems(current => [...current, resp])
-                console.log(resp)
-                setLoading(false)
-                form.reset()
-                setOpenModal(false)
-            }).
-            catch(err => console.error(err))
-        console.log(values)
+        CreatePasswordItem(values)
+            .then((resp) => {
+                setPasswordItems((current) => [...current, resp]);
+                console.log(resp);
+                setLoading(false);
+                form.reset();
+                setOpenModal(false);
+            })
+            .catch((err) => console.error(err));
+        console.log(values);
     };
 
     return (
-        <Modal title="Add New Item" size="md" opened={openModal} onClose={() => setOpenModal(curr => !curr)}>
+        <Modal
+            title="Add New Item"
+            size="md"
+            opened={openModal}
+            onClose={() => setOpenModal((curr) => !curr)}
+        >
             <Paper
                 p={noPadding ? 0 : 'lg'}
                 shadow={noShadow ? undefined : 'sm'}
                 style={{
                     position: 'relative',
-                    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+                    backgroundColor:
+                        theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
                     ...style,
                 }}
             >
@@ -111,7 +112,7 @@ export function CreatePasswordItemForm({
                             rightSection={pasteButton('site_url')}
                         />
                     </Group>
-
+                    {/* TODO: Use constants instead of 'md','sm', etc. This should provide better tracking and easier updatability */}
                     <TextInput
                         mt="md"
                         placeholder="Your email"
@@ -120,7 +121,6 @@ export function CreatePasswordItemForm({
                         {...form.getInputProps('username')}
                         rightSection={pasteButton('username')}
                     />
-
 
                     <TextInput
                         mt="md"
@@ -132,9 +132,13 @@ export function CreatePasswordItemForm({
                         rightSectionWidth={75}
                         rightSection={
                             <Group spacing="xs">
-                                <LockUnlock inputType={inputType} toggleInputType={toggleInputType} />
-                                {pasteButton("password")}
-                            </Group>}
+                                <LockUnlock
+                                    inputType={inputType}
+                                    toggleInputType={toggleInputType}
+                                />
+                                {pasteButton('password')}
+                            </Group>
+                        }
                     />
 
                     <MultiSelect
@@ -146,7 +150,10 @@ export function CreatePasswordItemForm({
                         creatable
                         getCreateLabel={(query) => `+ Create ${query}`}
                         onCreate={(query) => {
-                            form.setFieldValue('tags', [...form.getInputProps('tags').value, query])
+                            form.setFieldValue('tags', [
+                                ...form.getInputProps('tags').value,
+                                query,
+                            ]);
                             return query;
                         }}
                     />
@@ -164,19 +171,30 @@ export function CreatePasswordItemForm({
                     </Group>
                 </form>
             </Paper>
-        </Modal >
+        </Modal>
     );
 }
 
-
-
-function LockUnlock({ inputType, toggleInputType }: { inputType: string, toggleInputType: () => void }) {
+function LockUnlock({
+    inputType,
+    toggleInputType,
+}: {
+    inputType: string;
+    toggleInputType: () => void;
+}) {
     return (
         <ActionIcon
-            variant='default'
+            variant="default"
             sx={{ opacity: 0.4 }}
-            onClick={() => { toggleInputType() }}>
-            {inputType === 'password' ? <IconEyeOff size={18} stroke={1.5} /> : <IconEye size={18} stroke={1.5} />}
+            onClick={() => {
+                toggleInputType();
+            }}
+        >
+            {inputType === 'password' ? (
+                <IconEyeOff size={18} stroke={1.5} />
+            ) : (
+                <IconEye size={18} stroke={1.5} />
+            )}
         </ActionIcon>
-    )
+    );
 }
