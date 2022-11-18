@@ -14,6 +14,10 @@ export function ReadAllPasswordItems() {
   return window['go']['main']['DatabaseService']['ReadAllPasswordItems']();
 }
 
+export function ReadSinglePasswordItems(arg1) {
+  return window['go']['main']['DatabaseService']['ReadSinglePasswordItems'](arg1);
+}
+
 export function UpdatePasswordItem(arg1) {
   return window['go']['main']['DatabaseService']['UpdatePasswordItem'](arg1);
 }

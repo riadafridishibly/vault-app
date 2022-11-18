@@ -13,9 +13,9 @@ import {
     useMantineTheme,
 } from '@mantine/core';
 import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { atom, useRecoilState, useSetRecoilState } from 'recoil';
 import { showNewPasswordCreateModal } from '@src/pages/PasswordManager/PasswordManagerControls';
-import { CreatePasswordItem } from '@wailsjs/go/main/DatabaseService';
+import { CreatePasswordItem, ReadSinglePasswordItems } from '@wailsjs/go/main/DatabaseService';
 import { passwordManagerItems } from '@src/pages/PasswordManager/Table';
 
 export interface CreatePasswordItemProps {
@@ -24,9 +24,32 @@ export interface CreatePasswordItemProps {
     style?: React.CSSProperties;
 }
 
+let passwordItem: ent.PasswordItem | null;
+
+export const passwordItemId = atom<number>({
+    key: 'passwordItemId',
+    default: -1,
+    effects: [
+        ({ onSet }) => {
+            onSet(async (value) => {
+                try {
+                    if (value > 0) {
+                        passwordItem = await ReadSinglePasswordItems(value);
+                    } else {
+                        passwordItem = new ent.PasswordItem();
+                    }
+                } catch (ex) {
+                    console.log(ex);
+                }
+            });
+        },
+    ],
+});
+
 export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordItemProps) {
     const setPasswordItems = useSetRecoilState(passwordManagerItems);
     const [openModal, setOpenModal] = useRecoilState(showNewPasswordCreateModal);
+    const [editPasswordItemId, setEditPasswordItemId] = useRecoilState(passwordItemId);
     const [inputType, setInputType] = useState<'text' | 'password'>('password');
     const { paste } = useGoClipboard();
     const [loading, setLoading] = useState(false);
@@ -34,14 +57,16 @@ export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordI
     const theme = useMantineTheme();
 
     const form = useForm<ent.PasswordItem>({
-        initialValues: new ent.PasswordItem({
-            description: '',
-            site_name: '',
-            site_url: '',
-            username: '',
-            password: '',
-            tags: [],
-        }),
+        initialValues:
+            passwordItem ??
+            new ent.PasswordItem({
+                description: '',
+                site_name: '',
+                site_url: '',
+                username: '',
+                password: '',
+                tags: [],
+            }),
     });
 
     const toggleInputType = () => {

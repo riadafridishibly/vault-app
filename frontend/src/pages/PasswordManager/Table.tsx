@@ -15,6 +15,9 @@ import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
 import { showNotification } from '@mantine/notifications';
 import { showPasswordBreachModal } from '@src/shared/components/PwnCheckModal';
 import { ReadAllPasswordItems } from '@wailsjs/go/main/DatabaseService';
+import { passwordItemId } from '@src/shared/components/PasswordItemModal';
+import { showNewPasswordCreateModal } from './PasswordManagerControls';
+import { isNullOrUndefined } from '@src/shared/utils/utils';
 
 function PasswordField({ password }: { password: string | undefined }) {
     const { hovered, ref } = useHover();
@@ -89,6 +92,8 @@ export const passwordManagerItems = atom<ent.PasswordItem[]>({
 });
 
 export function PasswordManagerTable() {
+    const setEditPasswordItemId = useSetRecoilState(passwordItemId);
+    const setOpenModal = useSetRecoilState(showNewPasswordCreateModal);
     const [passwordBreachModalState, setPasswordBreachModalState] =
         useRecoilState(showPasswordBreachModal);
 
@@ -132,7 +137,13 @@ export function PasswordManagerTable() {
                         <IconPencil
                             size={16}
                             stroke={1.5}
-                            onClick={() => console.log('open edit')}
+                            onClick={() => {
+                                if (isNullOrUndefined(item.id)) {
+                                    return;
+                                }
+                                setEditPasswordItemId(item.id as number);
+                                setOpenModal(true);
+                            }}
                         />
                     </ActionIcon>
                     <Menu transition="pop" withArrow position="bottom-end">
@@ -207,8 +218,8 @@ export function PasswordManagerTable() {
     ));
 
     return (
-        <ScrollArea>
-            <Table sx={{ minWidth: 800, height: '100vh' }} verticalSpacing="md">
+        <ScrollArea sx={{ height: '100%' }}>
+            <Table sx={{ width: '100%' }} verticalSpacing="md">
                 <tbody>{rows}</tbody>
             </Table>
         </ScrollArea>

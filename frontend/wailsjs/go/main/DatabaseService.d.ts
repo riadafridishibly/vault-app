@@ -8,4 +8,6 @@ export function DeletePasswordItem(arg1:number):Promise<ent.PasswordItem>;
 
 export function ReadAllPasswordItems():Promise<Array<ent.PasswordItem>>;
 
+export function ReadSinglePasswordItems(arg1:number):Promise<ent.PasswordItem>;
+
 export function UpdatePasswordItem(arg1:ent.PasswordItem):Promise<ent.PasswordItem>;
