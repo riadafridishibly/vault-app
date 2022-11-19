@@ -1,3 +1,4 @@
+import DeletePasswordItemModal from '@src/shared/components/DeletePasswordItemModal';
 import { PasswordItemForm } from '@src/shared/components/PasswordItemModal';
 import PwnCheckModal from '@src/shared/components/PwnCheckModal';
 import { data, PasswordManagerTable } from './Table';
@@ -8,6 +9,7 @@ function PasswordManager() {
         <>
             <PwnCheckModal />
             <PasswordItemForm />
+            <DeletePasswordItemModal />
             <PasswordManagerTable />
         </>
     );

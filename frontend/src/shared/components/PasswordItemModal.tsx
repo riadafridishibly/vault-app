@@ -1,5 +1,5 @@
 import { ActionIcon, Modal, MultiSelect } from '@mantine/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from '@mantine/form';
 import { IconLock, IconAt, IconClipboardCopy, IconEyeOff, IconEye } from '@tabler/icons';
 import { ent } from '@wailsjs/go/models';
@@ -15,8 +15,14 @@ import {
 import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
 import { atom, useRecoilState, useSetRecoilState } from 'recoil';
 import { showNewPasswordCreateModal } from '@src/pages/PasswordManager/PasswordManagerControls';
-import { CreatePasswordItem, ReadSinglePasswordItems } from '@wailsjs/go/main/DatabaseService';
+import {
+    CreatePasswordItem,
+    ReadAllPasswordItems,
+    ReadSinglePasswordItems,
+    UpdatePasswordItem,
+} from '@wailsjs/go/main/DatabaseService';
 import { passwordManagerItems } from '@src/pages/PasswordManager/Table';
+import { isNullOrUndefined } from '../utils/utils';
 
 export interface CreatePasswordItemProps {
     noShadow?: boolean;
@@ -24,19 +30,23 @@ export interface CreatePasswordItemProps {
     style?: React.CSSProperties;
 }
 
-let passwordItem: ent.PasswordItem | null;
-
-export const passwordItemId = atom<number>({
+export const passwordItemId = atom<ent.PasswordItem>({
     key: 'passwordItemId',
-    default: -1,
+    default: new ent.PasswordItem({
+        description: '',
+        site_name: '',
+        site_url: '',
+        username: '',
+        password: '',
+        tags: [],
+    }),
     effects: [
-        ({ onSet }) => {
+        ({ setSelf, onSet }) => {
             onSet(async (value) => {
                 try {
-                    if (value > 0) {
-                        passwordItem = await ReadSinglePasswordItems(value);
-                    } else {
-                        passwordItem = new ent.PasswordItem();
+                    if (isNullOrUndefined(value.id) === false && (value.id as number) > 0) {
+                        const item = await ReadSinglePasswordItems(value.id as number);
+                        setSelf(item);
                     }
                 } catch (ex) {
                     console.log(ex);
@@ -49,7 +59,7 @@ export const passwordItemId = atom<number>({
 export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordItemProps) {
     const setPasswordItems = useSetRecoilState(passwordManagerItems);
     const [openModal, setOpenModal] = useRecoilState(showNewPasswordCreateModal);
-    const [editPasswordItemId, setEditPasswordItemId] = useRecoilState(passwordItemId);
+    const [editPasswordItem, setEditPasswordItem] = useRecoilState(passwordItemId);
     const [inputType, setInputType] = useState<'text' | 'password'>('password');
     const { paste } = useGoClipboard();
     const [loading, setLoading] = useState(false);
@@ -57,17 +67,12 @@ export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordI
     const theme = useMantineTheme();
 
     const form = useForm<ent.PasswordItem>({
-        initialValues:
-            passwordItem ??
-            new ent.PasswordItem({
-                description: '',
-                site_name: '',
-                site_url: '',
-                username: '',
-                password: '',
-                tags: [],
-            }),
+        initialValues: editPasswordItem,
     });
+    //  kinda hax need to figure out a better solution later
+    useEffect(() => {
+        form.setValues(editPasswordItem);
+    }, [editPasswordItem]);
 
     const toggleInputType = () => {
         setInputType((curr) => (curr === 'text' ? 'password' : 'text'));
@@ -84,29 +89,35 @@ export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordI
             sx={{ opacity: 0.4 }}
             // size="sm"
             onClick={(e: React.MouseEvent) => handlePaste(e, propName)}
+            tabIndex={-1}
         >
             <IconClipboardCopy size={18} stroke={1.5} />
         </ActionIcon>
     );
 
-    const handleSubmit = (values: ent.PasswordItem) => {
+    const handleSubmit = async (values: ent.PasswordItem) => {
         setLoading(true);
-        CreatePasswordItem(values)
-            .then((resp) => {
-                setPasswordItems((current) => [...current, resp]);
-                console.log(resp);
-                setLoading(false);
-                form.reset();
-                setOpenModal(false);
-            })
-            .catch((err) => console.error(err));
-        console.log(values);
+        try {
+            let addedPasswordItem =
+                (values.id as number) > 0
+                    ? await UpdatePasswordItem(values)
+                    : await CreatePasswordItem(values);
+
+            setPasswordItems(await ReadAllPasswordItems());
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+            form.reset();
+            setOpenModal(false);
+        }
     };
 
     return (
         <Modal
             title="Add New Item"
             size="md"
+            centered={true}
             opened={openModal}
             onClose={() => setOpenModal((curr) => !curr)}
         >

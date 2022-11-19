@@ -18,6 +18,7 @@ import { ReadAllPasswordItems } from '@wailsjs/go/main/DatabaseService';
 import { passwordItemId } from '@src/shared/components/PasswordItemModal';
 import { showNewPasswordCreateModal } from './PasswordManagerControls';
 import { isNullOrUndefined } from '@src/shared/utils/utils';
+import { openDeletePasswordItemModal } from '@src/shared/components/DeletePasswordItemModal';
 
 function PasswordField({ password }: { password: string | undefined }) {
     const { hovered, ref } = useHover();
@@ -94,8 +95,8 @@ export const passwordManagerItems = atom<ent.PasswordItem[]>({
 export function PasswordManagerTable() {
     const setEditPasswordItemId = useSetRecoilState(passwordItemId);
     const setOpenModal = useSetRecoilState(showNewPasswordCreateModal);
-    const [passwordBreachModalState, setPasswordBreachModalState] =
-        useRecoilState(showPasswordBreachModal);
+    const setOpenDeletePasswordItemModal = useSetRecoilState(openDeletePasswordItemModal);
+    const setPasswordBreachModalState = useSetRecoilState(showPasswordBreachModal);
 
     const data = useRecoilValue(passwordManagerItems);
     const { copy } = useGoClipboard();
@@ -138,10 +139,7 @@ export function PasswordManagerTable() {
                             size={16}
                             stroke={1.5}
                             onClick={() => {
-                                if (isNullOrUndefined(item.id)) {
-                                    return;
-                                }
-                                setEditPasswordItemId(item.id as number);
+                                setEditPasswordItemId(item);
                                 setOpenModal(true);
                             }}
                         />
@@ -201,13 +199,23 @@ export function PasswordManagerTable() {
                                     setPasswordBreachModalState({
                                         opened: true,
                                         password: item?.password ?? '',
-                                        count: 0,
+                                        count: -1,
                                     })
                                 }
                             >
                                 Check Breach
                             </Menu.Item>
-                            <Menu.Item icon={<IconTrash size={16} stroke={1.5} />} color="red">
+                            <Menu.Item
+                                icon={<IconTrash size={16} stroke={1.5} />}
+                                color="red"
+                                onClick={() => {
+                                    console.log('opening delete modal');
+                                    setOpenDeletePasswordItemModal({
+                                        opened: true,
+                                        id: item.id as number,
+                                    });
+                                }}
+                            >
                                 Delete
                             </Menu.Item>
                         </Menu.Dropdown>
