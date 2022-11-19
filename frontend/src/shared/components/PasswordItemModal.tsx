@@ -30,16 +30,18 @@ export interface CreatePasswordItemProps {
     style?: React.CSSProperties;
 }
 
+export const defaultPasswordItem = new ent.PasswordItem({
+    description: '',
+    site_name: '',
+    site_url: '',
+    username: '',
+    password: '',
+    tags: [],
+});
+
 export const passwordItemId = atom<ent.PasswordItem>({
     key: 'passwordItemId',
-    default: new ent.PasswordItem({
-        description: '',
-        site_name: '',
-        site_url: '',
-        username: '',
-        password: '',
-        tags: [],
-    }),
+    default: defaultPasswordItem,
     effects: [
         ({ setSelf, onSet }) => {
             onSet(async (value) => {
@@ -119,7 +121,10 @@ export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordI
             size="md"
             centered={true}
             opened={openModal}
-            onClose={() => setOpenModal((curr) => !curr)}
+            onClose={() => {
+                setEditPasswordItem(defaultPasswordItem);
+                setOpenModal(false);
+            }}
         >
             <Paper
                 p={noPadding ? 0 : 'lg'}
