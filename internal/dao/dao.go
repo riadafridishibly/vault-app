@@ -101,3 +101,7 @@ func (d Dao) DeletePasswordItem(ctx context.Context, id int) (*ent.PasswordItem,
 func (d Dao) ReadAllPasswordItems(ctx context.Context) ([]*ent.PasswordItem, error) {
 	return d.client.PasswordItem.Query().All(ctx)
 }
+
+func (d Dao) ReadSinglePasswordItems(ctx context.Context, id int) (*ent.PasswordItem, error) {
+	return d.client.PasswordItem.Get(ctx, id)
+}

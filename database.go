@@ -44,6 +44,10 @@ func (db *DatabaseService) ReadAllPasswordItems() ([]*ent.PasswordItem, error) {
 	return db.dao.ReadAllPasswordItems(db.ctx)
 }
 
+func (db *DatabaseService) ReadSinglePasswordItems(id int) (*ent.PasswordItem, error) {
+	return db.dao.ReadSinglePasswordItems(db.ctx, id)
+}
+
 func (db *DatabaseService) close() error {
 	return db.dao.Close()
 }
