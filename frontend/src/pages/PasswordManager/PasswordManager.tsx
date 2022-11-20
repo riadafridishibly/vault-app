@@ -1,7 +1,7 @@
 import DeletePasswordItemModal from '@src/shared/components/DeletePasswordItemModal';
 import { PasswordItemForm } from '@src/shared/components/PasswordItemModal';
 import PwnCheckModal from '@src/shared/components/PwnCheckModal';
-import { data, PasswordManagerTable } from './Table';
+import { PasswordManagerTable } from './Table';
 
 // <DataTable tableData={passwordDummy}></DataTable>
 function PasswordManager() {
