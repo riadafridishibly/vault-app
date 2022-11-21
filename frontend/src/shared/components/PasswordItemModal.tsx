@@ -144,7 +144,7 @@ export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordI
 
     return (
         <Modal
-            title="Add New Item"
+            title={passwordItemMode === 'create' ? 'Add New Item' : 'Edit Item'}
             size="lg"
             centered={true}
             opened={openModal}
