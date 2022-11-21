@@ -1,6 +1,7 @@
-import { Button, Group } from '@mantine/core'
+import { Button, Group } from '@mantine/core';
+import { passwordItemFormMode } from '@src/shared/components/PasswordItemModal';
 import { IconPlus } from '@tabler/icons';
-import React from 'react'
+import React from 'react';
 import { atom, useSetRecoilState } from 'recoil';
 
 export const showNewPasswordCreateModal = atom<boolean>({
@@ -9,18 +10,20 @@ export const showNewPasswordCreateModal = atom<boolean>({
 });
 
 function AddNewPassword() {
-    const setShow = useSetRecoilState(showNewPasswordCreateModal)
+    const setShow = useSetRecoilState(showNewPasswordCreateModal);
+    const setPasswordItemMode = useSetRecoilState(passwordItemFormMode);
     return (
         <Button
             onClick={(e: React.MouseEvent) => {
                 e.preventDefault();
-                setShow(true)
+                setPasswordItemMode('create');
+                setShow(true);
             }}
             leftIcon={<IconPlus />}
         >
             Add
         </Button>
-    )
+    );
 }
 
 function PasswordManagerControls() {
@@ -28,7 +31,7 @@ function PasswordManagerControls() {
         <Group>
             <AddNewPassword />
         </Group>
-    )
+    );
 }
 
-export default PasswordManagerControls
+export default PasswordManagerControls;
