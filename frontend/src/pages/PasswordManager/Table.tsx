@@ -1,4 +1,14 @@
-import { Avatar, Table, Group, Text, ActionIcon, Menu, ScrollArea, Popover } from '@mantine/core';
+import {
+    Avatar,
+    Table,
+    Group,
+    Text,
+    ActionIcon,
+    Menu,
+    ScrollArea,
+    Popover,
+    PasswordInput,
+} from '@mantine/core';
 import {
     IconPencil,
     IconTrash,
@@ -14,17 +24,17 @@ import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
 import { showNotification } from '@mantine/notifications';
 import { showPasswordBreachModal } from '@src/shared/components/PwnCheckModal';
 import { ReadAllPasswordItems } from '@wailsjs/go/main/DatabaseService';
-import { passwordItemId } from '@src/shared/components/PasswordItemModal';
+import { passwordItemFormMode, passwordItemId } from '@src/shared/components/PasswordItemModal';
 import { showNewPasswordCreateModal } from './PasswordManagerControls';
 import { isNullOrUndefined } from '@src/shared/utils/utils';
 import { openDeletePasswordItemModal } from '@src/shared/components/DeletePasswordItemModal';
 
 function PasswordPopover({ password }: { password: string }) {
-    const len = password.length;
     return (
         <Popover width="auto" position="bottom" withArrow shadow="md">
             <Popover.Target>
-                <Text>{'*'.repeat(len)}</Text>
+                <PasswordInput width={'30ch'} value={password} readOnly />
+                {/* <Text>{'*'.repeat(len)}</Text> */}
             </Popover.Target>
             <Popover.Dropdown>
                 <Text size="sm">{password}</Text>
@@ -46,6 +56,7 @@ export const passwordManagerItems = atom<ent.PasswordItem[]>({
 });
 
 export function PasswordManagerTable() {
+    const setPasswordItemMode = useSetRecoilState(passwordItemFormMode);
     const setEditPasswordItemId = useSetRecoilState(passwordItemId);
     const setOpenModal = useSetRecoilState(showNewPasswordCreateModal);
     const setOpenDeletePasswordItemModal = useSetRecoilState(openDeletePasswordItemModal);
@@ -59,7 +70,12 @@ export function PasswordManagerTable() {
                 <Group spacing="sm">
                     <Avatar size={40} src={item.avatar} radius={40} />
                     <div>
-                        <Text size="sm" weight={500}>
+                        <Text
+                            lineClamp={1}
+                            sx={{ maxWidth: '17ch', textOverflow: 'ellipsis', overflow: 'hidden' }}
+                            size="sm"
+                            weight={500}
+                        >
                             {item.site_name}
                         </Text>
                         <Text
@@ -80,12 +96,10 @@ export function PasswordManagerTable() {
                 </Text>
             </td>
             <td>
-                {isNullOrUndefined(item.password) === false && (
-                    <PasswordPopover password={item.password as string} />
-                )}
-                <Text size="xs" color="dimmed">
+                <PasswordInput value={item.password} readOnly />
+                {/* <Text size="xs" color="dimmed">
                     Password
-                </Text>
+                </Text> */}
             </td>
             <td>
                 <Group spacing={0} position="right">
@@ -94,6 +108,7 @@ export function PasswordManagerTable() {
                             size={16}
                             stroke={1.5}
                             onClick={() => {
+                                setPasswordItemMode('edit');
                                 setEditPasswordItemId(item);
                                 setOpenModal(true);
                             }}
@@ -154,7 +169,6 @@ export function PasswordManagerTable() {
                                     setPasswordBreachModalState({
                                         opened: true,
                                         password: item?.password ?? '',
-                                        count: -1,
                                     })
                                 }
                             >

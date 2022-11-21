@@ -1,7 +1,7 @@
-import { ActionIcon, Modal, MultiSelect } from '@mantine/core';
+import { ActionIcon, Modal, MultiSelect, Textarea } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { useForm } from '@mantine/form';
-import { IconLock, IconAt, IconClipboardCopy, IconEyeOff, IconEye } from '@tabler/icons';
+import { IconLock, IconAt, IconClipboardCopy, IconEyeOff, IconEye, IconCopy } from '@tabler/icons';
 import { ent } from '@wailsjs/go/models';
 import {
     TextInput,
@@ -13,7 +13,7 @@ import {
     useMantineTheme,
 } from '@mantine/core';
 import { useGoClipboard } from '@src/hooks/use-go-clipboard/useGoClipboard';
-import { atom, useRecoilState, useSetRecoilState } from 'recoil';
+import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { showNewPasswordCreateModal } from '@src/pages/PasswordManager/PasswordManagerControls';
 import {
     CreatePasswordItem,
@@ -39,6 +39,11 @@ export const defaultPasswordItem = new ent.PasswordItem({
     tags: [],
 });
 
+export const passwordItemFormMode = atom<'create' | 'edit'>({
+    key: 'passwordItemFormMode',
+    default: 'create',
+});
+
 export const passwordItemId = atom<ent.PasswordItem>({
     key: 'passwordItemId',
     default: defaultPasswordItem,
@@ -59,11 +64,12 @@ export const passwordItemId = atom<ent.PasswordItem>({
 });
 
 export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordItemProps) {
+    const passwordItemMode = useRecoilValue(passwordItemFormMode);
     const setPasswordItems = useSetRecoilState(passwordManagerItems);
     const [openModal, setOpenModal] = useRecoilState(showNewPasswordCreateModal);
     const [editPasswordItem, setEditPasswordItem] = useRecoilState(passwordItemId);
     const [inputType, setInputType] = useState<'text' | 'password'>('password');
-    const { paste } = useGoClipboard();
+    const { paste, copy } = useGoClipboard();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const theme = useMantineTheme();
@@ -85,15 +91,36 @@ export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordI
         form.setFieldValue(propName, await paste());
     };
 
-    const pasteButton = (propName: string) => (
+    const handleCopy = async (e: React.MouseEvent, propName: string) => {
+        e.preventDefault();
+        const dynamicKey = propName as keyof typeof form.values;
+        const value = form.values[dynamicKey];
+        if (value) {
+            copy(value);
+        }
+    };
+
+    const handleCopyPaste = async (e: React.MouseEvent, propName: string) => {
+        if (passwordItemMode === 'create') {
+            handlePaste(e, propName);
+        } else {
+            handleCopy(e, propName);
+        }
+    };
+
+    const copyPasteButton = (propName: string) => (
         <ActionIcon
             variant="default"
             sx={{ opacity: 0.4 }}
             // size="sm"
-            onClick={(e: React.MouseEvent) => handlePaste(e, propName)}
+            onClick={(e: React.MouseEvent) => handleCopyPaste(e, propName)}
             tabIndex={-1}
         >
-            <IconClipboardCopy size={18} stroke={1.5} />
+            {passwordItemMode === 'create' ? (
+                <IconClipboardCopy size={18} stroke={1.5} />
+            ) : (
+                <IconCopy size={18} stroke={1.5} />
+            )}
         </ActionIcon>
     );
 
@@ -117,8 +144,8 @@ export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordI
 
     return (
         <Modal
-            title="Add New Item"
-            size="md"
+            title={passwordItemMode === 'create' ? 'Add New Item' : 'Edit Item'}
+            size="lg"
             centered={true}
             opened={openModal}
             onClose={() => {
@@ -144,13 +171,13 @@ export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordI
                             placeholder="Google"
                             label="Website"
                             {...form.getInputProps('site_name')}
-                            rightSection={pasteButton('site_name')}
+                            rightSection={copyPasteButton('site_name')}
                         />
                         <TextInput
                             placeholder="https://accounts.google.com/v3/signin/identifier"
                             label="Address"
                             {...form.getInputProps('site_url')}
-                            rightSection={pasteButton('site_url')}
+                            rightSection={copyPasteButton('site_url')}
                         />
                     </Group>
                     {/* TODO: Use constants instead of 'md','sm', etc. This should provide better tracking and easier updatability */}
@@ -160,7 +187,7 @@ export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordI
                         label="Email"
                         icon={<IconAt size={16} stroke={1.5} />}
                         {...form.getInputProps('username')}
-                        rightSection={pasteButton('username')}
+                        rightSection={copyPasteButton('username')}
                     />
 
                     <TextInput
@@ -177,14 +204,22 @@ export function PasswordItemForm({ noShadow, noPadding, style }: CreatePasswordI
                                     inputType={inputType}
                                     toggleInputType={toggleInputType}
                                 />
-                                {pasteButton('password')}
+                                {copyPasteButton('password')}
                             </Group>
                         }
                     />
 
+                    <Textarea
+                        mt="md"
+                        label="Description"
+                        placeholder="Add description"
+                        {...form.getInputProps('description')}
+                    ></Textarea>
+
                     <MultiSelect
                         mt="md"
                         label="Tags"
+                        value={form.values.tags}
                         data={form.getInputProps('tags').value}
                         placeholder="Select items"
                         searchable

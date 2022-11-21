@@ -1,6 +1,6 @@
 import { PwnChecker } from './pages/PwnChecker/PwnChecker';
 import {
-    IconAlertTriangle,
+    IconAlertOctagon,
     IconBellRinging,
     IconDatabaseImport,
     IconFilePower,
@@ -92,7 +92,7 @@ export const routeMappings: RouteData[] = [
         component: PwnChecker,
         routeType: RouteType.Account,
         label: 'Password Breach',
-        icon: IconAlertTriangle,
+        icon: IconAlertOctagon,
     },
     {
         path: '/keys/new',
