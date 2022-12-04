@@ -5,6 +5,7 @@ package ent
 import (
 	"time"
 
+	"github.com/riadafridishibly/vault-app/ent/key"
 	"github.com/riadafridishibly/vault-app/ent/passworditem"
 	"github.com/riadafridishibly/vault-app/ent/schema"
 )
@@ -13,6 +14,16 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	keyFields := schema.Key{}.Fields()
+	_ = keyFields
+	// keyDescCreatedAt is the schema descriptor for created_at field.
+	keyDescCreatedAt := keyFields[3].Descriptor()
+	// key.DefaultCreatedAt holds the default value on creation for the created_at field.
+	key.DefaultCreatedAt = keyDescCreatedAt.Default.(func() time.Time)
+	// keyDescUpdatedAt is the schema descriptor for updated_at field.
+	keyDescUpdatedAt := keyFields[4].Descriptor()
+	// key.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	key.DefaultUpdatedAt = keyDescUpdatedAt.Default.(func() time.Time)
 	passworditemFields := schema.PasswordItem{}.Fields()
 	_ = passworditemFields
 	// passworditemDescCreatedAt is the schema descriptor for created_at field.

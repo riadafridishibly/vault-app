@@ -8,6 +8,21 @@ import (
 )
 
 var (
+	// KeysColumns holds the columns for the "keys" table.
+	KeysColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "type", Type: field.TypeString},
+		{Name: "public_key", Type: field.TypeString},
+		{Name: "private_key", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+	}
+	// KeysTable holds the schema information for the "keys" table.
+	KeysTable = &schema.Table{
+		Name:       "keys",
+		Columns:    KeysColumns,
+		PrimaryKey: []*schema.Column{KeysColumns[0]},
+	}
 	// PasswordItemsColumns holds the columns for the "password_items" table.
 	PasswordItemsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -30,6 +45,7 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		KeysTable,
 		PasswordItemsTable,
 	}
 )

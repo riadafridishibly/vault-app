@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/riadafridishibly/vault-app/ent/key"
 	"github.com/riadafridishibly/vault-app/ent/passworditem"
 )
 
@@ -31,6 +32,7 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
+		key.Table:          key.ValidColumn,
 		passworditem.Table: passworditem.ValidColumn,
 	}
 	check, ok := checks[table]

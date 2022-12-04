@@ -10,6 +10,7 @@ import (
 
 	"github.com/riadafridishibly/vault-app/ent/migrate"
 
+	"github.com/riadafridishibly/vault-app/ent/key"
 	"github.com/riadafridishibly/vault-app/ent/passworditem"
 
 	"entgo.io/ent/dialect"
@@ -21,6 +22,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// Key is the client for interacting with the Key builders.
+	Key *KeyClient
 	// PasswordItem is the client for interacting with the PasswordItem builders.
 	PasswordItem *PasswordItemClient
 }
@@ -36,6 +39,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.Key = NewKeyClient(c.config)
 	c.PasswordItem = NewPasswordItemClient(c.config)
 }
 
@@ -70,6 +74,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:          ctx,
 		config:       cfg,
+		Key:          NewKeyClient(cfg),
 		PasswordItem: NewPasswordItemClient(cfg),
 	}, nil
 }
@@ -90,6 +95,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:          ctx,
 		config:       cfg,
+		Key:          NewKeyClient(cfg),
 		PasswordItem: NewPasswordItemClient(cfg),
 	}, nil
 }
@@ -97,7 +103,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		PasswordItem.
+//		Key.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -119,7 +125,98 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.Key.Use(hooks...)
 	c.PasswordItem.Use(hooks...)
+}
+
+// KeyClient is a client for the Key schema.
+type KeyClient struct {
+	config
+}
+
+// NewKeyClient returns a client for the Key from the given config.
+func NewKeyClient(c config) *KeyClient {
+	return &KeyClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `key.Hooks(f(g(h())))`.
+func (c *KeyClient) Use(hooks ...Hook) {
+	c.hooks.Key = append(c.hooks.Key, hooks...)
+}
+
+// Create returns a builder for creating a Key entity.
+func (c *KeyClient) Create() *KeyCreate {
+	mutation := newKeyMutation(c.config, OpCreate)
+	return &KeyCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Key entities.
+func (c *KeyClient) CreateBulk(builders ...*KeyCreate) *KeyCreateBulk {
+	return &KeyCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Key.
+func (c *KeyClient) Update() *KeyUpdate {
+	mutation := newKeyMutation(c.config, OpUpdate)
+	return &KeyUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *KeyClient) UpdateOne(k *Key) *KeyUpdateOne {
+	mutation := newKeyMutation(c.config, OpUpdateOne, withKey(k))
+	return &KeyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *KeyClient) UpdateOneID(id int) *KeyUpdateOne {
+	mutation := newKeyMutation(c.config, OpUpdateOne, withKeyID(id))
+	return &KeyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Key.
+func (c *KeyClient) Delete() *KeyDelete {
+	mutation := newKeyMutation(c.config, OpDelete)
+	return &KeyDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *KeyClient) DeleteOne(k *Key) *KeyDeleteOne {
+	return c.DeleteOneID(k.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *KeyClient) DeleteOneID(id int) *KeyDeleteOne {
+	builder := c.Delete().Where(key.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &KeyDeleteOne{builder}
+}
+
+// Query returns a query builder for Key.
+func (c *KeyClient) Query() *KeyQuery {
+	return &KeyQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a Key entity by its id.
+func (c *KeyClient) Get(ctx context.Context, id int) (*Key, error) {
+	return c.Query().Where(key.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *KeyClient) GetX(ctx context.Context, id int) *Key {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *KeyClient) Hooks() []Hook {
+	return c.hooks.Key
 }
 
 // PasswordItemClient is a client for the PasswordItem schema.
