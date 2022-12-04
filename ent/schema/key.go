@@ -1,15 +1,20 @@
 package schema
 
 import (
-	"time"
-
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/mixin"
 )
 
 // Key holds the schema definition for the Key entity.
 type Key struct {
 	ent.Schema
+}
+
+func (Key) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.Time{},
+	}
 }
 
 // Fields of the Key.
@@ -18,8 +23,7 @@ func (Key) Fields() []ent.Field {
 		field.String("type"),        // "age", "ed25519", "x25519"
 		field.String("public_key"),  // string
 		field.String("private_key"), // encrypted string
-		field.Time("created_at").Default(time.Now),
-		field.Time("updated_at").Default(time.Now),
+		field.Int("references"),     // How many times the key is used to encrypt
 	}
 }
 

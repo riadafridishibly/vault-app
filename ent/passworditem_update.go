@@ -29,6 +29,12 @@ func (piu *PasswordItemUpdate) Where(ps ...predicate.PasswordItem) *PasswordItem
 	return piu
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (piu *PasswordItemUpdate) SetUpdateTime(t time.Time) *PasswordItemUpdate {
+	piu.mutation.SetUpdateTime(t)
+	return piu
+}
+
 // SetAvatar sets the "avatar" field.
 func (piu *PasswordItemUpdate) SetAvatar(s string) *PasswordItemUpdate {
 	piu.mutation.SetAvatar(s)
@@ -187,34 +193,6 @@ func (piu *PasswordItemUpdate) ClearTags() *PasswordItemUpdate {
 	return piu
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (piu *PasswordItemUpdate) SetCreatedAt(t time.Time) *PasswordItemUpdate {
-	piu.mutation.SetCreatedAt(t)
-	return piu
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (piu *PasswordItemUpdate) SetNillableCreatedAt(t *time.Time) *PasswordItemUpdate {
-	if t != nil {
-		piu.SetCreatedAt(*t)
-	}
-	return piu
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (piu *PasswordItemUpdate) SetUpdatedAt(t time.Time) *PasswordItemUpdate {
-	piu.mutation.SetUpdatedAt(t)
-	return piu
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (piu *PasswordItemUpdate) SetNillableUpdatedAt(t *time.Time) *PasswordItemUpdate {
-	if t != nil {
-		piu.SetUpdatedAt(*t)
-	}
-	return piu
-}
-
 // Mutation returns the PasswordItemMutation object of the builder.
 func (piu *PasswordItemUpdate) Mutation() *PasswordItemMutation {
 	return piu.mutation
@@ -226,6 +204,7 @@ func (piu *PasswordItemUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	piu.defaults()
 	if len(piu.hooks) == 0 {
 		affected, err = piu.sqlSave(ctx)
 	} else {
@@ -274,6 +253,14 @@ func (piu *PasswordItemUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (piu *PasswordItemUpdate) defaults() {
+	if _, ok := piu.mutation.UpdateTime(); !ok {
+		v := passworditem.UpdateDefaultUpdateTime()
+		piu.mutation.SetUpdateTime(v)
+	}
+}
+
 func (piu *PasswordItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -291,6 +278,9 @@ func (piu *PasswordItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := piu.mutation.UpdateTime(); ok {
+		_spec.SetField(passworditem.FieldUpdateTime, field.TypeTime, value)
 	}
 	if value, ok := piu.mutation.Avatar(); ok {
 		_spec.SetField(passworditem.FieldAvatar, field.TypeString, value)
@@ -345,12 +335,6 @@ func (piu *PasswordItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if piu.mutation.TagsCleared() {
 		_spec.ClearField(passworditem.FieldTags, field.TypeJSON)
 	}
-	if value, ok := piu.mutation.CreatedAt(); ok {
-		_spec.SetField(passworditem.FieldCreatedAt, field.TypeTime, value)
-	}
-	if value, ok := piu.mutation.UpdatedAt(); ok {
-		_spec.SetField(passworditem.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if n, err = sqlgraph.UpdateNodes(ctx, piu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{passworditem.Label}
@@ -368,6 +352,12 @@ type PasswordItemUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *PasswordItemMutation
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (piuo *PasswordItemUpdateOne) SetUpdateTime(t time.Time) *PasswordItemUpdateOne {
+	piuo.mutation.SetUpdateTime(t)
+	return piuo
 }
 
 // SetAvatar sets the "avatar" field.
@@ -528,34 +518,6 @@ func (piuo *PasswordItemUpdateOne) ClearTags() *PasswordItemUpdateOne {
 	return piuo
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (piuo *PasswordItemUpdateOne) SetCreatedAt(t time.Time) *PasswordItemUpdateOne {
-	piuo.mutation.SetCreatedAt(t)
-	return piuo
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (piuo *PasswordItemUpdateOne) SetNillableCreatedAt(t *time.Time) *PasswordItemUpdateOne {
-	if t != nil {
-		piuo.SetCreatedAt(*t)
-	}
-	return piuo
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (piuo *PasswordItemUpdateOne) SetUpdatedAt(t time.Time) *PasswordItemUpdateOne {
-	piuo.mutation.SetUpdatedAt(t)
-	return piuo
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (piuo *PasswordItemUpdateOne) SetNillableUpdatedAt(t *time.Time) *PasswordItemUpdateOne {
-	if t != nil {
-		piuo.SetUpdatedAt(*t)
-	}
-	return piuo
-}
-
 // Mutation returns the PasswordItemMutation object of the builder.
 func (piuo *PasswordItemUpdateOne) Mutation() *PasswordItemMutation {
 	return piuo.mutation
@@ -574,6 +536,7 @@ func (piuo *PasswordItemUpdateOne) Save(ctx context.Context) (*PasswordItem, err
 		err  error
 		node *PasswordItem
 	)
+	piuo.defaults()
 	if len(piuo.hooks) == 0 {
 		node, err = piuo.sqlSave(ctx)
 	} else {
@@ -628,6 +591,14 @@ func (piuo *PasswordItemUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (piuo *PasswordItemUpdateOne) defaults() {
+	if _, ok := piuo.mutation.UpdateTime(); !ok {
+		v := passworditem.UpdateDefaultUpdateTime()
+		piuo.mutation.SetUpdateTime(v)
+	}
+}
+
 func (piuo *PasswordItemUpdateOne) sqlSave(ctx context.Context) (_node *PasswordItem, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -662,6 +633,9 @@ func (piuo *PasswordItemUpdateOne) sqlSave(ctx context.Context) (_node *Password
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := piuo.mutation.UpdateTime(); ok {
+		_spec.SetField(passworditem.FieldUpdateTime, field.TypeTime, value)
 	}
 	if value, ok := piuo.mutation.Avatar(); ok {
 		_spec.SetField(passworditem.FieldAvatar, field.TypeString, value)
@@ -715,12 +689,6 @@ func (piuo *PasswordItemUpdateOne) sqlSave(ctx context.Context) (_node *Password
 	}
 	if piuo.mutation.TagsCleared() {
 		_spec.ClearField(passworditem.FieldTags, field.TypeJSON)
-	}
-	if value, ok := piuo.mutation.CreatedAt(); ok {
-		_spec.SetField(passworditem.FieldCreatedAt, field.TypeTime, value)
-	}
-	if value, ok := piuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(passworditem.FieldUpdatedAt, field.TypeTime, value)
 	}
 	_node = &PasswordItem{config: piuo.config}
 	_spec.Assign = _node.assignValues

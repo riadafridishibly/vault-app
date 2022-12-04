@@ -20,6 +20,34 @@ type KeyCreate struct {
 	hooks    []Hook
 }
 
+// SetCreateTime sets the "create_time" field.
+func (kc *KeyCreate) SetCreateTime(t time.Time) *KeyCreate {
+	kc.mutation.SetCreateTime(t)
+	return kc
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (kc *KeyCreate) SetNillableCreateTime(t *time.Time) *KeyCreate {
+	if t != nil {
+		kc.SetCreateTime(*t)
+	}
+	return kc
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (kc *KeyCreate) SetUpdateTime(t time.Time) *KeyCreate {
+	kc.mutation.SetUpdateTime(t)
+	return kc
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (kc *KeyCreate) SetNillableUpdateTime(t *time.Time) *KeyCreate {
+	if t != nil {
+		kc.SetUpdateTime(*t)
+	}
+	return kc
+}
+
 // SetType sets the "type" field.
 func (kc *KeyCreate) SetType(s string) *KeyCreate {
 	kc.mutation.SetType(s)
@@ -38,31 +66,9 @@ func (kc *KeyCreate) SetPrivateKey(s string) *KeyCreate {
 	return kc
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (kc *KeyCreate) SetCreatedAt(t time.Time) *KeyCreate {
-	kc.mutation.SetCreatedAt(t)
-	return kc
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (kc *KeyCreate) SetNillableCreatedAt(t *time.Time) *KeyCreate {
-	if t != nil {
-		kc.SetCreatedAt(*t)
-	}
-	return kc
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (kc *KeyCreate) SetUpdatedAt(t time.Time) *KeyCreate {
-	kc.mutation.SetUpdatedAt(t)
-	return kc
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (kc *KeyCreate) SetNillableUpdatedAt(t *time.Time) *KeyCreate {
-	if t != nil {
-		kc.SetUpdatedAt(*t)
-	}
+// SetReferences sets the "references" field.
+func (kc *KeyCreate) SetReferences(i int) *KeyCreate {
+	kc.mutation.SetReferences(i)
 	return kc
 }
 
@@ -143,18 +149,24 @@ func (kc *KeyCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (kc *KeyCreate) defaults() {
-	if _, ok := kc.mutation.CreatedAt(); !ok {
-		v := key.DefaultCreatedAt()
-		kc.mutation.SetCreatedAt(v)
+	if _, ok := kc.mutation.CreateTime(); !ok {
+		v := key.DefaultCreateTime()
+		kc.mutation.SetCreateTime(v)
 	}
-	if _, ok := kc.mutation.UpdatedAt(); !ok {
-		v := key.DefaultUpdatedAt()
-		kc.mutation.SetUpdatedAt(v)
+	if _, ok := kc.mutation.UpdateTime(); !ok {
+		v := key.DefaultUpdateTime()
+		kc.mutation.SetUpdateTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (kc *KeyCreate) check() error {
+	if _, ok := kc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "Key.create_time"`)}
+	}
+	if _, ok := kc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "Key.update_time"`)}
+	}
 	if _, ok := kc.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Key.type"`)}
 	}
@@ -164,11 +176,8 @@ func (kc *KeyCreate) check() error {
 	if _, ok := kc.mutation.PrivateKey(); !ok {
 		return &ValidationError{Name: "private_key", err: errors.New(`ent: missing required field "Key.private_key"`)}
 	}
-	if _, ok := kc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Key.created_at"`)}
-	}
-	if _, ok := kc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Key.updated_at"`)}
+	if _, ok := kc.mutation.References(); !ok {
+		return &ValidationError{Name: "references", err: errors.New(`ent: missing required field "Key.references"`)}
 	}
 	return nil
 }
@@ -197,6 +206,14 @@ func (kc *KeyCreate) createSpec() (*Key, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	if value, ok := kc.mutation.CreateTime(); ok {
+		_spec.SetField(key.FieldCreateTime, field.TypeTime, value)
+		_node.CreateTime = value
+	}
+	if value, ok := kc.mutation.UpdateTime(); ok {
+		_spec.SetField(key.FieldUpdateTime, field.TypeTime, value)
+		_node.UpdateTime = value
+	}
 	if value, ok := kc.mutation.GetType(); ok {
 		_spec.SetField(key.FieldType, field.TypeString, value)
 		_node.Type = value
@@ -209,13 +226,9 @@ func (kc *KeyCreate) createSpec() (*Key, *sqlgraph.CreateSpec) {
 		_spec.SetField(key.FieldPrivateKey, field.TypeString, value)
 		_node.PrivateKey = value
 	}
-	if value, ok := kc.mutation.CreatedAt(); ok {
-		_spec.SetField(key.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
-	}
-	if value, ok := kc.mutation.UpdatedAt(); ok {
-		_spec.SetField(key.FieldUpdatedAt, field.TypeTime, value)
-		_node.UpdatedAt = value
+	if value, ok := kc.mutation.References(); ok {
+		_spec.SetField(key.FieldReferences, field.TypeInt, value)
+		_node.References = value
 	}
 	return _node, _spec
 }

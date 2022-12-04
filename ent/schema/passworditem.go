@@ -1,15 +1,20 @@
 package schema
 
 import (
-	"time"
-
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/mixin"
 )
 
 // PasswordItem holds the schema definition for the PasswordItem entity.
 type PasswordItem struct {
 	ent.Schema
+}
+
+func (PasswordItem) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.Time{},
+	}
 }
 
 // Fields of the PasswordItem.
@@ -23,8 +28,6 @@ func (PasswordItem) Fields() []ent.Field {
 		field.String("username_type").Nillable().Optional(), // email, username
 		field.String("password").Nillable().Optional(),
 		field.JSON("tags", []string{}).Optional(),
-		field.Time("created_at").Default(time.Now),
-		field.Time("updated_at").Default(time.Now),
 	}
 }
 

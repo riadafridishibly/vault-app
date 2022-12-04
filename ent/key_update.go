@@ -28,6 +28,12 @@ func (ku *KeyUpdate) Where(ps ...predicate.Key) *KeyUpdate {
 	return ku
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (ku *KeyUpdate) SetUpdateTime(t time.Time) *KeyUpdate {
+	ku.mutation.SetUpdateTime(t)
+	return ku
+}
+
 // SetType sets the "type" field.
 func (ku *KeyUpdate) SetType(s string) *KeyUpdate {
 	ku.mutation.SetType(s)
@@ -46,31 +52,16 @@ func (ku *KeyUpdate) SetPrivateKey(s string) *KeyUpdate {
 	return ku
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (ku *KeyUpdate) SetCreatedAt(t time.Time) *KeyUpdate {
-	ku.mutation.SetCreatedAt(t)
+// SetReferences sets the "references" field.
+func (ku *KeyUpdate) SetReferences(i int) *KeyUpdate {
+	ku.mutation.ResetReferences()
+	ku.mutation.SetReferences(i)
 	return ku
 }
 
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ku *KeyUpdate) SetNillableCreatedAt(t *time.Time) *KeyUpdate {
-	if t != nil {
-		ku.SetCreatedAt(*t)
-	}
-	return ku
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (ku *KeyUpdate) SetUpdatedAt(t time.Time) *KeyUpdate {
-	ku.mutation.SetUpdatedAt(t)
-	return ku
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ku *KeyUpdate) SetNillableUpdatedAt(t *time.Time) *KeyUpdate {
-	if t != nil {
-		ku.SetUpdatedAt(*t)
-	}
+// AddReferences adds i to the "references" field.
+func (ku *KeyUpdate) AddReferences(i int) *KeyUpdate {
+	ku.mutation.AddReferences(i)
 	return ku
 }
 
@@ -85,6 +76,7 @@ func (ku *KeyUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	ku.defaults()
 	if len(ku.hooks) == 0 {
 		affected, err = ku.sqlSave(ctx)
 	} else {
@@ -133,6 +125,14 @@ func (ku *KeyUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (ku *KeyUpdate) defaults() {
+	if _, ok := ku.mutation.UpdateTime(); !ok {
+		v := key.UpdateDefaultUpdateTime()
+		ku.mutation.SetUpdateTime(v)
+	}
+}
+
 func (ku *KeyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -151,6 +151,9 @@ func (ku *KeyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := ku.mutation.UpdateTime(); ok {
+		_spec.SetField(key.FieldUpdateTime, field.TypeTime, value)
+	}
 	if value, ok := ku.mutation.GetType(); ok {
 		_spec.SetField(key.FieldType, field.TypeString, value)
 	}
@@ -160,11 +163,11 @@ func (ku *KeyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ku.mutation.PrivateKey(); ok {
 		_spec.SetField(key.FieldPrivateKey, field.TypeString, value)
 	}
-	if value, ok := ku.mutation.CreatedAt(); ok {
-		_spec.SetField(key.FieldCreatedAt, field.TypeTime, value)
+	if value, ok := ku.mutation.References(); ok {
+		_spec.SetField(key.FieldReferences, field.TypeInt, value)
 	}
-	if value, ok := ku.mutation.UpdatedAt(); ok {
-		_spec.SetField(key.FieldUpdatedAt, field.TypeTime, value)
+	if value, ok := ku.mutation.AddedReferences(); ok {
+		_spec.AddField(key.FieldReferences, field.TypeInt, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ku.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -185,6 +188,12 @@ type KeyUpdateOne struct {
 	mutation *KeyMutation
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (kuo *KeyUpdateOne) SetUpdateTime(t time.Time) *KeyUpdateOne {
+	kuo.mutation.SetUpdateTime(t)
+	return kuo
+}
+
 // SetType sets the "type" field.
 func (kuo *KeyUpdateOne) SetType(s string) *KeyUpdateOne {
 	kuo.mutation.SetType(s)
@@ -203,31 +212,16 @@ func (kuo *KeyUpdateOne) SetPrivateKey(s string) *KeyUpdateOne {
 	return kuo
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (kuo *KeyUpdateOne) SetCreatedAt(t time.Time) *KeyUpdateOne {
-	kuo.mutation.SetCreatedAt(t)
+// SetReferences sets the "references" field.
+func (kuo *KeyUpdateOne) SetReferences(i int) *KeyUpdateOne {
+	kuo.mutation.ResetReferences()
+	kuo.mutation.SetReferences(i)
 	return kuo
 }
 
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (kuo *KeyUpdateOne) SetNillableCreatedAt(t *time.Time) *KeyUpdateOne {
-	if t != nil {
-		kuo.SetCreatedAt(*t)
-	}
-	return kuo
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (kuo *KeyUpdateOne) SetUpdatedAt(t time.Time) *KeyUpdateOne {
-	kuo.mutation.SetUpdatedAt(t)
-	return kuo
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (kuo *KeyUpdateOne) SetNillableUpdatedAt(t *time.Time) *KeyUpdateOne {
-	if t != nil {
-		kuo.SetUpdatedAt(*t)
-	}
+// AddReferences adds i to the "references" field.
+func (kuo *KeyUpdateOne) AddReferences(i int) *KeyUpdateOne {
+	kuo.mutation.AddReferences(i)
 	return kuo
 }
 
@@ -249,6 +243,7 @@ func (kuo *KeyUpdateOne) Save(ctx context.Context) (*Key, error) {
 		err  error
 		node *Key
 	)
+	kuo.defaults()
 	if len(kuo.hooks) == 0 {
 		node, err = kuo.sqlSave(ctx)
 	} else {
@@ -303,6 +298,14 @@ func (kuo *KeyUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (kuo *KeyUpdateOne) defaults() {
+	if _, ok := kuo.mutation.UpdateTime(); !ok {
+		v := key.UpdateDefaultUpdateTime()
+		kuo.mutation.SetUpdateTime(v)
+	}
+}
+
 func (kuo *KeyUpdateOne) sqlSave(ctx context.Context) (_node *Key, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -338,6 +341,9 @@ func (kuo *KeyUpdateOne) sqlSave(ctx context.Context) (_node *Key, err error) {
 			}
 		}
 	}
+	if value, ok := kuo.mutation.UpdateTime(); ok {
+		_spec.SetField(key.FieldUpdateTime, field.TypeTime, value)
+	}
 	if value, ok := kuo.mutation.GetType(); ok {
 		_spec.SetField(key.FieldType, field.TypeString, value)
 	}
@@ -347,11 +353,11 @@ func (kuo *KeyUpdateOne) sqlSave(ctx context.Context) (_node *Key, err error) {
 	if value, ok := kuo.mutation.PrivateKey(); ok {
 		_spec.SetField(key.FieldPrivateKey, field.TypeString, value)
 	}
-	if value, ok := kuo.mutation.CreatedAt(); ok {
-		_spec.SetField(key.FieldCreatedAt, field.TypeTime, value)
+	if value, ok := kuo.mutation.References(); ok {
+		_spec.SetField(key.FieldReferences, field.TypeInt, value)
 	}
-	if value, ok := kuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(key.FieldUpdatedAt, field.TypeTime, value)
+	if value, ok := kuo.mutation.AddedReferences(); ok {
+		_spec.AddField(key.FieldReferences, field.TypeInt, value)
 	}
 	_node = &Key{config: kuo.config}
 	_spec.Assign = _node.assignValues

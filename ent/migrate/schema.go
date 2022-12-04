@@ -8,14 +8,30 @@ import (
 )
 
 var (
+	// FilesColumns holds the columns for the "files" table.
+	FilesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
+		{Name: "src_path", Type: field.TypeString},
+		{Name: "current_path", Type: field.TypeString},
+		{Name: "filetype", Type: field.TypeString},
+	}
+	// FilesTable holds the schema information for the "files" table.
+	FilesTable = &schema.Table{
+		Name:       "files",
+		Columns:    FilesColumns,
+		PrimaryKey: []*schema.Column{FilesColumns[0]},
+	}
 	// KeysColumns holds the columns for the "keys" table.
 	KeysColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
 		{Name: "type", Type: field.TypeString},
 		{Name: "public_key", Type: field.TypeString},
 		{Name: "private_key", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "references", Type: field.TypeInt},
 	}
 	// KeysTable holds the schema information for the "keys" table.
 	KeysTable = &schema.Table{
@@ -26,6 +42,8 @@ var (
 	// PasswordItemsColumns holds the columns for the "password_items" table.
 	PasswordItemsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
 		{Name: "avatar", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "site_name", Type: field.TypeString, Nullable: true},
@@ -34,8 +52,6 @@ var (
 		{Name: "username_type", Type: field.TypeString, Nullable: true},
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// PasswordItemsTable holds the schema information for the "password_items" table.
 	PasswordItemsTable = &schema.Table{
@@ -45,6 +61,7 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		FilesTable,
 		KeysTable,
 		PasswordItemsTable,
 	}

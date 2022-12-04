@@ -64,6 +64,22 @@ func (db *DatabaseService) ReadSingleKey(id int) (*ent.Key, error) {
 	return db.dao.FindKeyByID(db.ctx, id)
 }
 
+func (db *DatabaseService) CreateFile(file ent.File) (*ent.File, error) {
+	return db.dao.NewFile(db.ctx, file)
+}
+
+func (db *DatabaseService) ReadAllFiles() ([]*ent.File, error) {
+	return db.dao.FindAllFiles(db.ctx)
+}
+
+func (db *DatabaseService) DeleteFileByID(id int) error {
+	return db.dao.RemoveFileByID(db.ctx, id)
+}
+
+func (db *DatabaseService) ReadSingleFile(id int) (*ent.File, error) {
+	return db.dao.FindFileByID(db.ctx, id)
+}
+
 func (db *DatabaseService) close() error {
 	return db.dao.Close()
 }

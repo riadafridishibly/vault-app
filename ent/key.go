@@ -16,16 +16,18 @@ type Key struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// CreateTime holds the value of the "create_time" field.
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// UpdateTime holds the value of the "update_time" field.
+	UpdateTime time.Time `json:"update_time,omitempty"`
 	// Type holds the value of the "type" field.
 	Type string `json:"type,omitempty"`
 	// PublicKey holds the value of the "public_key" field.
 	PublicKey string `json:"public_key,omitempty"`
 	// PrivateKey holds the value of the "private_key" field.
 	PrivateKey string `json:"private_key,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// References holds the value of the "references" field.
+	References int `json:"references,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -33,11 +35,11 @@ func (*Key) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case key.FieldID:
+		case key.FieldID, key.FieldReferences:
 			values[i] = new(sql.NullInt64)
 		case key.FieldType, key.FieldPublicKey, key.FieldPrivateKey:
 			values[i] = new(sql.NullString)
-		case key.FieldCreatedAt, key.FieldUpdatedAt:
+		case key.FieldCreateTime, key.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Key", columns[i])
@@ -60,6 +62,18 @@ func (k *Key) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			k.ID = int(value.Int64)
+		case key.FieldCreateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field create_time", values[i])
+			} else if value.Valid {
+				k.CreateTime = value.Time
+			}
+		case key.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				k.UpdateTime = value.Time
+			}
 		case key.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
@@ -78,17 +92,11 @@ func (k *Key) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				k.PrivateKey = value.String
 			}
-		case key.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+		case key.FieldReferences:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field references", values[i])
 			} else if value.Valid {
-				k.CreatedAt = value.Time
-			}
-		case key.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				k.UpdatedAt = value.Time
+				k.References = int(value.Int64)
 			}
 		}
 	}
@@ -118,6 +126,12 @@ func (k *Key) String() string {
 	var builder strings.Builder
 	builder.WriteString("Key(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", k.ID))
+	builder.WriteString("create_time=")
+	builder.WriteString(k.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(k.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(k.Type)
 	builder.WriteString(", ")
@@ -127,11 +141,8 @@ func (k *Key) String() string {
 	builder.WriteString("private_key=")
 	builder.WriteString(k.PrivateKey)
 	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(k.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(k.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString("references=")
+	builder.WriteString(fmt.Sprintf("%v", k.References))
 	builder.WriteByte(')')
 	return builder.String()
 }
