@@ -48,6 +48,22 @@ func (db *DatabaseService) ReadSinglePasswordItems(id int) (*ent.PasswordItem, e
 	return db.dao.ReadSinglePasswordItems(db.ctx, id)
 }
 
+func (db *DatabaseService) CreateKey() (*ent.Key, error) {
+	return db.dao.NewKey(db.ctx)
+}
+
+func (db *DatabaseService) ReadAllKeys() ([]*ent.Key, error) {
+	return db.dao.FindAllKeys(db.ctx)
+}
+
+func (db *DatabaseService) DeleteKeyByID(id int) error {
+	return db.dao.RemoveKeyByID(db.ctx, id)
+}
+
+func (db *DatabaseService) ReadSingleKey(id int) (*ent.Key, error) {
+	return db.dao.FindKeyByID(db.ctx, id)
+}
+
 func (db *DatabaseService) close() error {
 	return db.dao.Close()
 }
