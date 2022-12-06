@@ -115,6 +115,13 @@ func PrivateKey(v string) predicate.Key {
 	})
 }
 
+// IsActive applies equality check predicate on the "is_active" field. It's identical to IsActiveEQ.
+func IsActive(v bool) predicate.Key {
+	return predicate.Key(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldIsActive), v))
+	})
+}
+
 // References applies equality check predicate on the "references" field. It's identical to ReferencesEQ.
 func References(v int) predicate.Key {
 	return predicate.Key(func(s *sql.Selector) {
@@ -544,6 +551,20 @@ func PrivateKeyEqualFold(v string) predicate.Key {
 func PrivateKeyContainsFold(v string) predicate.Key {
 	return predicate.Key(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldPrivateKey), v))
+	})
+}
+
+// IsActiveEQ applies the EQ predicate on the "is_active" field.
+func IsActiveEQ(v bool) predicate.Key {
+	return predicate.Key(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldIsActive), v))
+	})
+}
+
+// IsActiveNEQ applies the NEQ predicate on the "is_active" field.
+func IsActiveNEQ(v bool) predicate.Key {
+	return predicate.Key(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldIsActive), v))
 	})
 }
 

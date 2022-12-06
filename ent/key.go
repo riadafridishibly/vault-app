@@ -26,6 +26,8 @@ type Key struct {
 	PublicKey string `json:"public_key,omitempty"`
 	// PrivateKey holds the value of the "private_key" field.
 	PrivateKey string `json:"private_key,omitempty"`
+	// IsActive holds the value of the "is_active" field.
+	IsActive bool `json:"is_active,omitempty"`
 	// References holds the value of the "references" field.
 	References int `json:"references,omitempty"`
 }
@@ -35,6 +37,8 @@ func (*Key) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case key.FieldIsActive:
+			values[i] = new(sql.NullBool)
 		case key.FieldID, key.FieldReferences:
 			values[i] = new(sql.NullInt64)
 		case key.FieldType, key.FieldPublicKey, key.FieldPrivateKey:
@@ -92,6 +96,12 @@ func (k *Key) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				k.PrivateKey = value.String
 			}
+		case key.FieldIsActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_active", values[i])
+			} else if value.Valid {
+				k.IsActive = value.Bool
+			}
 		case key.FieldReferences:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field references", values[i])
@@ -140,6 +150,9 @@ func (k *Key) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("private_key=")
 	builder.WriteString(k.PrivateKey)
+	builder.WriteString(", ")
+	builder.WriteString("is_active=")
+	builder.WriteString(fmt.Sprintf("%v", k.IsActive))
 	builder.WriteString(", ")
 	builder.WriteString("references=")
 	builder.WriteString(fmt.Sprintf("%v", k.References))

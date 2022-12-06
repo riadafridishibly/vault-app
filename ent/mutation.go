@@ -569,6 +569,7 @@ type KeyMutation struct {
 	_type         *string
 	public_key    *string
 	private_key   *string
+	is_active     *bool
 	references    *int
 	addreferences *int
 	clearedFields map[string]struct{}
@@ -855,6 +856,42 @@ func (m *KeyMutation) ResetPrivateKey() {
 	m.private_key = nil
 }
 
+// SetIsActive sets the "is_active" field.
+func (m *KeyMutation) SetIsActive(b bool) {
+	m.is_active = &b
+}
+
+// IsActive returns the value of the "is_active" field in the mutation.
+func (m *KeyMutation) IsActive() (r bool, exists bool) {
+	v := m.is_active
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsActive returns the old "is_active" field's value of the Key entity.
+// If the Key object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *KeyMutation) OldIsActive(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsActive is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsActive requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsActive: %w", err)
+	}
+	return oldValue.IsActive, nil
+}
+
+// ResetIsActive resets all changes to the "is_active" field.
+func (m *KeyMutation) ResetIsActive() {
+	m.is_active = nil
+}
+
 // SetReferences sets the "references" field.
 func (m *KeyMutation) SetReferences(i int) {
 	m.references = &i
@@ -930,7 +967,7 @@ func (m *KeyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *KeyMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.create_time != nil {
 		fields = append(fields, key.FieldCreateTime)
 	}
@@ -945,6 +982,9 @@ func (m *KeyMutation) Fields() []string {
 	}
 	if m.private_key != nil {
 		fields = append(fields, key.FieldPrivateKey)
+	}
+	if m.is_active != nil {
+		fields = append(fields, key.FieldIsActive)
 	}
 	if m.references != nil {
 		fields = append(fields, key.FieldReferences)
@@ -967,6 +1007,8 @@ func (m *KeyMutation) Field(name string) (ent.Value, bool) {
 		return m.PublicKey()
 	case key.FieldPrivateKey:
 		return m.PrivateKey()
+	case key.FieldIsActive:
+		return m.IsActive()
 	case key.FieldReferences:
 		return m.References()
 	}
@@ -988,6 +1030,8 @@ func (m *KeyMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldPublicKey(ctx)
 	case key.FieldPrivateKey:
 		return m.OldPrivateKey(ctx)
+	case key.FieldIsActive:
+		return m.OldIsActive(ctx)
 	case key.FieldReferences:
 		return m.OldReferences(ctx)
 	}
@@ -1033,6 +1077,13 @@ func (m *KeyMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPrivateKey(v)
+		return nil
+	case key.FieldIsActive:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsActive(v)
 		return nil
 	case key.FieldReferences:
 		v, ok := value.(int)
@@ -1119,6 +1170,9 @@ func (m *KeyMutation) ResetField(name string) error {
 		return nil
 	case key.FieldPrivateKey:
 		m.ResetPrivateKey()
+		return nil
+	case key.FieldIsActive:
+		m.ResetIsActive()
 		return nil
 	case key.FieldReferences:
 		m.ResetReferences()

@@ -52,6 +52,12 @@ func (ku *KeyUpdate) SetPrivateKey(s string) *KeyUpdate {
 	return ku
 }
 
+// SetIsActive sets the "is_active" field.
+func (ku *KeyUpdate) SetIsActive(b bool) *KeyUpdate {
+	ku.mutation.SetIsActive(b)
+	return ku
+}
+
 // SetReferences sets the "references" field.
 func (ku *KeyUpdate) SetReferences(i int) *KeyUpdate {
 	ku.mutation.ResetReferences()
@@ -163,6 +169,9 @@ func (ku *KeyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ku.mutation.PrivateKey(); ok {
 		_spec.SetField(key.FieldPrivateKey, field.TypeString, value)
 	}
+	if value, ok := ku.mutation.IsActive(); ok {
+		_spec.SetField(key.FieldIsActive, field.TypeBool, value)
+	}
 	if value, ok := ku.mutation.References(); ok {
 		_spec.SetField(key.FieldReferences, field.TypeInt, value)
 	}
@@ -209,6 +218,12 @@ func (kuo *KeyUpdateOne) SetPublicKey(s string) *KeyUpdateOne {
 // SetPrivateKey sets the "private_key" field.
 func (kuo *KeyUpdateOne) SetPrivateKey(s string) *KeyUpdateOne {
 	kuo.mutation.SetPrivateKey(s)
+	return kuo
+}
+
+// SetIsActive sets the "is_active" field.
+func (kuo *KeyUpdateOne) SetIsActive(b bool) *KeyUpdateOne {
+	kuo.mutation.SetIsActive(b)
 	return kuo
 }
 
@@ -352,6 +367,9 @@ func (kuo *KeyUpdateOne) sqlSave(ctx context.Context) (_node *Key, err error) {
 	}
 	if value, ok := kuo.mutation.PrivateKey(); ok {
 		_spec.SetField(key.FieldPrivateKey, field.TypeString, value)
+	}
+	if value, ok := kuo.mutation.IsActive(); ok {
+		_spec.SetField(key.FieldIsActive, field.TypeBool, value)
 	}
 	if value, ok := kuo.mutation.References(); ok {
 		_spec.SetField(key.FieldReferences, field.TypeInt, value)

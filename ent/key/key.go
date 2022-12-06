@@ -21,6 +21,8 @@ const (
 	FieldPublicKey = "public_key"
 	// FieldPrivateKey holds the string denoting the private_key field in the database.
 	FieldPrivateKey = "private_key"
+	// FieldIsActive holds the string denoting the is_active field in the database.
+	FieldIsActive = "is_active"
 	// FieldReferences holds the string denoting the references field in the database.
 	FieldReferences = "references"
 	// Table holds the table name of the key in the database.
@@ -35,6 +37,7 @@ var Columns = []string{
 	FieldType,
 	FieldPublicKey,
 	FieldPrivateKey,
+	FieldIsActive,
 	FieldReferences,
 }
 

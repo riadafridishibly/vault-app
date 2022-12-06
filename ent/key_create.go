@@ -66,6 +66,12 @@ func (kc *KeyCreate) SetPrivateKey(s string) *KeyCreate {
 	return kc
 }
 
+// SetIsActive sets the "is_active" field.
+func (kc *KeyCreate) SetIsActive(b bool) *KeyCreate {
+	kc.mutation.SetIsActive(b)
+	return kc
+}
+
 // SetReferences sets the "references" field.
 func (kc *KeyCreate) SetReferences(i int) *KeyCreate {
 	kc.mutation.SetReferences(i)
@@ -176,6 +182,9 @@ func (kc *KeyCreate) check() error {
 	if _, ok := kc.mutation.PrivateKey(); !ok {
 		return &ValidationError{Name: "private_key", err: errors.New(`ent: missing required field "Key.private_key"`)}
 	}
+	if _, ok := kc.mutation.IsActive(); !ok {
+		return &ValidationError{Name: "is_active", err: errors.New(`ent: missing required field "Key.is_active"`)}
+	}
 	if _, ok := kc.mutation.References(); !ok {
 		return &ValidationError{Name: "references", err: errors.New(`ent: missing required field "Key.references"`)}
 	}
@@ -225,6 +234,10 @@ func (kc *KeyCreate) createSpec() (*Key, *sqlgraph.CreateSpec) {
 	if value, ok := kc.mutation.PrivateKey(); ok {
 		_spec.SetField(key.FieldPrivateKey, field.TypeString, value)
 		_node.PrivateKey = value
+	}
+	if value, ok := kc.mutation.IsActive(); ok {
+		_spec.SetField(key.FieldIsActive, field.TypeBool, value)
+		_node.IsActive = value
 	}
 	if value, ok := kc.mutation.References(); ok {
 		_spec.SetField(key.FieldReferences, field.TypeInt, value)

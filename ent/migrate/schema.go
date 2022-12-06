@@ -31,6 +31,7 @@ var (
 		{Name: "type", Type: field.TypeString},
 		{Name: "public_key", Type: field.TypeString},
 		{Name: "private_key", Type: field.TypeString},
+		{Name: "is_active", Type: field.TypeBool},
 		{Name: "references", Type: field.TypeInt},
 	}
 	// KeysTable holds the schema information for the "keys" table.

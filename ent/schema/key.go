@@ -23,7 +23,8 @@ func (Key) Fields() []ent.Field {
 		field.String("type"),        // "age", "ed25519", "x25519"
 		field.String("public_key"),  // string
 		field.String("private_key"), // encrypted string
-		field.Int("references"),     // How many times the key is used to encrypt
+		field.Bool("is_active"),
+		field.Int("references"), // How many times the key is used to encrypt
 	}
 }
 
