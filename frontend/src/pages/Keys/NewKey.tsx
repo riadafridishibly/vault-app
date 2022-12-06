@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 import { showNewKeyAddModal } from './KeysControls';
 import SSHKeyGen from './SSHKeyGen';
 
-function NewKey() {
+function NewKey({ refetch }: { refetch: () => void }) {
     const [show, setShow] = useRecoilState(showNewKeyAddModal);
 
     const generateNewAgeKey = () => {
@@ -32,7 +32,15 @@ function NewKey() {
                 </Tabs.Panel>
                 <Tabs.Panel value="age_key" pt="xs">
                     <Center>
-                        <Button onClick={generateNewAgeKey}>Generate AGE Key</Button>
+                        <Button
+                            onClick={() => {
+                                generateNewAgeKey();
+                                refetch();
+                                setShow(false);
+                            }}
+                        >
+                            Generate AGE Key
+                        </Button>
                     </Center>
                 </Tabs.Panel>
             </Tabs>

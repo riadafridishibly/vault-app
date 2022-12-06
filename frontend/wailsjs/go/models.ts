@@ -51,6 +51,7 @@ export namespace ent {
 	    type?: string;
 	    public_key?: string;
 	    private_key?: string;
+	    is_active?: boolean;
 	    references?: number;
 	
 	    static createFrom(source: any = {}) {
@@ -65,6 +66,7 @@ export namespace ent {
 	        this.type = source["type"];
 	        this.public_key = source["public_key"];
 	        this.private_key = source["private_key"];
+	        this.is_active = source["is_active"];
 	        this.references = source["references"];
 	    }
 	
