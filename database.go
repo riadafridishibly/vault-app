@@ -64,6 +64,18 @@ func (db *DatabaseService) ReadSingleKey(id int) (*ent.Key, error) {
 	return db.dao.FindKeyByID(db.ctx, id)
 }
 
+func (db *DatabaseService) ActivateKey(id int) (*ent.Key, error) {
+	return db.dao.ActivateKey(db.ctx, id)
+}
+
+func (db *DatabaseService) DeactivateKey(id int) (*ent.Key, error) {
+	return db.dao.DeactivateKey(db.ctx, id)
+}
+
+func (db *DatabaseService) ReadAlActiveKeys() ([]*ent.Key, error) {
+	return db.dao.AllActiveKeys(db.ctx)
+}
+
 func (db *DatabaseService) CreateFile(file ent.File) (*ent.File, error) {
 	return db.dao.NewFile(db.ctx, file)
 }
