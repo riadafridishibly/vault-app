@@ -1,28 +1,9 @@
 import { Switch, Table } from '@mantine/core';
+import { formatDate, formatPubPrivKey } from '@src/shared/utils/utils';
 import { ActivateKey, DeactivateKey, ReadAllKeys } from '@wailsjs/go/main/DatabaseService';
 import { ent } from '@wailsjs/go/models';
 import React, { useCallback, useEffect } from 'react';
 import NewKey from './NewKey';
-
-function formatDate(date: string) {
-    return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-    });
-}
-
-function trunkString(s: string | undefined) {
-    if (s === undefined) {
-        return s;
-    }
-
-    if (s.length < 40) {
-        return s;
-    }
-
-    return s.substring(0, 15) + '...' + s.substring(s.length - 5);
-}
 
 function KeyState({
     id,
@@ -74,8 +55,8 @@ function Keys() {
 
     const rows = keys.map((key) => (
         <tr key={key.id}>
-            <td>{trunkString(key.public_key)}</td>
-            <td>{trunkString(key.private_key)}</td>
+            <td>{formatPubPrivKey(key.public_key)}</td>
+            <td>{formatPubPrivKey(key.private_key)}</td>
             <td>{formatDate(key.create_time)}</td>
             <td>
                 <KeyState id={key.id} currentState={key.is_active} refetch={handleRefetch} />
