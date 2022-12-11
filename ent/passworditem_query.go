@@ -253,12 +253,12 @@ func (piq *PasswordItemQuery) Clone() *PasswordItemQuery {
 // Example:
 //
 //	var v []struct {
-//		Avatar string `json:"avatar,omitempty"`
+//		CreateTime time.Time `json:"create_time,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.PasswordItem.Query().
-//		GroupBy(passworditem.FieldAvatar).
+//		GroupBy(passworditem.FieldCreateTime).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (piq *PasswordItemQuery) GroupBy(field string, fields ...string) *PasswordItemGroupBy {
@@ -281,11 +281,11 @@ func (piq *PasswordItemQuery) GroupBy(field string, fields ...string) *PasswordI
 // Example:
 //
 //	var v []struct {
-//		Avatar string `json:"avatar,omitempty"`
+//		CreateTime time.Time `json:"create_time,omitempty"`
 //	}
 //
 //	client.PasswordItem.Query().
-//		Select(passworditem.FieldAvatar).
+//		Select(passworditem.FieldCreateTime).
 //		Scan(ctx, &v)
 func (piq *PasswordItemQuery) Select(fields ...string) *PasswordItemSelect {
 	piq.fields = append(piq.fields, fields...)

@@ -17,6 +17,10 @@ type PasswordItem struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// CreateTime holds the value of the "create_time" field.
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// UpdateTime holds the value of the "update_time" field.
+	UpdateTime time.Time `json:"update_time,omitempty"`
 	// Avatar holds the value of the "avatar" field.
 	Avatar *string `json:"avatar,omitempty"`
 	// Description holds the value of the "description" field.
@@ -33,10 +37,6 @@ type PasswordItem struct {
 	Password *string `json:"password,omitempty"`
 	// Tags holds the value of the "tags" field.
 	Tags []string `json:"tags,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -50,7 +50,7 @@ func (*PasswordItem) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case passworditem.FieldAvatar, passworditem.FieldDescription, passworditem.FieldSiteName, passworditem.FieldSiteURL, passworditem.FieldUsername, passworditem.FieldUsernameType, passworditem.FieldPassword:
 			values[i] = new(sql.NullString)
-		case passworditem.FieldCreatedAt, passworditem.FieldUpdatedAt:
+		case passworditem.FieldCreateTime, passworditem.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type PasswordItem", columns[i])
@@ -73,6 +73,18 @@ func (pi *PasswordItem) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			pi.ID = int(value.Int64)
+		case passworditem.FieldCreateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field create_time", values[i])
+			} else if value.Valid {
+				pi.CreateTime = value.Time
+			}
+		case passworditem.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				pi.UpdateTime = value.Time
+			}
 		case passworditem.FieldAvatar:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar", values[i])
@@ -130,18 +142,6 @@ func (pi *PasswordItem) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
-		case passworditem.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				pi.CreatedAt = value.Time
-			}
-		case passworditem.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				pi.UpdatedAt = value.Time
-			}
 		}
 	}
 	return nil
@@ -170,6 +170,12 @@ func (pi *PasswordItem) String() string {
 	var builder strings.Builder
 	builder.WriteString("PasswordItem(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", pi.ID))
+	builder.WriteString("create_time=")
+	builder.WriteString(pi.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(pi.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
 	if v := pi.Avatar; v != nil {
 		builder.WriteString("avatar=")
 		builder.WriteString(*v)
@@ -207,12 +213,6 @@ func (pi *PasswordItem) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", pi.Tags))
-	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(pi.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(pi.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

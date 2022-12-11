@@ -9,6 +9,32 @@ import (
 	"github.com/riadafridishibly/vault-app/ent"
 )
 
+// The FileFunc type is an adapter to allow the use of ordinary
+// function as File mutator.
+type FileFunc func(context.Context, *ent.FileMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FileFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.FileMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FileMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The KeyFunc type is an adapter to allow the use of ordinary
+// function as Key mutator.
+type KeyFunc func(context.Context, *ent.KeyMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f KeyFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.KeyMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.KeyMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The PasswordItemFunc type is an adapter to allow the use of ordinary
 // function as PasswordItem mutator.
 type PasswordItemFunc func(context.Context, *ent.PasswordItemMutation) (ent.Value, error)

@@ -20,6 +20,34 @@ type PasswordItemCreate struct {
 	hooks    []Hook
 }
 
+// SetCreateTime sets the "create_time" field.
+func (pic *PasswordItemCreate) SetCreateTime(t time.Time) *PasswordItemCreate {
+	pic.mutation.SetCreateTime(t)
+	return pic
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (pic *PasswordItemCreate) SetNillableCreateTime(t *time.Time) *PasswordItemCreate {
+	if t != nil {
+		pic.SetCreateTime(*t)
+	}
+	return pic
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (pic *PasswordItemCreate) SetUpdateTime(t time.Time) *PasswordItemCreate {
+	pic.mutation.SetUpdateTime(t)
+	return pic
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (pic *PasswordItemCreate) SetNillableUpdateTime(t *time.Time) *PasswordItemCreate {
+	if t != nil {
+		pic.SetUpdateTime(*t)
+	}
+	return pic
+}
+
 // SetAvatar sets the "avatar" field.
 func (pic *PasswordItemCreate) SetAvatar(s string) *PasswordItemCreate {
 	pic.mutation.SetAvatar(s)
@@ -124,34 +152,6 @@ func (pic *PasswordItemCreate) SetTags(s []string) *PasswordItemCreate {
 	return pic
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (pic *PasswordItemCreate) SetCreatedAt(t time.Time) *PasswordItemCreate {
-	pic.mutation.SetCreatedAt(t)
-	return pic
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (pic *PasswordItemCreate) SetNillableCreatedAt(t *time.Time) *PasswordItemCreate {
-	if t != nil {
-		pic.SetCreatedAt(*t)
-	}
-	return pic
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (pic *PasswordItemCreate) SetUpdatedAt(t time.Time) *PasswordItemCreate {
-	pic.mutation.SetUpdatedAt(t)
-	return pic
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (pic *PasswordItemCreate) SetNillableUpdatedAt(t *time.Time) *PasswordItemCreate {
-	if t != nil {
-		pic.SetUpdatedAt(*t)
-	}
-	return pic
-}
-
 // Mutation returns the PasswordItemMutation object of the builder.
 func (pic *PasswordItemCreate) Mutation() *PasswordItemMutation {
 	return pic.mutation
@@ -229,23 +229,23 @@ func (pic *PasswordItemCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (pic *PasswordItemCreate) defaults() {
-	if _, ok := pic.mutation.CreatedAt(); !ok {
-		v := passworditem.DefaultCreatedAt()
-		pic.mutation.SetCreatedAt(v)
+	if _, ok := pic.mutation.CreateTime(); !ok {
+		v := passworditem.DefaultCreateTime()
+		pic.mutation.SetCreateTime(v)
 	}
-	if _, ok := pic.mutation.UpdatedAt(); !ok {
-		v := passworditem.DefaultUpdatedAt()
-		pic.mutation.SetUpdatedAt(v)
+	if _, ok := pic.mutation.UpdateTime(); !ok {
+		v := passworditem.DefaultUpdateTime()
+		pic.mutation.SetUpdateTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (pic *PasswordItemCreate) check() error {
-	if _, ok := pic.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "PasswordItem.created_at"`)}
+	if _, ok := pic.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "PasswordItem.create_time"`)}
 	}
-	if _, ok := pic.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "PasswordItem.updated_at"`)}
+	if _, ok := pic.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "PasswordItem.update_time"`)}
 	}
 	return nil
 }
@@ -274,6 +274,14 @@ func (pic *PasswordItemCreate) createSpec() (*PasswordItem, *sqlgraph.CreateSpec
 			},
 		}
 	)
+	if value, ok := pic.mutation.CreateTime(); ok {
+		_spec.SetField(passworditem.FieldCreateTime, field.TypeTime, value)
+		_node.CreateTime = value
+	}
+	if value, ok := pic.mutation.UpdateTime(); ok {
+		_spec.SetField(passworditem.FieldUpdateTime, field.TypeTime, value)
+		_node.UpdateTime = value
+	}
 	if value, ok := pic.mutation.Avatar(); ok {
 		_spec.SetField(passworditem.FieldAvatar, field.TypeString, value)
 		_node.Avatar = &value
@@ -305,14 +313,6 @@ func (pic *PasswordItemCreate) createSpec() (*PasswordItem, *sqlgraph.CreateSpec
 	if value, ok := pic.mutation.Tags(); ok {
 		_spec.SetField(passworditem.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
-	}
-	if value, ok := pic.mutation.CreatedAt(); ok {
-		_spec.SetField(passworditem.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
-	}
-	if value, ok := pic.mutation.UpdatedAt(); ok {
-		_spec.SetField(passworditem.FieldUpdatedAt, field.TypeTime, value)
-		_node.UpdatedAt = value
 	}
 	return _node, _spec
 }

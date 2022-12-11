@@ -6,5 +6,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// File is the predicate function for file builders.
+type File func(*sql.Selector)
+
+// Key is the predicate function for key builders.
+type Key func(*sql.Selector)
+
 // PasswordItem is the predicate function for passworditem builders.
 type PasswordItem func(*sql.Selector)

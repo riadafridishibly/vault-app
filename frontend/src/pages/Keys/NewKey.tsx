@@ -1,19 +1,28 @@
-import { Button, Center, Modal, Tabs } from '@mantine/core'
-import { useRecoilState } from 'recoil'
-import { showNewKeyAddModal } from './KeysControls'
-import SSHKeyGen from './SSHKeyGen'
+import { Button, Center, Modal, Tabs } from '@mantine/core';
+import { CreateKey } from '@wailsjs/go/main/DatabaseService';
+import { useRecoilState } from 'recoil';
+import { showNewKeyAddModal } from './KeysControls';
+import SSHKeyGen from './SSHKeyGen';
 
-function NewKey() {
-    const [show, setShow] = useRecoilState(showNewKeyAddModal)
+function NewKey({ refetch }: { refetch: () => void }) {
+    const [show, setShow] = useRecoilState(showNewKeyAddModal);
+
+    const generateNewAgeKey = () => {
+        CreateKey()
+            .then((key) => console.log(key))
+            .catch((err) => console.error(err));
+    };
 
     return (
         <Modal
             title="Add New Key"
             withCloseButton={true}
             opened={show}
-            onClose={() => { setShow(false) }}
+            onClose={() => {
+                setShow(false);
+            }}
         >
-            <Tabs defaultValue="ssh_key">
+            <Tabs defaultValue="age_key">
                 <Tabs.List>
                     <Tabs.Tab value="ssh_key">SSH Key</Tabs.Tab>
                     <Tabs.Tab value="age_key">AGE Key</Tabs.Tab>
@@ -21,15 +30,22 @@ function NewKey() {
                 <Tabs.Panel value="ssh_key" pt="xs">
                     <SSHKeyGen />
                 </Tabs.Panel>
-
                 <Tabs.Panel value="age_key" pt="xs">
                     <Center>
-                        <Button>Generate AGE Key</Button>
+                        <Button
+                            onClick={() => {
+                                generateNewAgeKey();
+                                refetch();
+                                setShow(false);
+                            }}
+                        >
+                            Generate AGE Key
+                        </Button>
                     </Center>
                 </Tabs.Panel>
             </Tabs>
         </Modal>
-    )
+    );
 }
 
-export default NewKey
+export default NewKey;

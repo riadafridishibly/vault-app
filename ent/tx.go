@@ -12,6 +12,10 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// File is the client for interacting with the File builders.
+	File *FileClient
+	// Key is the client for interacting with the Key builders.
+	Key *KeyClient
 	// PasswordItem is the client for interacting with the PasswordItem builders.
 	PasswordItem *PasswordItemClient
 
@@ -145,6 +149,8 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.File = NewFileClient(tx.config)
+	tx.Key = NewKeyClient(tx.config)
 	tx.PasswordItem = NewPasswordItemClient(tx.config)
 }
 
@@ -155,7 +161,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: PasswordItem.QueryXXX(), the query will be executed
+// applies a query, for example: File.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.
