@@ -3,7 +3,7 @@ module github.com/riadafridishibly/vault-app
 go 1.18
 
 require (
-	github.com/go-chi/chi/v5 v5.0.7
+	github.com/go-chi/chi/v5 v5.0.8
 	github.com/hashicorp/golang-lru v0.5.4
 	github.com/wailsapp/wails/v2 v2.2.0
 	golang.design/x/clipboard v0.6.3
