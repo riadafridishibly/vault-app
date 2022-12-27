@@ -21,81 +21,82 @@ import Settings from './pages/Settings/Settings';
 import Keys from './pages/Keys/Keys';
 import { RouteType } from './shared/enums/route-type.enum';
 import { RouteData } from './shared/interfaces/route-data.interface';
+import Auth from './pages/Auth/Auth';
 
 const nullTablerIcon = null as any as TablerIcon;
 
 export const routeMappings: RouteData[] = [
+    // {
+    //     path: '/',
+    //     component: PasswordGenerator,
+    //     routeType: RouteType.General,
+    //     label: 'Databases',
+    //     icon: IconDatabaseImport,
+    // },
+    // {
+    //     path: '/notifications',
+    //     component: Notifications,
+    //     routeType: RouteType.Account,
+    //     label: 'Notifications',
+    //     icon: IconBellRinging,
+    // },
+    // {
+    //     path: '/notes',
+    //     component: Notes,
+    //     routeType: RouteType.Account,
+    //     label: 'Notes',
+    //     icon: IconNotes,
+    // },
     {
-        path: '/',
-        component: PasswordGenerator,
-        routeType: RouteType.General,
-        label: 'Databases',
-        icon: IconDatabaseImport,
-    },
-    {
-        path: '/notifications',
-        component: Notifications,
-        routeType: RouteType.Account,
-        label: 'Notifications',
-        icon: IconBellRinging,
-    },
-    {
-        path: '/notes',
-        component: Notes,
-        routeType: RouteType.Account,
-        label: 'Notes',
-        icon: IconNotes,
-    },
-    {
-        path: '/password_manager',
+        path: '/app/password_manager',
         component: PasswordManager,
         routeType: RouteType.Account,
         label: 'Password Manager',
         icon: IconShieldLock,
     },
     {
-        path: '/encrypt_files',
+        path: '/app/encrypt_files',
         component: EncryptFiles,
         routeType: RouteType.Account,
         label: 'Encrypt Files',
         icon: IconFilePower,
     },
     {
-        path: '/password_generator',
+        path: '/app/password_generator',
         component: PasswordGenerator,
         routeType: RouteType.Account,
         label: 'Password Generator',
         icon: IconLock,
     },
     {
-        path: '/settings',
+        path: '/app/settings',
         component: Settings,
         routeType: RouteType.Account,
         label: 'Settings',
         icon: IconSettings,
     },
+    // {
+    //     path: '/notes/new',
+    //     component: NewNote,
+    //     routeType: RouteType.Hidden,
+    //     icon: nullTablerIcon,
+    // },
     {
-        path: '/notes/new',
-        component: NewNote,
-        routeType: RouteType.Hidden,
-        icon: nullTablerIcon,
-    },
-    {
-        path: '/keys',
+        path: '/app/keys',
         component: Keys,
         routeType: RouteType.Account,
         label: 'Keys',
         icon: IconKey,
     },
     {
-        path: '/password-checker',
+        path: '/app/password-checker',
         component: PwnChecker,
         routeType: RouteType.Account,
         label: 'Password Breach',
         icon: IconAlertOctagon,
     },
     {
-        path: '/keys/new',
+        path: '/app/keys/new',
         component: Keys,
         routeType: RouteType.Hidden,
         label: 'Keys',

@@ -54,13 +54,13 @@ interface HeaderSearchProps {
 }
 
 function renderActions(location: string) {
-    if (location.startsWith('/keys')) {
+    if (location.startsWith('/app/keys')) {
         return <KeysControls />;
     }
-    if (location.startsWith('/password_manager')) {
+    if (location.startsWith('/app/password_manager')) {
         return <PasswordManagerControls />;
     }
-    if (location.startsWith('/encrypt_files')) {
+    if (location.startsWith('/app/encrypt_files')) {
         return <EncryptFilesControls />;
     }
     return null;

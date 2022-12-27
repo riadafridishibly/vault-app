@@ -13,12 +13,15 @@ Keep your secrets secret.
 
 ## TODO
 
-- [ ] Define Each Page and attatch with navbar
-  - `useNavigage`
-- [x] Random Password Generator
+- [x] Password Generator
 - [ ] Encryptor (let's use age for now)
   - Use progress bar
 - [ ] And so on
 - [ ] Remove Vertical/Horizontal Scrollbar
 
-## Self Hosting (Organization)
+### Authentication
+
+- [ ] Master key
+- [ ] Encrypt other keys with the master key
+- [ ] Adding a key requires entering the master key
+- [ ] UI for the master key!
