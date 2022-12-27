@@ -8,6 +8,8 @@ export function CreateFile(arg1:ent.File):Promise<ent.File>;
 
 export function CreateKey():Promise<ent.Key>;
 
+export function CreateMasterPasswordHash(arg1:string):Promise<Error>;
+
 export function CreatePasswordItem(arg1:ent.PasswordItem):Promise<ent.PasswordItem>;
 
 export function DeactivateKey(arg1:number):Promise<ent.Key>;
@@ -18,13 +20,15 @@ export function DeleteKeyByID(arg1:number):Promise<Error>;
 
 export function DeletePasswordItem(arg1:number):Promise<ent.PasswordItem>;
 
-export function ReadAlActiveKeys():Promise<Array<ent.Key>>;
+export function ReadAllActiveKeys():Promise<Array<ent.Key>>;
 
 export function ReadAllFiles():Promise<Array<ent.File>>;
 
 export function ReadAllKeys():Promise<Array<ent.Key>>;
 
 export function ReadAllPasswordItems():Promise<Array<ent.PasswordItem>>;
+
+export function ReadMasterPasswordHash():Promise<string>;
 
 export function ReadSingleFile(arg1:number):Promise<ent.File>;
 

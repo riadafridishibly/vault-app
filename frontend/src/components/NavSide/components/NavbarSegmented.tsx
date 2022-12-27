@@ -96,7 +96,7 @@ export function NavbarSegmented() {
                 onClick={(event) => {
                     event.preventDefault();
                     setActive(item.label ?? '');
-                    navigate(item.path);
+                    navigate(item.path, { replace: true });
                 }}
             >
                 {isNullOrUndefined(item?.icon) === false && (
@@ -108,7 +108,7 @@ export function NavbarSegmented() {
 
     return (
         <Navbar width={{ sm: 300 }} p="md" className={classes.navbar}>
-            <Navbar.Section>
+            {/* <Navbar.Section>
                 <Center sx={{ marginBottom: '0.7rem' }}>
                     <BadgeWithAvatar title={'user@example.com'} />
                 </Center>
@@ -123,19 +123,21 @@ export function NavbarSegmented() {
                         { label: 'System', value: 'general' },
                     ]}
                 />
-            </Navbar.Section>
+            </Navbar.Section> */}
 
             <Navbar.Section grow mt="xl">
                 {links}
             </Navbar.Section>
 
             <Navbar.Section className={classes.footer}>
-                <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
-                    <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
-                    <span>Change account</span>
-                </a>
-
-                <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+                <a
+                    href="#"
+                    className={classes.link}
+                    onClick={(event) => {
+                        event.preventDefault();
+                        navigate('/', { replace: true });
+                    }}
+                >
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
                     <span>Logout</span>
                 </a>

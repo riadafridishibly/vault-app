@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 export default function Notes() {
-    return <div>Notes List</div>;
+    return <div>Notes</div>;
 }

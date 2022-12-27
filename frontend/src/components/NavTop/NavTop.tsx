@@ -54,13 +54,13 @@ interface HeaderSearchProps {
 }
 
 function renderActions(location: string) {
-    if (location.startsWith('/keys')) {
+    if (location.startsWith('/app/keys')) {
         return <KeysControls />;
     }
-    if (location.startsWith('/password_manager')) {
+    if (location.startsWith('/app/password_manager')) {
         return <PasswordManagerControls />;
     }
-    if (location.startsWith('/encrypt_files')) {
+    if (location.startsWith('/app/encrypt_files')) {
         return <EncryptFilesControls />;
     }
     return null;
@@ -86,8 +86,8 @@ function HeaderSearch({ links }: HeaderSearchProps) {
         <Header height={56} className={classes.header} mb={120} fixed>
             <div className={classes.inner}>
                 <Group>
-                    <Burger opened={opened} onClick={toggle} size="sm" />
-                    <Text<'h1'> weight={'bolder'}>Vault</Text>
+                    {/* <Burger opened={opened} onClick={toggle} size="sm" /> */}
+                    <Text<'h1'> weight={'bolder'}>Vault App</Text>
                 </Group>
 
                 <Group>

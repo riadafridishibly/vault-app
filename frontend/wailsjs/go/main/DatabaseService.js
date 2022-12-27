@@ -14,6 +14,10 @@ export function CreateKey() {
   return window['go']['main']['DatabaseService']['CreateKey']();
 }
 
+export function CreateMasterPasswordHash(arg1) {
+  return window['go']['main']['DatabaseService']['CreateMasterPasswordHash'](arg1);
+}
+
 export function CreatePasswordItem(arg1) {
   return window['go']['main']['DatabaseService']['CreatePasswordItem'](arg1);
 }
@@ -34,8 +38,8 @@ export function DeletePasswordItem(arg1) {
   return window['go']['main']['DatabaseService']['DeletePasswordItem'](arg1);
 }
 
-export function ReadAlActiveKeys() {
-  return window['go']['main']['DatabaseService']['ReadAlActiveKeys']();
+export function ReadAllActiveKeys() {
+  return window['go']['main']['DatabaseService']['ReadAllActiveKeys']();
 }
 
 export function ReadAllFiles() {
@@ -48,6 +52,10 @@ export function ReadAllKeys() {
 
 export function ReadAllPasswordItems() {
   return window['go']['main']['DatabaseService']['ReadAllPasswordItems']();
+}
+
+export function ReadMasterPasswordHash() {
+  return window['go']['main']['DatabaseService']['ReadMasterPasswordHash']();
 }
 
 export function ReadSingleFile(arg1) {

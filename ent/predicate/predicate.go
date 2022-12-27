@@ -12,5 +12,8 @@ type File func(*sql.Selector)
 // Key is the predicate function for key builders.
 type Key func(*sql.Selector)
 
+// MasterPassword is the predicate function for masterpassword builders.
+type MasterPassword func(*sql.Selector)
+
 // PasswordItem is the predicate function for passworditem builders.
 type PasswordItem func(*sql.Selector)
