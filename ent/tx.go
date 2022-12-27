@@ -16,6 +16,8 @@ type Tx struct {
 	File *FileClient
 	// Key is the client for interacting with the Key builders.
 	Key *KeyClient
+	// MasterPassword is the client for interacting with the MasterPassword builders.
+	MasterPassword *MasterPasswordClient
 	// PasswordItem is the client for interacting with the PasswordItem builders.
 	PasswordItem *PasswordItemClient
 
@@ -151,6 +153,7 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.File = NewFileClient(tx.config)
 	tx.Key = NewKeyClient(tx.config)
+	tx.MasterPassword = NewMasterPasswordClient(tx.config)
 	tx.PasswordItem = NewPasswordItemClient(tx.config)
 }
 

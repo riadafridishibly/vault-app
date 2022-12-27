@@ -16,6 +16,7 @@ type App struct {
 	clipboardService *ClipboardService
 	databaseService  *DatabaseService
 	assetServer      *AssetServerHack
+	userService      *UserService
 }
 
 // NewApp creates a new App application struct
@@ -36,6 +37,7 @@ func NewApp() (*App, error) {
 		assetServer:      NewAssetServer(),
 		databaseService:  db,
 		clipboardService: clip,
+		userService:      &UserService{},
 	}, nil
 }
 
@@ -52,4 +54,5 @@ func (a *App) startup(ctx context.Context) {
 	a.databaseService.updateContext(ctx)
 	a.assetServer.updateContext(ctx)
 	a.assetServer.initializeServer()
+	a.userService.setDB(a.databaseService)
 }

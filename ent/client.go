@@ -12,6 +12,7 @@ import (
 
 	"github.com/riadafridishibly/vault-app/ent/file"
 	"github.com/riadafridishibly/vault-app/ent/key"
+	"github.com/riadafridishibly/vault-app/ent/masterpassword"
 	"github.com/riadafridishibly/vault-app/ent/passworditem"
 
 	"entgo.io/ent/dialect"
@@ -27,6 +28,8 @@ type Client struct {
 	File *FileClient
 	// Key is the client for interacting with the Key builders.
 	Key *KeyClient
+	// MasterPassword is the client for interacting with the MasterPassword builders.
+	MasterPassword *MasterPasswordClient
 	// PasswordItem is the client for interacting with the PasswordItem builders.
 	PasswordItem *PasswordItemClient
 }
@@ -44,6 +47,7 @@ func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.File = NewFileClient(c.config)
 	c.Key = NewKeyClient(c.config)
+	c.MasterPassword = NewMasterPasswordClient(c.config)
 	c.PasswordItem = NewPasswordItemClient(c.config)
 }
 
@@ -76,11 +80,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:          ctx,
-		config:       cfg,
-		File:         NewFileClient(cfg),
-		Key:          NewKeyClient(cfg),
-		PasswordItem: NewPasswordItemClient(cfg),
+		ctx:            ctx,
+		config:         cfg,
+		File:           NewFileClient(cfg),
+		Key:            NewKeyClient(cfg),
+		MasterPassword: NewMasterPasswordClient(cfg),
+		PasswordItem:   NewPasswordItemClient(cfg),
 	}, nil
 }
 
@@ -98,11 +103,12 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:          ctx,
-		config:       cfg,
-		File:         NewFileClient(cfg),
-		Key:          NewKeyClient(cfg),
-		PasswordItem: NewPasswordItemClient(cfg),
+		ctx:            ctx,
+		config:         cfg,
+		File:           NewFileClient(cfg),
+		Key:            NewKeyClient(cfg),
+		MasterPassword: NewMasterPasswordClient(cfg),
+		PasswordItem:   NewPasswordItemClient(cfg),
 	}, nil
 }
 
@@ -133,6 +139,7 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	c.File.Use(hooks...)
 	c.Key.Use(hooks...)
+	c.MasterPassword.Use(hooks...)
 	c.PasswordItem.Use(hooks...)
 }
 
@@ -314,6 +321,96 @@ func (c *KeyClient) GetX(ctx context.Context, id int) *Key {
 // Hooks returns the client hooks.
 func (c *KeyClient) Hooks() []Hook {
 	return c.hooks.Key
+}
+
+// MasterPasswordClient is a client for the MasterPassword schema.
+type MasterPasswordClient struct {
+	config
+}
+
+// NewMasterPasswordClient returns a client for the MasterPassword from the given config.
+func NewMasterPasswordClient(c config) *MasterPasswordClient {
+	return &MasterPasswordClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `masterpassword.Hooks(f(g(h())))`.
+func (c *MasterPasswordClient) Use(hooks ...Hook) {
+	c.hooks.MasterPassword = append(c.hooks.MasterPassword, hooks...)
+}
+
+// Create returns a builder for creating a MasterPassword entity.
+func (c *MasterPasswordClient) Create() *MasterPasswordCreate {
+	mutation := newMasterPasswordMutation(c.config, OpCreate)
+	return &MasterPasswordCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MasterPassword entities.
+func (c *MasterPasswordClient) CreateBulk(builders ...*MasterPasswordCreate) *MasterPasswordCreateBulk {
+	return &MasterPasswordCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MasterPassword.
+func (c *MasterPasswordClient) Update() *MasterPasswordUpdate {
+	mutation := newMasterPasswordMutation(c.config, OpUpdate)
+	return &MasterPasswordUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MasterPasswordClient) UpdateOne(mp *MasterPassword) *MasterPasswordUpdateOne {
+	mutation := newMasterPasswordMutation(c.config, OpUpdateOne, withMasterPassword(mp))
+	return &MasterPasswordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MasterPasswordClient) UpdateOneID(id int) *MasterPasswordUpdateOne {
+	mutation := newMasterPasswordMutation(c.config, OpUpdateOne, withMasterPasswordID(id))
+	return &MasterPasswordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MasterPassword.
+func (c *MasterPasswordClient) Delete() *MasterPasswordDelete {
+	mutation := newMasterPasswordMutation(c.config, OpDelete)
+	return &MasterPasswordDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MasterPasswordClient) DeleteOne(mp *MasterPassword) *MasterPasswordDeleteOne {
+	return c.DeleteOneID(mp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MasterPasswordClient) DeleteOneID(id int) *MasterPasswordDeleteOne {
+	builder := c.Delete().Where(masterpassword.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MasterPasswordDeleteOne{builder}
+}
+
+// Query returns a query builder for MasterPassword.
+func (c *MasterPasswordClient) Query() *MasterPasswordQuery {
+	return &MasterPasswordQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a MasterPassword entity by its id.
+func (c *MasterPasswordClient) Get(ctx context.Context, id int) (*MasterPassword, error) {
+	return c.Query().Where(masterpassword.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MasterPasswordClient) GetX(ctx context.Context, id int) *MasterPassword {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *MasterPasswordClient) Hooks() []Hook {
+	return c.hooks.MasterPassword
 }
 
 // PasswordItemClient is a client for the PasswordItem schema.

@@ -40,6 +40,17 @@ var (
 		Columns:    KeysColumns,
 		PrimaryKey: []*schema.Column{KeysColumns[0]},
 	}
+	// MasterPasswordsColumns holds the columns for the "master_passwords" table.
+	MasterPasswordsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "password_hash", Type: field.TypeString},
+	}
+	// MasterPasswordsTable holds the schema information for the "master_passwords" table.
+	MasterPasswordsTable = &schema.Table{
+		Name:       "master_passwords",
+		Columns:    MasterPasswordsColumns,
+		PrimaryKey: []*schema.Column{MasterPasswordsColumns[0]},
+	}
 	// PasswordItemsColumns holds the columns for the "password_items" table.
 	PasswordItemsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -64,6 +75,7 @@ var (
 	Tables = []*schema.Table{
 		FilesTable,
 		KeysTable,
+		MasterPasswordsTable,
 		PasswordItemsTable,
 	}
 )

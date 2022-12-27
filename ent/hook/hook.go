@@ -35,6 +35,19 @@ func (f KeyFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) 
 	return f(ctx, mv)
 }
 
+// The MasterPasswordFunc type is an adapter to allow the use of ordinary
+// function as MasterPassword mutator.
+type MasterPasswordFunc func(context.Context, *ent.MasterPasswordMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MasterPasswordFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.MasterPasswordMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MasterPasswordMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The PasswordItemFunc type is an adapter to allow the use of ordinary
 // function as PasswordItem mutator.
 type PasswordItemFunc func(context.Context, *ent.PasswordItemMutation) (ent.Value, error)

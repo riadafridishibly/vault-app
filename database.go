@@ -72,7 +72,7 @@ func (db *DatabaseService) DeactivateKey(id int) (*ent.Key, error) {
 	return db.dao.DeactivateKey(db.ctx, id)
 }
 
-func (db *DatabaseService) ReadAlActiveKeys() ([]*ent.Key, error) {
+func (db *DatabaseService) ReadAllActiveKeys() ([]*ent.Key, error) {
 	return db.dao.AllActiveKeys(db.ctx)
 }
 
@@ -90,6 +90,15 @@ func (db *DatabaseService) DeleteFileByID(id int) error {
 
 func (db *DatabaseService) ReadSingleFile(id int) (*ent.File, error) {
 	return db.dao.FindFileByID(db.ctx, id)
+}
+
+func (db *DatabaseService) ReadMasterPasswordHash() (passwordHash string, err error) {
+	return db.dao.MasterPasswordHash(db.ctx)
+}
+
+func (db *DatabaseService) CreateMasterPasswordHash(passwordHash string) error {
+	_, err := db.dao.CreateMasterPasswordHash(db.ctx, passwordHash)
+	return err
 }
 
 func (db *DatabaseService) close() error {

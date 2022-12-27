@@ -7,6 +7,7 @@ import (
 
 	"github.com/riadafridishibly/vault-app/ent/file"
 	"github.com/riadafridishibly/vault-app/ent/key"
+	"github.com/riadafridishibly/vault-app/ent/masterpassword"
 	"github.com/riadafridishibly/vault-app/ent/passworditem"
 	"github.com/riadafridishibly/vault-app/ent/schema"
 )
@@ -45,6 +46,12 @@ func init() {
 	key.DefaultUpdateTime = keyDescUpdateTime.Default.(func() time.Time)
 	// key.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
 	key.UpdateDefaultUpdateTime = keyDescUpdateTime.UpdateDefault.(func() time.Time)
+	masterpasswordFields := schema.MasterPassword{}.Fields()
+	_ = masterpasswordFields
+	// masterpasswordDescPasswordHash is the schema descriptor for password_hash field.
+	masterpasswordDescPasswordHash := masterpasswordFields[0].Descriptor()
+	// masterpassword.PasswordHashValidator is a validator for the "password_hash" field. It is called by the builders before save.
+	masterpassword.PasswordHashValidator = masterpasswordDescPasswordHash.Validators[0].(func(string) error)
 	passworditemMixin := schema.PasswordItem{}.Mixin()
 	passworditemMixinFields0 := passworditemMixin[0].Fields()
 	_ = passworditemMixinFields0
