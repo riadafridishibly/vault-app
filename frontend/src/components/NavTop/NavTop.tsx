@@ -86,8 +86,8 @@ function HeaderSearch({ links }: HeaderSearchProps) {
         <Header height={56} className={classes.header} mb={120} fixed>
             <div className={classes.inner}>
                 <Group>
-                    <Burger opened={opened} onClick={toggle} size="sm" />
-                    <Text<'h1'> weight={'bolder'}>Vault</Text>
+                    {/* <Burger opened={opened} onClick={toggle} size="sm" /> */}
+                    <Text<'h1'> weight={'bolder'}>Vault App</Text>
                 </Group>
 
                 <Group>
